@@ -22,12 +22,38 @@ jdk:
     - "oraclejdk8"
     - "oraclejdk9"
 
+env:
+    global:
+        -
+            secure: "jmTrz+xf+cDnWqobtdquLyZ3qopsrmvIOtgeViFAKzTt84MRwkBsZo7ovA55+PWvWTm/se5ggrJC7t87GNoe1YlDnA075zbOtETl3LWoH0X885/JQpW5ITjIMJXv6BWoGLUN+M39kjWPj67UH+d7XH0ils2PnzV88EM0bA5eUvCO6E2ZAOvkcsdafHJNZo1TBbtLOBnS/39TaNaNAALpafP+3cW4H+ytcBjXnnRvuY7vY7fw23QTUtUYS9nLBHkOGaM8v1FDp/oAVqWMHnicdioscTG7Wu9Q1FvoQgoyaJ4k77Nr4TFVCSbttKweopis7f7COUBT/KW7gr2Fpv3wI+cvhO5G+ivMvy+I5nACwiJ3OdEZcGNsLmr8XusakVcBHy8LXRsVnEk5cNRgLDcpFSn1KOgsfdR62y+egSanHrstXVA3wHGZh3Nb7HD7GQPJIlGQ45QyLuftkOcACMz6sU/CAmX+yWq/inqw90aLLUCOKQK7DUJz7E/7gn1pDt9Wt9bPx35kILPVr+vbvrOLYDlhI61TGQTwHHBXPSzcSJbxd3fuvKf9izdk+MOo6gJRWLmaYjNL45XwXRaIMxyNG+nrq+T/oHDGAiYOeetQH7+eAvPFnT4wAwVNinE4F2b22WgSiMpF0qH2d+DzpQIdPZA1oeE/myywq/rVH0ZG27Y="
+        -
+            secure: "qhLCWEhUqVgxQejWUCdv/P5BW8TB650jbUYL86Fo3GYGdwVgPzArjLC0YYxsEjoMjTSO5xfnJvMWIeCk3Og4TEHEGybkn46juNBjdj0xj+bIDMFefVHp04FkXm9DutdWOiysXA5cFmTlMFYNldTbPZYNCRFoLasKAsWHsNi2wcPqkTOLomS+3D9JbLM4rRc3p5JYGmR6B30GaL4kP7tjxDQrHFFbZBdUCwWEljQImKzbbMG6RpuyLx1s85qthEMFol44r/MoAbaUOIc91UVVN7v4Fcb9znHybKvqpaUWZ2kqctL0krRIfer9XthfRmzQeasDYPWMS0yXYW/8Dps9pqoYgUDoGlOj/r7Q6phtrcbBuWFv/1Q72yvvvi8KdGPLOE4ofA06/pRrpkxX72SQ/tg//dnYtqIjgLJaH72c84kBTY3E1AgAKsFaxpuxJclzYhLMvuyDrKTmJ8uwcjUV3lnKhd6GwqYgA823ZB50QNhFCz3g7A/hIbsC04dM2RWEgf3OUTUMSlsb0fWPF7cufkLchSxC1q+kjX8qDn69Coqi6NPhO6ome+kAKbhaJuABF5FDf4U/EXR+EqfOpZ/i25zFHu+hvc6rvaxxdz2TA/+mNgH3nOSRufcx1pO8+vqwo5Bam5V2X5HDrduIeFYYl+tFo94ZQWmQ+IruTFYx3pk="
+        -
+            secure: "CjzrcWBPlmBKK7ID/FB65HJf6nURz8ZJEbbY3+BkNm4kMDRAJQ/vm3OdCO57ZHsw+XCSAaafVTXKk4NrL8RnqQg4XtJn9tBWLK5U+XJT8iXyicsjh4HzkHbTop/qPmRU3KVNBhspXRPvPpxk8FHrGxuN+b9dZGP3biLGFqiholP3Dmh+9hu95oEC4l6Az+BE4IgZBIF7TB/sgP0d0WBTuL1OCZU1okDyfjJn17tq7nKIYesiPCq3joSToKga5EbyzehgvJUIhFBRYi1i2zYktnh0g0jO0OSaDDFk6U0mTw8PBaCPM+yNiNv8iBkHR6+ua8xPVhQvcC/bYv2WVeubhYTLePWxC5phMFxmQk+7tu9+eG7OxG3ZnUtRJZrx6APhZjPvJpmF8GtZ/mP/H/xq9WAYGOL523zW3K5VEIwtxpviX0sKFetZ+NJPVAbooEekTOdD5jh6HveNOS66fjs1SBAQnVx5ceh1C5G+9HhTeESlwIvkzK9khHGA13HZZDGcpuB6/h8Chm0qU7bf0+C4jCoh3waZ7VxNwHO2Yux7HL5G+nkYH/8TPYgd4f0ynAku69WdVJndAajDe9xypVeQKDZr3TqaZtlyzl4AIIWgKDvQKNneKXsFReBxpSWELBZuk8CvnUcsDJVDcGRNrkonz8OVsgMjJ9DtmONFanuM7ro="
+        -
+            secure: "Iral/oHoDvHjkZ57UFVI80qPJFpG2lnXRfEEZRuOEcoNLv0sTrJE/5ui1R7Ir82nAehafKIG7Fds458AsiNo3O5AuOtyEGD3uxTCDo4E5H+jxncJhHRBsSJLdGJQyQXDYn87q9EblnchgPcCiBQmRjlvKuoLzZ/z5r/FMCP+WQgsTK5P1SDBgJBGKXCLytXTqbGL+UB98wk8mT5ff1aWfwDs/sklpeiKXfu9k5VpB5XyZTyAQJb2mAbggoy78Am6AMhipJBffBRQ8Rp06R87kBOleQCLhw6PRMn+U70lwlb5rpqfn7/CSNAzHwUoqj0ki6y9geXReenqNKoqcS9Fqb3tPibkG/NphD33/iZpFKk2kDleoHpYaVlxq0pPz+2SWppUCt1W2S3tEMvb94NgnjWnu1+tQLnt36l09S3W0k2oiHY4dq7cOgruWoDgLt1qqX78vYgEH6zsOYfp9IPeLnZ3UEouMdI9b2YcqGPnLQ2BeVc+4+PoWVCOG2nvYPlI183IMDxRDzEssfAVTUF7FAgzDHyZcgU5YT31KOy2ylwI9JEHnu6Xp2HFqU+nYGWQ+n6lq/Cw/X29tiKwk5AIjE6pkiMD27hXwOGmxTycQjdQiVgFdrCuH0un2u2tduxevNYHny5+ppTpgCFzRSTlPcbNF4/qrgfMCKj1YPgp8vs="
+        -
+            secure: "ER58R1omPkycfvy4WgolFDtVAmbDGkIDzNWkBqQm+Mv6YQCt7UJ+/hiyo0/ctU7ylzt2DTnLUMy8FTyNwbsCj+q3+u7zk6R1125WXKXSDfFs1wG/+EYGohIWRBJbNofoySr9gk/EQ9nsPAcybvfC/GGaWVZiNr/i8BzSzuD9MlAzfzK3rlDT8Y4PWqbFBIkfVoPwJPs84OhL0zvrnWurutMWI5x0860vo+/vTPrjjTBrMj0CvF9u53OOSJXUWN77zOL1ECzmMcLLqq1t54U9mH1cTcG2e03WmWuYC9cv/3egX12+qZ8LCefmqYAGdDaylBS0J3JBS6VqvOxUPr82F9xHgNaTpU40tj5H1BXiJCzfFjqbk19HmPwkqujQRNMzYrxyEiBDDjbLsImd0HqOUaI0bmuXGx5my5SPbUCIfhzELnIAwfYXrXwB+sPdvWfN3ChBPPvwIlVFg6PAgEBaAibTRWR9V0+WdVKVSYtsDxub5eWQMxdkLzEbDYE3klhJsfbW540jHzwJOs62QR5eGLS/7PZ7G9PBtbwe93PTghcAeCAsByrTugcZjUI3cGozXFDTdD8v56nfc4d67lAw/hf5e9+EsPHi9PMeBWBxNcIHqTgqPWxZnTYrJcm0bN8kXPM55lOwuSf280ra89RgVgMfyXSG8lvtYkInqoc46QY="
+
 # this is not a boolean, this is a Linux `true` command to simply override this step
 install: "true"
 
 script: "mvn -e verify site"
 
 after_script: "mvn -e coveralls:report"
+
+before_deploy:
+    - "eval \"$(ssh-agent -s)\""
+    - "git config user.name \"Travis CI\""
+    - "git config user.email \"office@chilldev.pl\""
+    - "openssl aes-256-cbc -k \"${SECRET}\" -in .travis/gpg_key.enc -out .travis/gpg_key -d"
+    - "openssl aes-256-cbc -k \"${SECRET}\" -in .travis/id_rsa.enc -out .travis/id_rsa -d"
+    # this is needed to avoid duplicated key error as we have two deploys on `master`
+    - "rm -f ~/.gnupg/*.gpg"
+    - "gpg --fast-import .travis/gpg_key"
+    - "chmod 600 .travis/id_rsa"
+    - "ssh-add .travis/id_rsa"
+    - "echo -e \"Host github.com\\n    StrictHostKeyChecking no\\n\" >> ~/.ssh/config"
 
 # TODO: deployment
 
