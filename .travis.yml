@@ -1,0 +1,43 @@
+##
+# This file is part of the ChillDev-Lambda.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2018 © by Rafal Wrzeszcz - Wrzasq.pl.
+##
+
+#FIXME: https://github.com/travis-ci/travis-ci/issues/753
+
+language: "java"
+
+sudo: false
+
+dist: "trusty"
+
+branches:
+    except:
+        - "/^release-/"
+
+jdk:
+    - "openjdk8"
+    - "oraclejdk8"
+    - "oraclejdk9"
+
+# this is not a boolean, this is a Linux `true` command to simply override this step
+install: "true"
+
+script: "mvn -e verify site"
+
+after_script: "mvn -e coveralls:report"
+
+# TODO: deployment
+
+cache:
+    directories:
+        - "${HOME}/.m2/"
+
+before_cache: "rm -rf ${HOME}/.m2/repository/pl/chilldev/lambda"
+
+notifications:
+    webhooks:
+        urls:
+            - "https://webhooks.gitter.im/e/27be3b24be63d41f7b18"
