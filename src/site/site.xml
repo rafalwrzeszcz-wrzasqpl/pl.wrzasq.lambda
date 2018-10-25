@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+# This file is part of the ChillDev-Lambda.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+-->
+<project
+    xmlns="http://maven.apache.org/DECORATION/1.4.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://maven.apache.org/DECORATION/1.4.0 http://maven.apache.org/xsd/decoration-1.4.0.xsd
+">
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.6</version>
+    </skin>
+
+    <bannerLeft>
+        <name>${project.name}</name>
+    </bannerLeft>
+
+    <bannerRight>
+        <name>&lt;img src="https://static.wrzasq.pl/images/wrzasqpl.png" alt="Wrzasq.pl"/&gt;</name>
+        <href>https://wrzasq.pl</href>
+    </bannerRight>
+
+    <publishDate position="bottom"/>
+    <version position="bottom"/>
+
+    <poweredBy>
+        <logo
+            name="Maven"
+            href="https://maven.apache.org/"
+            img="https://maven.apache.org/images/logos/maven-feather.png"
+            alt="Apache Maven"
+            title="Build with Maven"/>
+        <logo
+            name="Chillout Development"
+            href="https://chilldev.pl"
+            img="https://static.chilldev.pl/images/chilldevpl.png"
+            alt="Chillout Development"
+            title="Chillout Development"/>
+        <logo
+            name="Wrzasq.pl"
+            href="https://wrzasq.pl"
+            img="https://static.chilldev.pl/images/wrzasqpl.png"
+            alt="Wrzasq.pl"
+            title="Wrzasq.pl"/>
+    </poweredBy>
+
+    <body>
+        <menu name="Main" inherit="top">
+            <item name="GitHub project" href="https://github.com/chilloutdevelopment/pl.chilldev.lambda/"/>
+            <item name="Chillout Development" href="https://chilldev.pl/"/>
+            <item name="Wrzasq.pl" href="https://wrzasq.pl/"/>
+            <item name="ChillDev @ Facebook" href="https://www.facebook.com/chilldev"/>
+            <item name="Wrzasq.pl @ Facebook" href="https://www.facebook.com/wrzasqpl"/>
+        </menu>
+
+        <menu ref="modules"/>
+
+        <menu name="Contribution guide">
+            <item name="Git workflow" href="gitflow.html"/>
+        </menu>
+
+        <menu ref="reports"/>
+    </body>
+</project>
