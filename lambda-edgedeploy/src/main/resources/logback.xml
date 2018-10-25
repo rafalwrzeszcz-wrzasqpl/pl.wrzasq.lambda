@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+# This file is part of the ChillDev-Lambda.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+-->
+<configuration scan="true">
+    <!-- stdout output -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n%ex{full}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- our logger instances -->
+    <logger name="com.amazonaws">
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="pl.chilldev">
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+</configuration>

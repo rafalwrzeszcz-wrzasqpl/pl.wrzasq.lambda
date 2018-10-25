@@ -15,7 +15,7 @@
 
     <!-- core project settings -->
     <groupId>pl.chilldev.lambda</groupId>
-    <artifactId>commons</artifactId>
+    <artifactId>lambda</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <parent>
@@ -125,5 +125,6 @@
 
     <!-- components of ChillDev-Lambda project -->
     <modules>
+        <module>lambda-edgedeploy</module>
     </modules>
 </project>
