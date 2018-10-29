@@ -96,7 +96,6 @@ public class LambdaEdgeManager
                 )
         );
 
-        // TODO: log success
         return this.publishLambdaVersion(input.getFunctionName());
     }
 
@@ -129,7 +128,6 @@ public class LambdaEdgeManager
                 )
         );
 
-        // TODO: log success
         return this.publishLambdaVersion(input.getFunctionName());
     }
 
@@ -150,7 +148,6 @@ public class LambdaEdgeManager
             this.logger.warn("Attempt to delete non-existing Lambda {}.", input.getFunctionName(), error);
         }
 
-        // TODO: log success
         return new CustomResourceResponse<>(
             new PublishVersionResult()
                 .withFunctionName(input.getFunctionName())

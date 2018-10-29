@@ -19,6 +19,7 @@ import com.sunrun.cfnresponse.CfnRequest;
 import pl.chilldev.commons.aws.cloudformation.CustomResourceHandler;
 import pl.chilldev.lambda.edgedeploy.model.EdgeDeployRequest;
 import pl.chilldev.lambda.edgedeploy.service.LambdaEdgeManager;
+import pl.chilldev.lambda.json.ObjectMapperFactory;
 
 /**
  * CloudFormation request handler.
@@ -33,7 +34,7 @@ public class Handler
     private static CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> handler;
 
     static {
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();
         AWSLambda lambda = AWSLambdaClientBuilder.standard()
             // Lambda@Edge needs to be deployed in Virginia!
             .withRegion(Regions.US_EAST_1)

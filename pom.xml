@@ -126,5 +126,6 @@
     <!-- components of ChillDev-Lambda project -->
     <modules>
         <module>lambda-edgedeploy</module>
+        <module>lambda-json</module>
     </modules>
 </project>
