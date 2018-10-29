@@ -15,7 +15,9 @@
         <menu ref="parent"/>
 
         <menu name="Guide">
-            <item name="Factory" href="guide/json.html"/>
+            <item name="Usage" href="guide/usage.html"/>
+            <item name="Failing delete" href="guide/delete.html"/>
+            <item name="Configuration" href="guide/config.html"/>
         </menu>
 
         <menu ref="reports"/>
