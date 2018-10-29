@@ -15,7 +15,7 @@
         <menu ref="parent"/>
 
         <menu name="Guide">
-            <item name="Factory" href="guide/factory.html"/>
+            <item name="Factory" href="guide/json.html"/>
         </menu>
 
         <menu ref="reports"/>
