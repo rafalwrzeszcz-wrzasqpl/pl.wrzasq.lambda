@@ -40,6 +40,7 @@
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor</usedDependency>
                         <usedDependency>io.symphonia:lambda-logging</usedDependency>
+                        <usedDependency>javax.xml.bind:jaxb-api</usedDependency>
                     </usedDependencies>
                 </configuration>
             </plugin>
