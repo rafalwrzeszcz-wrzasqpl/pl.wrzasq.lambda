@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
@@ -29,6 +30,9 @@ public class HandlerTest
     @Rule
     public MockitoRule mockito = MockitoJUnit.rule();
 
+    @Rule
+    public EnvironmentVariables environmentVariables = new EnvironmentVariables();
+
     @Mock
     private CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> handler;
 
@@ -40,6 +44,9 @@ public class HandlerTest
     @Before
     public void setUp() throws NoSuchFieldException, IllegalAccessException
     {
+        // this is to make sure we resolve the AWS region for default region provider
+        this.environmentVariables.set("AWS_REGION", "eu-central-1");
+
         this.originalHandler = this.setHandler(this.handler);
     }
 
