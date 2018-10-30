@@ -1,3 +1,10 @@
+##
+# This file is part of the ChillDev-Lambda.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+##
+
 [*]
 charset=utf-8
 end_of_line=lf

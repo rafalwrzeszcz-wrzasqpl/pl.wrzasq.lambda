@@ -12,8 +12,8 @@ import java.time.LocalDate;
 import java.time.Month;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import pl.chilldev.lambda.json.ObjectMapperFactory;
 
 public class ObjectMapperFactoryTest
@@ -27,10 +27,10 @@ public class ObjectMapperFactoryTest
 
         String json = objectMapper.writeValueAsString(date);
 
-        Assert.assertEquals(
-            "ObjectMapprFactory.createObjectMapper() should create ObjectMapper capable of Java 8 Time API serialization.",
+        Assertions.assertEquals(
             "\"2011-01-30\"",
-            json
+            json,
+            "ObjectMapprFactory.createObjectMapper() should create ObjectMapper capable of Java 8 Time API serialization."
         );
     }
 
@@ -41,20 +41,20 @@ public class ObjectMapperFactoryTest
 
         LocalDate date = objectMapper.readValue("\"2015-07-02\"", LocalDate.class);
 
-        Assert.assertEquals(
-            "ObjectMapprFactory.createObjectMapper() should create ObjectMapper capable of Java 8 Time API deserialization.",
+        Assertions.assertEquals(
             2015,
-            date.getYear()
+            date.getYear(),
+            "ObjectMapprFactory.createObjectMapper() should create ObjectMapper capable of Java 8 Time API deserialization."
         );
-        Assert.assertEquals(
-            "ObjectMapprFactory.createObjectMapper() should create ObjectMapper capable of Java 8 Time API deserialization.",
+        Assertions.assertEquals(
             Month.JULY,
-            date.getMonth()
+            date.getMonth(),
+            "ObjectMapprFactory.createObjectMapper() should create ObjectMapper capable of Java 8 Time API deserialization."
         );
-        Assert.assertEquals(
-            "ObjectMapprFactory.createObjectMapper() should create ObjectMapper capable of Java 8 Time API deserialization.",
+        Assertions.assertEquals(
             2,
-            date.getDayOfMonth()
+            date.getDayOfMonth(),
+            "ObjectMapprFactory.createObjectMapper() should create ObjectMapper capable of Java 8 Time API deserialization."
         );
     }
 

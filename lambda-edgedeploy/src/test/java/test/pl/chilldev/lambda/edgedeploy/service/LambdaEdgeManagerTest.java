@@ -33,22 +33,22 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pl.chilldev.commons.aws.cloudformation.CustomResourceResponse;
 import pl.chilldev.lambda.edgedeploy.model.EdgeDeployRequest;
 import pl.chilldev.lambda.edgedeploy.service.LambdaEdgeManager;
 import pl.chilldev.lambda.edgedeploy.zip.ZipBuilder;
 import pl.chilldev.lambda.json.ObjectMapperFactory;
 
+@ExtendWith(MockitoExtension.class)
 public class LambdaEdgeManagerTest
 {
     private static final String FUNCTION_NAME = "test";
@@ -81,9 +81,6 @@ public class LambdaEdgeManagerTest
 
     private static final String VARIABLE_2_VALUE = "Bar";
 
-    @Rule
-    public MockitoRule mockito = MockitoJUnit.rule();
-
     @Mock
     private AWSLambda lambda;
 
@@ -110,7 +107,7 @@ public class LambdaEdgeManagerTest
     @Captor
     ArgumentCaptor<PublishVersionRequest> publishRequest;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         this.objectMapper.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
@@ -150,45 +147,45 @@ public class LambdaEdgeManagerTest
         CreateFunctionRequest createRequest = this.createRequest.getValue();
         PublishVersionRequest publishRequest = this.publishRequest.getValue();
 
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request creation of function with given name.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
-            createRequest.getFunctionName()
+            createRequest.getFunctionName(),
+            "LambdaEdgeManager.create() should request creation of function with given name."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request creation of function with given description.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_DESCRIPTION,
-            createRequest.getDescription()
+            createRequest.getDescription(),
+            "LambdaEdgeManager.create() should request creation of function with given description."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request creation of function with given runtime.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.RUNTIME.toString(),
-            createRequest.getRuntime()
+            createRequest.getRuntime(),
+            "LambdaEdgeManager.create() should request creation of function with given runtime."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request creation of function with given handler.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.HANDLER,
-            createRequest.getHandler()
+            createRequest.getHandler(),
+            "LambdaEdgeManager.create() should request creation of function with given handler."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request creation of function with given memory limit.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.MEMORY,
-            createRequest.getMemorySize().intValue()
+            createRequest.getMemorySize().intValue(),
+            "LambdaEdgeManager.create() should request creation of function with given memory limit."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request creation of function with given timeout.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.TIMEOUT,
-            createRequest.getTimeout().intValue()
+            createRequest.getTimeout().intValue(),
+            "LambdaEdgeManager.create() should request creation of function with given timeout."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request creation of function with given role.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.ROLE_ARN,
-            createRequest.getRole()
+            createRequest.getRole(),
+            "LambdaEdgeManager.create() should request creation of function with given role."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request creation of function with given tracing mode.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.TRACING_MODE.name(),
-            createRequest.getTracingConfig().getMode()
+            createRequest.getTracingConfig().getMode(),
+            "LambdaEdgeManager.create() should request creation of function with given tracing mode."
         );
 
         try (
@@ -207,10 +204,10 @@ public class LambdaEdgeManagerTest
 
                         Scanner scanner = new Scanner(stream);
 
-                        Assert.assertEquals(
-                            "LambdaEdgeManager.create() should write file content.",
+                        Assertions.assertEquals(
                             "export{}",
-                            scanner.next()
+                            scanner.next(),
+                            "LambdaEdgeManager.create() should write file content."
                         );
                         break;
 
@@ -221,34 +218,34 @@ public class LambdaEdgeManagerTest
                             new TypeReference<Map<String, Object>>() {}
                         );
 
-                        Assert.assertEquals(
-                            "LambdaEdgeManager.create() should save all configuration variables.",
+                        Assertions.assertEquals(
                             2,
-                            config.size()
+                            config.size(),
+                            "LambdaEdgeManager.create() should save all configuration variables."
                         );
-                        Assert.assertTrue(
-                            "LambdaEdgeManager.create() should save all configuration variables.",
-                            config.containsKey(LambdaEdgeManagerTest.VARIABLE_1_KEY)
+                        Assertions.assertTrue(
+                            config.containsKey(LambdaEdgeManagerTest.VARIABLE_1_KEY),
+                            "LambdaEdgeManager.create() should save all configuration variables."
                         );
-                        Assert.assertEquals(
-                            "LambdaEdgeManager.create() should save all configuration variables.",
+                        Assertions.assertEquals(
                             LambdaEdgeManagerTest.VARIABLE_1_VALUE,
-                            config.get(LambdaEdgeManagerTest.VARIABLE_1_KEY)
+                            config.get(LambdaEdgeManagerTest.VARIABLE_1_KEY),
+                            "LambdaEdgeManager.create() should save all configuration variables."
                         );
-                        Assert.assertTrue(
-                            "LambdaEdgeManager.create() should save all configuration variables.",
-                            config.containsKey(LambdaEdgeManagerTest.VARIABLE_2_KEY)
+                        Assertions.assertTrue(
+                            config.containsKey(LambdaEdgeManagerTest.VARIABLE_2_KEY),
+                            "LambdaEdgeManager.create() should save all configuration variables."
                         );
-                        Assert.assertEquals(
-                            "LambdaEdgeManager.create() should save all configuration variables.",
+                        Assertions.assertEquals(
                             LambdaEdgeManagerTest.VARIABLE_2_VALUE,
-                            config.get(LambdaEdgeManagerTest.VARIABLE_2_KEY)
+                            config.get(LambdaEdgeManagerTest.VARIABLE_2_KEY),
+                            "LambdaEdgeManager.create() should save all configuration variables."
                         );
 
                         break;
 
                     default:
-                        Assert.fail(
+                        Assertions.fail(
                             String.format(
                                 "LambdaEdgeManager.create() should not add any other files than config.json - %s found.",
                                 entry.getName()
@@ -257,26 +254,26 @@ public class LambdaEdgeManagerTest
                 }
             }
 
-            Assert.assertTrue(
-                "LambdaEdgeManager.create() should build package with content file and config file.",
-                hasIndex && hasConfig
+            Assertions.assertTrue(
+                hasIndex && hasConfig,
+                "LambdaEdgeManager.create() should build package with content file and config file."
             );
         }
 
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should request new function version publication.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
-            publishRequest.getFunctionName()
+            publishRequest.getFunctionName(),
+            "LambdaEdgeManager.create() should request new function version publication."
         );
 
-        Assert.assertEquals(
-            "LambdaEdgeManager.create() should set master function ARN as it's physical ID.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.MASTER_ARN,
-            response.getPhysicalResourceId()
+            response.getPhysicalResourceId(),
+            "LambdaEdgeManager.create() should set master function ARN as it's physical ID."
         );
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void createZipIoException() throws IOException
     {
         LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
@@ -291,7 +288,11 @@ public class LambdaEdgeManagerTest
             .when(this.s3ObjectInputStream.read(Mockito.any(byte[].class), Mockito.anyInt(), Mockito.anyInt()))
             .thenThrow(IOException.class);
 
-        manager.create(input);
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () -> manager.create(input),
+            "LambdaEdgeManager.create() should throw exception when processing target ZIP package fails."
+        );
     }
 
     @Test
@@ -329,45 +330,45 @@ public class LambdaEdgeManagerTest
         UpdateFunctionConfigurationRequest updateConfigurationRequest = this.updateConfigurationRequest.getValue();
         PublishVersionRequest publishRequest = this.publishRequest.getValue();
 
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request update of given function by it's name.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
-            updateConfigurationRequest.getFunctionName()
+            updateConfigurationRequest.getFunctionName(),
+            "LambdaEdgeManager.update() should request update of given function by it's name."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request update of function with given description.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_DESCRIPTION,
-            updateConfigurationRequest.getDescription()
+            updateConfigurationRequest.getDescription(),
+            "LambdaEdgeManager.update() should request update of function with given description."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request update of function with given runtime.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.RUNTIME.toString(),
-            updateConfigurationRequest.getRuntime()
+            updateConfigurationRequest.getRuntime(),
+            "LambdaEdgeManager.update() should request update of function with given runtime."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request update of function with given handler.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.HANDLER,
-            updateConfigurationRequest.getHandler()
+            updateConfigurationRequest.getHandler(),
+            "LambdaEdgeManager.update() should request update of function with given handler."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request update of function with given memory limit.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.MEMORY,
-            updateConfigurationRequest.getMemorySize().intValue()
+            updateConfigurationRequest.getMemorySize().intValue(),
+            "LambdaEdgeManager.update() should request update of function with given memory limit."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request update of function with given timeout.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.TIMEOUT,
-            updateConfigurationRequest.getTimeout().intValue()
+            updateConfigurationRequest.getTimeout().intValue(),
+            "LambdaEdgeManager.update() should request update of function with given timeout."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request update of function with given role.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.ROLE_ARN,
-            updateConfigurationRequest.getRole()
+            updateConfigurationRequest.getRole(),
+            "LambdaEdgeManager.update() should request update of function with given role."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request update of function with given tracing mode.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.TRACING_MODE.name(),
-            updateConfigurationRequest.getTracingConfig().getMode()
+            updateConfigurationRequest.getTracingConfig().getMode(),
+            "LambdaEdgeManager.update() should request update of function with given tracing mode."
         );
 
         try (
@@ -390,7 +391,7 @@ public class LambdaEdgeManagerTest
                         break;
 
                     default:
-                        Assert.fail(
+                        Assertions.fail(
                             String.format(
                                 "LambdaEdgeManager.update() should not add any other files than config.json - %s found.",
                                 entry.getName()
@@ -399,22 +400,22 @@ public class LambdaEdgeManagerTest
                 }
             }
 
-            Assert.assertTrue(
-                "LambdaEdgeManager.update() should build package with content file and config file.",
-                hasIndex && hasConfig
+            Assertions.assertTrue(
+                hasIndex && hasConfig,
+                "LambdaEdgeManager.update() should build package with content file and config file."
             );
         }
 
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should request new function version publication.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
-            publishRequest.getFunctionName()
+            publishRequest.getFunctionName(),
+            "LambdaEdgeManager.update() should request new function version publication."
         );
 
-        Assert.assertEquals(
-            "LambdaEdgeManager.update() should set master function ARN as it's physical ID.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.MASTER_ARN,
-            response.getPhysicalResourceId()
+            response.getPhysicalResourceId(),
+            "LambdaEdgeManager.update() should set master function ARN as it's physical ID."
         );
     }
 
@@ -431,15 +432,15 @@ public class LambdaEdgeManagerTest
 
         CustomResourceResponse<PublishVersionResult> result = manager.delete(input);
 
-        Assert.assertEquals(
-            "LambdaEdgeManager.delete() should attempt to delete given function.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
-            this.deleteRequest.getValue().getFunctionName()
+            this.deleteRequest.getValue().getFunctionName(),
+            "LambdaEdgeManager.delete() should attempt to delete given function."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.delete() should return deleted function name.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
-            result.getData().getFunctionName()
+            result.getData().getFunctionName(),
+            "LambdaEdgeManager.delete() should return deleted function name."
         );
     }
 
@@ -456,15 +457,15 @@ public class LambdaEdgeManagerTest
 
         CustomResourceResponse<PublishVersionResult> result = manager.delete(input);
 
-        Assert.assertEquals(
-            "LambdaEdgeManager.delete() should attempt to delete given function.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
-            this.deleteRequest.getValue().getFunctionName()
+            this.deleteRequest.getValue().getFunctionName(),
+            "LambdaEdgeManager.delete() should attempt to delete given function."
         );
-        Assert.assertEquals(
-            "LambdaEdgeManager.delete() should return function name even if didn't exist.",
+        Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
-            result.getData().getFunctionName()
+            result.getData().getFunctionName(),
+            "LambdaEdgeManager.delete() should return function name even if didn't exist."
         );
     }
 

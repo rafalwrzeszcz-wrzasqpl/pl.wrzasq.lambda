@@ -14,8 +14,8 @@ import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import pl.chilldev.lambda.edgedeploy.zip.ZipBuilder;
 
 public class ZipBuilderTest
@@ -32,8 +32,16 @@ public class ZipBuilderTest
 
         Scanner scanner = new Scanner(stream);
 
-        Assert.assertEquals("ZipBuilder.writeEntry() should set entry filename.", "test.txt", entry.getName());
-        Assert.assertEquals("ZipBuilder.writeEntry() should write file content.", "test", scanner.next());
+        Assertions.assertEquals(
+            "test.txt",
+            entry.getName(),
+            "ZipBuilder.writeEntry() should set entry filename."
+        );
+        Assertions.assertEquals(
+            "test",
+            scanner.next(),
+            "ZipBuilder.writeEntry() should write file content."
+        );
     }
 
     @Test
@@ -48,7 +56,15 @@ public class ZipBuilderTest
 
         Scanner scanner = new Scanner(stream);
 
-        Assert.assertEquals("ZipBuilder.writeEntry() should set entry filename.", "test.txt", entry.getName());
-        Assert.assertEquals("ZipBuilder.writeEntry() should write file content.", "test", scanner.next());
+        Assertions.assertEquals(
+            "test.txt",
+            entry.getName(),
+            "ZipBuilder.writeEntry() should set entry filename."
+        );
+        Assertions.assertEquals(
+            "test",
+            scanner.next(),
+            "ZipBuilder.writeEntry() should write file content."
+        );
     }
 }
