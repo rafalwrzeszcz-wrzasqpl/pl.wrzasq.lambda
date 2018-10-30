@@ -93,8 +93,8 @@ before_deploy:
     - "eval \"$(ssh-agent -s)\""
     - "git config user.name \"Travis CI\""
     - "git config user.email \"office@chilldev.pl\""
-    - "openssl aes-256-cbc -k \"${SECRET}\" -in .travis/gpg_key.enc -out .travis/gpg_key -d"
-    - "openssl aes-256-cbc -k \"${SECRET}\" -in .travis/id_rsa.enc -out .travis/id_rsa -d"
+    - "openssl aes-256-cbc -md sha256 -k \"${SECRET}\" -in .travis/gpg_key.enc -out .travis/gpg_key -d"
+    - "openssl aes-256-cbc -md sha256 -k \"${SECRET}\" -in .travis/id_rsa.enc -out .travis/id_rsa -d"
     # this is needed to avoid duplicated key error as we have two deploys on `master`
     - "rm -f ~/.gnupg/*.gpg"
     - "gpg --fast-import .travis/gpg_key"
