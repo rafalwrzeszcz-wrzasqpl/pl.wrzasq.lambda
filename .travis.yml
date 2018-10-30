@@ -27,16 +27,7 @@ jdk:
 
 # TODO: temporary as delombok won't work here
 matrix:
-    include:
-        # TODO: this is needed for OpenJDK missing certificates
-        -
-            jdk: "openjdk10"
-            before_install:
-                - "rm ${JAVA_HOME}/lib/security/cacerts"
-                - "ln -s /etc/ssl/certs/java/cacerts ${JAVA_HOME}/lib/security/cacerts"
     allow_failures:
-        -
-            jdk: "openjdk10"
         -
             jdk: "openjdk11"
         -
@@ -76,7 +67,32 @@ before_deploy:
     - "ssh-add .travis/id_rsa"
     - "echo -e \"Host github.com\\n    StrictHostKeyChecking no\\n\" >> ~/.ssh/config"
 
-# TODO: deployment
+deploy:
+    -
+        provider: "script"
+        skip_cleanup: true
+        # unfortunately deploy script must be single command
+        script: "./.travis/release.sh"
+        on:
+            branch: "develop"
+            condition: "${TRAVIS_EVENT_TYPE} == push"
+            jdk: "oraclejdk8"
+    -
+        provider: "script"
+        skip_cleanup: true
+        script: "mvn -e deploy site-deploy -P deploy --settings .travis/settings.xml"
+        on:
+            branch: "master"
+            jdk: "oraclejdk8"
+    -
+        provider: "releases"
+        skip_cleanup: true
+        api_key: "${GITHUB_TOKEN}"
+        file_glob: true
+        file: "*/target/*.jar"
+        on:
+            branch: "master"
+            jdk: "oraclejdk8"
 
 cache:
     directories:
