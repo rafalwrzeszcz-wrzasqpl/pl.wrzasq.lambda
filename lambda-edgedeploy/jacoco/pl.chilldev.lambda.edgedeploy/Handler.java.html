@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Handler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ChillDev Lambda@Edge deploy</a> &gt; <a href="index.source.html" class="el_package">pl.chilldev.lambda.edgedeploy</a> &gt; <span class="el_source">Handler.java</span></div><h1>Handler.java</h1><pre class="source lang-java linenums">/*
+ * This file is part of the ChillDev-Lambda.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.chilldev.lambda.edgedeploy;
+
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.lambda.AWSLambda;
+import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
+import com.amazonaws.services.lambda.model.PublishVersionResult;
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sunrun.cfnresponse.CfnRequest;
+import pl.chilldev.commons.aws.cloudformation.CustomResourceHandler;
+import pl.chilldev.lambda.edgedeploy.model.EdgeDeployRequest;
+import pl.chilldev.lambda.edgedeploy.service.LambdaEdgeManager;
+import pl.chilldev.lambda.json.ObjectMapperFactory;
+
+/**
+ * CloudFormation request handler.
+ *
+ * &lt;p&gt;Recommended memory: 256MB.&lt;/p&gt;
+ */
+<span class="fc" id="L29">public class Handler</span>
+{
+    /**
+     * CloudFormation response handler.
+     */
+    private static CustomResourceHandler&lt;EdgeDeployRequest, PublishVersionResult&gt; handler;
+
+    static {
+<span class="fc" id="L37">        ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();</span>
+<span class="fc" id="L38">        AWSLambda lambda = AWSLambdaClientBuilder.standard()</span>
+            // Lambda@Edge needs to be deployed in Virginia!
+<span class="fc" id="L40">            .withRegion(Regions.US_EAST_1)</span>
+<span class="fc" id="L41">            .build();</span>
+
+<span class="fc" id="L43">        AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();</span>
+
+<span class="fc" id="L45">        LambdaEdgeManager deploy = new LambdaEdgeManager(lambda, s3, objectMapper);</span>
+
+<span class="fc" id="L47">        Handler.handler = new CustomResourceHandler&lt;&gt;(deploy::create, deploy::update, deploy::delete);</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Handles invocation.
+     *
+     * @param request CloudFormation request.
+     * @param context AWS Lambda context.
+     */
+    public void handle(CfnRequest&lt;EdgeDeployRequest&gt; request, Context context)
+    {
+<span class="fc" id="L58">        Handler.handler.handle(request, context);</span>
+<span class="fc" id="L59">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

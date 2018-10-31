@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ZipBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ChillDev Lambda@Edge deploy</a> &gt; <a href="index.source.html" class="el_package">pl.chilldev.lambda.edgedeploy.zip</a> &gt; <span class="el_source">ZipBuilder.java</span></div><h1>ZipBuilder.java</h1><pre class="source lang-java linenums">/*
+ * This file is part of the ChillDev-Lambda.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.chilldev.lambda.edgedeploy.zip;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+/**
+ * Utility class for building ZIP archive stream.
+ */
+<span class="fc" id="L20">public class ZipBuilder</span>
+{
+    /**
+     * Internal interface for writing operations.
+     */
+    @FunctionalInterface
+    private interface ContentWriter
+    {
+        /**
+         * Performs write operation.
+         *
+         * @throws IOException When write to stream fails.
+         */
+        void write() throws IOException;
+    }
+
+    /**
+     * Size of bytes buffer for resource processing.
+     */
+    private static final int BUFFER_SIZE = 1024;
+
+    /**
+     * Output stream.
+     */
+<span class="fc" id="L44">    private ByteArrayOutputStream output = new ByteArrayOutputStream();</span>
+
+    /**
+     * ZIP compression stream.
+     */
+<span class="fc" id="L49">    private ZipOutputStream zip = new ZipOutputStream(this.output);</span>
+
+    /**
+     * Creates new ZIP archive entry.
+     *
+     * @param name Entry name.
+     * @param content Binary content of the file.
+     * @throws IOException When writing content to archive fails.
+     */
+    public void writeEntry(String name, byte[] content) throws IOException
+    {
+<span class="fc" id="L60">        this.writeEntry(name, () -&gt; this.zip.write(content));</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Creates new ZIP archive entry.
+     *
+     * @param name Entry name.
+     * @param stream Content source.
+     * @throws IOException When writing content to archive fails.
+     */
+    public void writeEntry(String name, InputStream stream) throws IOException
+    {
+<span class="fc" id="L72">        this.writeEntry(</span>
+            name,
+            () -&gt; {
+<span class="fc" id="L75">                byte[] buffer = new byte[ZipBuilder.BUFFER_SIZE];</span>
+                int count;
+<span class="fc bfc" id="L77" title="All 2 branches covered.">                while ((count = stream.read(buffer)) &gt; 0) {</span>
+<span class="fc" id="L78">                    this.zip.write(buffer, 0, count);</span>
+                }
+<span class="fc" id="L80">            }</span>
+        );
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Creates ZIP entry.
+     *
+     * @param name Entry name.
+     * @param handler Custom writing logic.
+     * @throws IOException When writing to stream fails.
+     */
+    private void writeEntry(String name, ContentWriter handler) throws IOException
+    {
+<span class="fc" id="L93">        this.zip.putNextEntry(</span>
+            new ZipEntry(name)
+        );
+<span class="fc" id="L96">        handler.write();</span>
+<span class="fc" id="L97">        this.zip.closeEntry();</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Closes active stream.
+     *
+     * @return Archive binary content.
+     * @throws IOException When dumping ZIP stream fails.
+     */
+    public ByteBuffer dump() throws IOException
+    {
+<span class="fc" id="L108">        this.zip.close();</span>
+<span class="fc" id="L109">        this.output.close();</span>
+
+<span class="fc" id="L111">        return ByteBuffer.wrap(this.output.toByteArray());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
