@@ -43,6 +43,7 @@ resource.
 -   [Maven packages](https://search.maven.org/search?q=g:pl.chilldev.lambda)
 -   [Chillout Development @ GitHub](https://github.com/chilloutdevelopment)
 -   [Chillout Development @ Facebook](https://www.facebook.com/chilldev)
+-   [Post on Wrzasq.pl](http://wrzasq.pl/blog/deploying-lambda-edge-with-pl-chilldev-lambda.html)
 
 # Authors
 
