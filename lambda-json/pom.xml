@@ -19,7 +19,7 @@
     <parent>
         <groupId>pl.chilldev.lambda</groupId>
         <artifactId>lambda</artifactId>
-        <version>0.0.4</version>
+        <version>0.0.5-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
