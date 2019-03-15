@@ -1,11 +1,11 @@
 /*
- * This file is part of the ChillDev-Lambda.
+ * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package pl.chilldev.lambda.edgedeploy.model;
+package pl.wrzasq.lambda.edgedeploy.model;
 
 import com.amazonaws.services.lambda.model.Runtime;
 import com.amazonaws.services.lambda.model.TracingMode;

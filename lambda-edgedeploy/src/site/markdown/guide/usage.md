@@ -1,8 +1,8 @@
 <!---
-# This file is part of the ChillDev-Lambda.
+# This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
 # Using in CloudFormation
@@ -233,7 +233,7 @@ version).
                 # put your source bucket
                 S3Bucket: "your-bucket"
                 S3Key: "lambda-edgedeploy-0.0.1-standalone.jar"
-            Handler: "pl.chilldev.lambda.edgedeploy.Handler::handle"
+            Handler: "pl.wrzasq.lambda.edgedeploy.Handler::handle"
             MemorySize: 256
             Description: "Lambda@Edge deployment."
             Timeout: 300

@@ -1,11 +1,11 @@
 /*
- * This file is part of the ChillDev-Lambda.
+ * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package pl.chilldev.lambda.edgedeploy.zip;
+package pl.wrzasq.lambda.edgedeploy.zip;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -1,11 +1,11 @@
 /*
- * This file is part of the ChillDev-Lambda.
+ * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package test.pl.chilldev.lambda.json;
+package test.pl.wrzasq.lambda.json;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -14,7 +14,7 @@ import java.time.Month;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pl.chilldev.lambda.json.ObjectMapperFactory;
+import pl.wrzasq.lambda.json.ObjectMapperFactory;
 
 public class ObjectMapperFactoryTest
 {

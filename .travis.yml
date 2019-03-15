@@ -1,8 +1,8 @@
 ##
-# This file is part of the ChillDev-Lambda.
+# This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 © by Rafal Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2019 © by Rafal Wrzeszcz - Wrzasq.pl.
 ##
 
 #FIXME: https://github.com/travis-ci/travis-ci/issues/753
@@ -97,7 +97,7 @@ after_script: "mvn -e coveralls:report"
 before_deploy:
     - "eval \"$(ssh-agent -s)\""
     - "git config user.name \"Travis CI\""
-    - "git config user.email \"office@chilldev.pl\""
+    - "git config user.email \"office@wrzasq.pl\""
     - "openssl aes-256-cbc -md sha256 -k \"${SECRET}\" -in .travis/gpg_key.enc -out .travis/gpg_key -d"
     - "openssl aes-256-cbc -md sha256 -k \"${SECRET}\" -in .travis/id_rsa.enc -out .travis/id_rsa -d"
     # this is needed to avoid duplicated key error as we have two deploys on `master`
@@ -138,9 +138,9 @@ cache:
     directories:
         - "${HOME}/.m2/"
 
-before_cache: "rm -rf ${HOME}/.m2/repository/pl/chilldev/lambda"
+before_cache: "rm -rf ${HOME}/.m2/repository/pl/wrzasq/lambda"
 
 notifications:
     webhooks:
         urls:
-            - "https://webhooks.gitter.im/e/27be3b24be63d41f7b18"
+            - "https://webhooks.gitter.im/e/7291b597f604254c3305"

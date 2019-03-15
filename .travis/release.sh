@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ##
-# This file is part of the ChillDev-Lambda.
+# This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 © by Rafal Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2019 © by Rafal Wrzeszcz - Wrzasq.pl.
 ##
 
 set -ex

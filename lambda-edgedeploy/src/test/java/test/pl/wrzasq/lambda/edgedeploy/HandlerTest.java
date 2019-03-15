@@ -1,11 +1,11 @@
 /*
- * This file is part of the ChillDev-Lambda.
+ * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package test.pl.chilldev.lambda.edgedeploy;
+package test.pl.wrzasq.lambda.edgedeploy;
 
 import java.lang.reflect.Field;
 
@@ -19,9 +19,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.chilldev.commons.aws.cloudformation.CustomResourceHandler;
-import pl.chilldev.lambda.edgedeploy.Handler;
-import pl.chilldev.lambda.edgedeploy.model.EdgeDeployRequest;
+import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
+import pl.wrzasq.lambda.edgedeploy.Handler;
+import pl.wrzasq.lambda.edgedeploy.model.EdgeDeployRequest;
 
 @ExtendWith(MockitoExtension.class)
 public class HandlerTest

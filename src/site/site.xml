@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-# This file is part of the ChillDev-Lambda.
+# This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <project
     xmlns="http://maven.apache.org/DECORATION/1.4.0"
@@ -37,25 +37,17 @@
             alt="Apache Maven"
             title="Build with Maven"/>
         <logo
-            name="Chillout Development"
-            href="https://chilldev.pl"
-            img="https://static.chilldev.pl/images/chilldevpl.png"
-            alt="Chillout Development"
-            title="Chillout Development"/>
-        <logo
             name="Wrzasq.pl"
             href="https://wrzasq.pl"
-            img="https://static.chilldev.pl/images/wrzasqpl.png"
+            img="https://static.wrzasq.pl/images/wrzasqpl.png"
             alt="Wrzasq.pl"
             title="Wrzasq.pl"/>
     </poweredBy>
 
     <body>
         <menu name="Main" inherit="top">
-            <item name="GitHub project" href="https://github.com/chilloutdevelopment/pl.chilldev.lambda/"/>
-            <item name="Chillout Development" href="https://chilldev.pl/"/>
+            <item name="GitHub project" href="https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/"/>
             <item name="Wrzasq.pl" href="https://wrzasq.pl/"/>
-            <item name="ChillDev @ Facebook" href="https://www.facebook.com/chilldev"/>
             <item name="Wrzasq.pl @ Facebook" href="https://www.facebook.com/wrzasqpl"/>
         </menu>
 

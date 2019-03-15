@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-# This file is part of the ChillDev-Lambda.
+# This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
@@ -14,20 +14,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- core project settings -->
-    <groupId>pl.chilldev.lambda</groupId>
+    <groupId>pl.wrzasq.lambda</groupId>
     <artifactId>lambda</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <parent>
-        <groupId>pl.chilldev.parent</groupId>
+        <groupId>pl.wrzasq.parent</groupId>
         <artifactId>parent-opensource</artifactId>
-        <version>0.6.2</version>
+        <version>1.0.2</version>
     </parent>
 
     <!-- project meta info -->
-    <name>ChillDev Lambda</name>
-    <url>https://chilloutdevelopment.github.io/pl.chilldev.lambda</url>
-    <description>ChillDev-Lambda is a set of generic AWS Lambda packages.</description>
+    <name>WrzasqPl Lambda</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda</url>
+    <description>WrzasqPl-Lambda is a set of generic AWS Lambda packages.</description>
     <inceptionYear>2018</inceptionYear>
 
     <!-- legal info -->
@@ -44,12 +44,6 @@
         <name>Rafał Wrzeszcz - Wrzasq.pl</name>
         <url>https://wrzasq.pl/</url>
     </organization>
-<!-- POM can't have more then one
-    <organization>
-        <name>Chillout Development</name>
-        <url>https://chilldev.pl/</url>
-    </organization>
--->
 
     <!-- personal info -->
     <developers>
@@ -77,18 +71,18 @@
     <!-- development handling -->
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/chilloutdevelopment/pl.chilldev.lambda/issues</url>
+        <url>https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/issues</url>
     </issueManagement>
 
     <ciManagement>
         <system>Travis CI</system>
-        <url>https://travis-ci.org/chilloutdevelopment/pl.chilldev.lambda</url>
+        <url>https://travis-ci.org/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda</url>
     </ciManagement>
 
     <scm>
-        <connection>scm:git:https://github.com/chilloutdevelopment/pl.chilldev.lambda.git</connection>
-        <developerConnection>scm:git:git@github.com:chilloutdevelopment/pl.chilldev.lambda.git</developerConnection>
-        <url>https://github.com/chilloutdevelopment/pl.chilldev.lambda</url>
+        <connection>scm:git:https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda.git</connection>
+        <developerConnection>scm:git:git@github.com:rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda.git</developerConnection>
+        <url>https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda</url>
     </scm>
 
     <!-- distribution handling -->
@@ -103,7 +97,7 @@
         </snapshotRepository>
         <site>
             <id>github</id>
-            <url>git:ssh://git@github.com/chilloutdevelopment/pl.chilldev.lambda.git?gh-pages#</url>
+            <url>git:ssh://git@github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda.git?gh-pages#</url>
         </site>
     </distributionManagement>
 
@@ -123,7 +117,7 @@
         </profile>
     </profiles>
 
-    <!-- components of ChillDev-Lambda project -->
+    <!-- components of WrzasqPl-Lambda project -->
     <modules>
         <module>lambda-edgedeploy</module>
         <module>lambda-json</module>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-# This file is part of the ChillDev-Lambda.
+# This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
@@ -17,15 +17,15 @@
     <artifactId>lambda-edgedeploy</artifactId>
     <packaging>jar</packaging>
     <parent>
-        <groupId>pl.chilldev.lambda</groupId>
+        <groupId>pl.wrzasq.lambda</groupId>
         <artifactId>lambda</artifactId>
-        <version>0.0.5-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
     <!-- project meta info -->
-    <name>ChillDev Lambda@Edge deploy</name>
-    <url>https://chilloutdevelopment.github.io/pl.chilldev.lambda/lambda-edgedeploy/</url>
+    <name>WrzasqPl Lambda@Edge deploy</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-edgedeploy/</url>
     <description>Lambda@Edge deployment utility.</description>
     <inceptionYear>2018</inceptionYear>
 
@@ -133,9 +133,9 @@
         </dependency>
 
         <dependency>
-            <groupId>pl.chilldev.commons</groupId>
+            <groupId>pl.wrzasq.commons</groupId>
             <artifactId>commons-aws</artifactId>
-            <version>0.4.4</version>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 </project>

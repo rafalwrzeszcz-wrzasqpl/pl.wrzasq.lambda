@@ -1,11 +1,11 @@
 /*
- * This file is part of the ChillDev-Lambda.
+ * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2018 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package pl.chilldev.lambda.edgedeploy;
+package pl.wrzasq.lambda.edgedeploy;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.lambda.AWSLambda;
@@ -16,10 +16,10 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunrun.cfnresponse.CfnRequest;
-import pl.chilldev.commons.aws.cloudformation.CustomResourceHandler;
-import pl.chilldev.lambda.edgedeploy.model.EdgeDeployRequest;
-import pl.chilldev.lambda.edgedeploy.service.LambdaEdgeManager;
-import pl.chilldev.lambda.json.ObjectMapperFactory;
+import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
+import pl.wrzasq.lambda.edgedeploy.model.EdgeDeployRequest;
+import pl.wrzasq.lambda.edgedeploy.service.LambdaEdgeManager;
+import pl.wrzasq.lambda.json.ObjectMapperFactory;
 
 /**
  * CloudFormation request handler.
