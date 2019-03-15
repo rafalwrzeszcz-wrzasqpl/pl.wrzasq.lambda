@@ -19,9 +19,9 @@ under the License.
 -->
 <rss version="0.91">
   <channel>
-    <title>ChillDev Lambda - Checkstyle report</title>
-    <link>https://chilloutdevelopment.github.io/pl.chilldev.lambda</link>
-    <description>ChillDev Lambda - Checkstyle report</description>
+    <title>WrzasqPl Lambda - Checkstyle report</title>
+    <link>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda</link>
+    <description>WrzasqPl Lambda - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2018 - 2019 Rafał Wrzeszcz - Wrzasq.pl</copyright>
     <item>
@@ -30,9 +30,9 @@ under the License.
              Warnings: 0,
              Infos: 0
       </title>
-            <link>https://chilloutdevelopment.github.io/pl.chilldev.lambda/checkstyle.html</link>
+            <link>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html</link>
       <description>
-        <p>Click <a href="https://chilloutdevelopment.github.io/pl.chilldev.lambda/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="https://chilloutdevelopment.github.io/pl.chilldev.lambda/checkstyle.html#pl.chilldev.lambda.edgedeploy.zip.ZipBuilder.java">pl/chilldev/lambda/edgedeploy/zip/ZipBuilder.java</a>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.json.ObjectMapperFactory.java">pl/wrzasq/lambda/json/ObjectMapperFactory.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://chilloutdevelopment.github.io/pl.chilldev.lambda/checkstyle.html#pl.chilldev.lambda.json.ObjectMapperFactory.java">pl/chilldev/lambda/json/ObjectMapperFactory.java</a>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.edgedeploy.service.LambdaEdgeManager.java">pl/wrzasq/lambda/edgedeploy/service/LambdaEdgeManager.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,21 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://chilloutdevelopment.github.io/pl.chilldev.lambda/checkstyle.html#pl.chilldev.lambda.edgedeploy.model.EdgeDeployRequest.java">pl/chilldev/lambda/edgedeploy/model/EdgeDeployRequest.java</a>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.edgedeploy.Handler.java">pl/wrzasq/lambda/edgedeploy/Handler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.edgedeploy.model.EdgeDeployRequest.java">pl/wrzasq/lambda/edgedeploy/model/EdgeDeployRequest.java</a>
                 </td>
                 <td>
                   0
@@ -88,21 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://chilloutdevelopment.github.io/pl.chilldev.lambda/checkstyle.html#pl.chilldev.lambda.edgedeploy.service.LambdaEdgeManager.java">pl/chilldev/lambda/edgedeploy/service/LambdaEdgeManager.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://chilloutdevelopment.github.io/pl.chilldev.lambda/checkstyle.html#pl.chilldev.lambda.edgedeploy.Handler.java">pl/chilldev/lambda/edgedeploy/Handler.java</a>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.edgedeploy.zip.ZipBuilder.java">pl/wrzasq/lambda/edgedeploy/zip/ZipBuilder.java</a>
                 </td>
                 <td>
                   0
