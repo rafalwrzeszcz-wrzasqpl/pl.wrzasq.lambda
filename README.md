@@ -12,7 +12,7 @@
 [![Build Status](https://travis-ci.org/chilloutdevelopment/pl.chilldev.lambda.svg)](https://travis-ci.org/chilloutdevelopment/pl.chilldev.lambda)
 [![Coverage Status](https://coveralls.io/repos/chilloutdevelopment/pl.chilldev.lambda/badge.png?branch=develop)](https://coveralls.io/r/chilloutdevelopment/pl.chilldev.lambda)
 [![Known Vulnerabilities](https://snyk.io/test/github/chilloutdevelopment/pl.chilldev.lambda/badge.svg)](https://snyk.io/test/github/chilloutdevelopment/pl.chilldev.lambda)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/chilloutdevelopment/pl.chilldev.lambda)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/chilloutdevelopment/pl.chilldev.lambda) [![Join the chat at https://gitter.im/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda](https://badges.gitter.im/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda.svg)](https://gitter.im/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # Usage
 
