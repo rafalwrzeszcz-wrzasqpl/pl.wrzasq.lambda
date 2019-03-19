@@ -37,6 +37,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
                     <usedDependencies>
+                        <usedDependency>${project.groupId}:lambda-json</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor</usedDependency>
                         <usedDependency>io.symphonia:lambda-logging</usedDependency>
@@ -53,6 +54,12 @@
 
     <!-- project dependencies -->
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lambda-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
@@ -104,7 +111,7 @@
         <dependency>
             <groupId>pl.wrzasq.commons</groupId>
             <artifactId>commons-aws</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 </project>
