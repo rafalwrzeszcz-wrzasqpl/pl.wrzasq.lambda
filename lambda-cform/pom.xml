@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+# This file is part of the pl.chilldev.lambda.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+-->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd
+">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- core project settings -->
+    <artifactId>lambda-cform</artifactId>
+    <packaging>pom</packaging>
+    <parent>
+        <groupId>pl.wrzasq.lambda</groupId>
+        <artifactId>lambda</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+        <relativePath>../</relativePath>
+    </parent>
+
+    <!-- project meta info -->
+    <name>WrzasqPl Lambda - CloudFormation</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/</url>
+    <description>Custom CloudFormation resource handlers container.</description>
+    <inceptionYear>2019</inceptionYear>
+
+    <!-- sub-components of the project -->
+    <modules>
+        <module>lambda-cform-organization</module>
+    </modules>
+</project>

@@ -135,7 +135,7 @@ public class LambdaEdgeManager
      * Handles function deletion.
      *
      * @param input Resource delete request.
-     * @return Data about published version.
+     * @return Data about deleted version.
      */
     public CustomResourceResponse<PublishVersionResult> delete(EdgeDeployRequest input)
     {

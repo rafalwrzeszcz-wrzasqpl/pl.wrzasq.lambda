@@ -35,6 +35,10 @@ to deploy [**Lambda@Edge**](https://aws.amazon.com/lambda/edge/) functions from 
 [`AWS::CloudFront::Distribution`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html)
 resource.
 
+## [Lambda-CForm Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-organization/)
+
+**CloudFormation** custom resource handlers for organization management.
+
 # Resources
 
 -   [GitHub page with API documentation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda)

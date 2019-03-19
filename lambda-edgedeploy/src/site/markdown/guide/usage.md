@@ -131,7 +131,6 @@ version).
     EdgeFunctionRole:
         Type: "AWS::IAM::Role"
         Properties:
-            RoleName: !Sub "${AWS::Region}.edge"
             AssumeRolePolicyDocument:
                 Statement:
                     -
@@ -148,7 +147,6 @@ version).
     EdgeDeployRole:
         Type: "AWS::IAM::Role"
         Properties:
-            RoleName: !Sub "${AWS::Region}.edge-deploy"
             AssumeRolePolicyDocument:
                 Statement:
                     -
@@ -227,12 +225,11 @@ version).
     EdgeDeploy:
         Type: "AWS::Lambda::Function"
         Properties:
-            FunctionName: "edge-deploy"
             Runtime: "java8"
             Code:
                 # put your source bucket
                 S3Bucket: "your-bucket"
-                S3Key: "lambda-edgedeploy-0.0.1-standalone.jar"
+                S3Key: "lambda-edgedeploy-1.0.1-standalone.jar"
             Handler: "pl.wrzasq.lambda.edgedeploy.Handler::handle"
             MemorySize: 256
             Description: "Lambda@Edge deployment."
