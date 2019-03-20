@@ -7,15 +7,14 @@
 
 # Using in CloudFormation
 
-This resource handler manager organization state (should be applied only on root account).
+This resource handler provisions account password policy.
 
 # Required permissions
 
-`cform-organization` Lambda needs following permissions:
+`cform-passwordpolicy` Lambda needs following permissions:
 
--   `iam:CreateOrganization`,
--   `iam:DeleteOrganization`,
--   `iam:DescribeOrganization`.
+-   `iam:DeleteAccountPasswordPolicy`,
+-   `iam:UpdateAccountPasswordPolicy`.
 
 Additionally you may want to add following policies to it's role:
 
@@ -26,25 +25,17 @@ resource handler execution);
 
 # Properties
 
-## `featureSet` (required) - string
-
-Specifies set of features enabled for accounts in organization. Can be either `CONSOLIDATED_BILLING` or `ALL`.
-
-**Note:** It only applies during organization creation, will not apply any changes if the value changes between updates.
+Resource properties are mapped directly to password policy update request, which means that properties are same as in
+[UpdateAccountPasswordPolicyRequest](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/identitymanagement/model/UpdateAccountPasswordPolicyRequest.html).
 
 # Output values
 
-Deploy handler exposes entire
-[Organization](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/iam/model/Organization.html)
-object. However it's not important as account can manage just one organization and organization data is never needed in
-further calls.
-
-**Note:** Custom resource physical ID is set as created organization ID.
+Output properties are same as the specified policy. Custom resource ID is set to fixed string.
 
 # Example
 
 ```yaml
-    OrganizationManagerRole:
+    PasswordPolicyManagerRole:
         Type: "AWS::IAM::Role"
         Properties:
             AssumeRolePolicyDocument:
@@ -59,39 +50,46 @@ further calls.
                 - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
             Policies:
                 -
-                    PolicyName: "AllowManagingOrganizations"
+                    PolicyName: "AllowManagingPasswordPolicy"
                     PolicyDocument:
                         Version: "2012-10-17"
                         Statement:
                             -
                                 Action:
-                                    - "iam:CreateOrganization"
-                                    - "iam:DeleteOrganization"
-                                    - "iam:DescribeOrganization"
+                                    - "iam:DeleteAccountPasswordPolocy"
+                                    - "iam:UpdateAccountPasswordPolicy"
                                 Effect: "Allow"
                                 Resource:
                                     - "*"
 
-    OrganizationManager:
+    PasswordPolicyManager:
         Type: "AWS::Lambda::Function"
         Properties:
             Runtime: "java8"
             Code:
                 # put your source bucket
                 S3Bucket: "your-bucket"
-                S3Key: "lambda-cform-organization-1.0.1-standalone.jar"
-            Handler: "pl.wrzasq.lambda.cform.organization.Handler::handle"
+                S3Key: "lambda-cform-passwordpolicy-1.0.1-standalone.jar"
+            Handler: "pl.wrzasq.lambda.cform.passwordpolicy.Handler::handle"
             MemorySize: 256
-            Description: "AWS Organization manager deployment."
+            Description: "AWS password policy manager deployment."
             Timeout: 300
             TracingConfig:
                 Mode: "Active"
-            Role: !GetAtt "OrganizationManagerRole.Arn"
+            Role: !GetAtt "PasswordPolicyManagerRole.Arn"
 
-    Organization:
+    PasswordPolicy:
         Type: "AWS::CloudFormation::CustomResource"
         Properties:
             # reference to deploy function
-            ServiceToken: !GetAtt "OrganizationManager.Arn"
-            featureSet: "ALL"
+            ServiceToken: !GetAtt "PasswordPolicyManager.Arn"
+            minimumPasswordLength: 8
+            requireLowercaseCharacters: true
+            requireUppercaseCharacters: true
+            requireNumbers: true
+            requireSymbols: true
+            allowUsersToChangePassword: true
+            passwordReusePrevention: 2
+            maxPasswordAge: 90
+            hardExpiry: false
 ```

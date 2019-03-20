@@ -37,7 +37,11 @@ resource.
 
 ## [Lambda-CForm Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-organization/)
 
-**CloudFormation** custom resource handlers for organization management.
+**CloudFormation** custom resource handler for organization management.
+
+## [Lambda-CForm PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-passwordpolicy/)
+
+**IAM** password policy enforcer as **CloudFormation** custom resource.
 
 # Resources
 

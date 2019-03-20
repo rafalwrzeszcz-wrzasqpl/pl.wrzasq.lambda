@@ -58,9 +58,9 @@ public class OrganizationManager
                 new DescribeOrganizationRequest()
             );
 
-            this.logger.info("Organization already exists (ID {}).", result.getOrganization().getId());
+            this.logger.info("Organization already exists (ARN {}).", result.getOrganization().getArn());
 
-            return new CustomResourceResponse<>(result.getOrganization(), result.getOrganization().getArn());
+            return new CustomResourceResponse<>(result.getOrganization(), result.getOrganization().getId());
         } catch (SdkBaseException error) {
             this.logger.info("Exception occurred during organization data fetching, probably doesn't exist.", error);
 
@@ -69,9 +69,9 @@ public class OrganizationManager
                     .withFeatureSet(input.getFeatureSet())
             );
 
-            this.logger.info("Created new organization, ID {}.", result.getOrganization().getId());
+            this.logger.info("Created new organization, ARN {}.", result.getOrganization().getArn());
 
-            return new CustomResourceResponse<>(result.getOrganization(), result.getOrganization().getArn());
+            return new CustomResourceResponse<>(result.getOrganization(), result.getOrganization().getId());
         }
     }
 
@@ -79,7 +79,7 @@ public class OrganizationManager
      * Handles organization deletion.
      *
      * @param input Resource delete request.
-     * @return Data about deleted unit.
+     * @return Empty response.
      */
     public CustomResourceResponse<Organization> delete(OrganizationRequest input)
     {

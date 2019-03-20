@@ -42,10 +42,10 @@ public class OrganizationManagerTest
     @Test
     public void sync()
     {
-        String arn = "arn:organization:test";
+        String id = "o-test";
 
         Organization organization = new Organization();
-        organization.setArn(arn);
+        organization.setId(id);
 
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
@@ -78,19 +78,19 @@ public class OrganizationManagerTest
             "OrganizationManager.sync() should return organization data of created organization."
         );
         Assertions.assertEquals(
-            arn,
+            id,
             result.getPhysicalResourceId(),
-            "OrganizationManager.sync() should return organization ARN as physical ID."
+            "OrganizationManager.sync() should return organization ID as physical ID."
         );
     }
 
     @Test
     public void syncAlreadyExists()
     {
-        String arn = "arn:organization:test";
+        String id = "o-test";
 
         Organization organization = new Organization();
-        organization.setArn(arn);
+        organization.setId(id);
 
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
@@ -114,9 +114,9 @@ public class OrganizationManagerTest
             "OrganizationManager.sync() should return organization data of existing organization."
         );
         Assertions.assertEquals(
-            arn,
+            id,
             result.getPhysicalResourceId(),
-            "OrganizationManager.sync() should return organization ARN as physical ID."
+            "OrganizationManager.sync() should return organization ID as physical ID."
         );
     }
 
