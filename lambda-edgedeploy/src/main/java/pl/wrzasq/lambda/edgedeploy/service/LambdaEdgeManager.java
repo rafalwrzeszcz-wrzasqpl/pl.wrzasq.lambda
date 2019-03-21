@@ -157,7 +157,7 @@ public class LambdaEdgeManager
     /**
      * Publishes new version of Lambda.
      *
-     * @param functionName Function name.
+     * @param functionName Function stackSetName.
      * @return Published version data.
      */
     private CustomResourceResponse<PublishVersionResult> publishLambdaVersion(String functionName)

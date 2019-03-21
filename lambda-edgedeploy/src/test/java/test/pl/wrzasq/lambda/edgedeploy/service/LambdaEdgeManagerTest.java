@@ -69,7 +69,7 @@ public class LambdaEdgeManagerTest
 
     private static final String PACKAGE_BUCKET = "bucket-test";
 
-    private static final String PACKAGE_KEY = "maven/release/pl/chilldev/lambda.zip";
+    private static final String PACKAGE_KEY = "maven/release/pl/wrzasq/lambda.zip";
 
     private static final String MASTER_ARN = "arn:aws:lambda:test";
 
@@ -150,7 +150,7 @@ public class LambdaEdgeManagerTest
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
             createRequest.getFunctionName(),
-            "LambdaEdgeManager.create() should request creation of function with given name."
+            "LambdaEdgeManager.create() should request creation of function with given stackSetName."
         );
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_DESCRIPTION,
@@ -333,7 +333,7 @@ public class LambdaEdgeManagerTest
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
             updateConfigurationRequest.getFunctionName(),
-            "LambdaEdgeManager.update() should request update of given function by it's name."
+            "LambdaEdgeManager.update() should request update of given function by it's stackSetName."
         );
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_DESCRIPTION,
@@ -440,7 +440,7 @@ public class LambdaEdgeManagerTest
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
             result.getData().getFunctionName(),
-            "LambdaEdgeManager.delete() should return deleted function name."
+            "LambdaEdgeManager.delete() should return deleted function stackSetName."
         );
     }
 
@@ -465,7 +465,7 @@ public class LambdaEdgeManagerTest
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
             result.getData().getFunctionName(),
-            "LambdaEdgeManager.delete() should return function name even if didn't exist."
+            "LambdaEdgeManager.delete() should return function stackSetName even if didn't exist."
         );
     }
 

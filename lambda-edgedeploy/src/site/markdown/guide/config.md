@@ -43,7 +43,7 @@ This will deploy your `lambda.zip` package with `env.json` file in it with confi
 ```json
 {
     "applicationVersion": "0.0.1",
-    "applicationDomain": "chilldev.pl",
+    "applicationDomain": "wrzasq.pl",
     "facebookAppId": "123456789abcdefgh"
 }
 ```

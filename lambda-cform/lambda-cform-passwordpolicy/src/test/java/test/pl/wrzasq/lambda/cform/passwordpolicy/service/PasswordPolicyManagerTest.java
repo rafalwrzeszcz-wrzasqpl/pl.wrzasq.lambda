@@ -41,9 +41,9 @@ public class PasswordPolicyManagerTest
         Mockito.verify(this.iam).updateAccountPasswordPolicy(input);
 
         Assertions.assertEquals(
-            "PasswordPolicyManager.setPolicy() should always set fixed string as a resource ID.",
             "password-policy",
-            result.getPhysicalResourceId()
+            result.getPhysicalResourceId(),
+            "PasswordPolicyManager.setPolicy() should always set fixed string as a resource ID."
         );
     }
 

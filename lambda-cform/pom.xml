@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-# This file is part of the pl.chilldev.lambda.
+# This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
 # @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
@@ -33,5 +33,6 @@
     <modules>
         <module>lambda-cform-organization</module>
         <module>lambda-cform-passwordpolicy</module>
+        <module>lambda-cform-stackset</module>
     </modules>
 </project>

@@ -11,7 +11,7 @@ This resource handler provisions account password policy.
 
 # Required permissions
 
-`cform-passwordpolicy` Lambda needs following permissions:
+`lambda-cform-passwordpolicy` Lambda needs following permissions:
 
 -   `iam:DeleteAccountPasswordPolicy`,
 -   `iam:UpdateAccountPasswordPolicy`.
@@ -69,7 +69,7 @@ Output properties are same as the specified policy. Custom resource ID is set to
             Code:
                 # put your source bucket
                 S3Bucket: "your-bucket"
-                S3Key: "lambda-cform-passwordpolicy-1.0.1-standalone.jar"
+                S3Key: "lambda-cform-passwordpolicy-1.0.2-standalone.jar"
             Handler: "pl.wrzasq.lambda.cform.passwordpolicy.Handler::handle"
             MemorySize: 256
             Description: "AWS password policy manager deployment."

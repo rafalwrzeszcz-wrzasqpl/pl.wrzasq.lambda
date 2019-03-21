@@ -14,6 +14,10 @@
     <body>
         <menu ref="parent"/>
 
+        <menu name="Guide">
+            <item name="Usage" href="guide/usage.html"/>
+        </menu>
+
         <menu ref="reports"/>
     </body>
 </project>

@@ -14,7 +14,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- core project settings -->
-    <artifactId>lambda-cform-passwordpolicy</artifactId>
+    <artifactId>lambda-cform-stackset</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>pl.wrzasq.lambda</groupId>
@@ -24,9 +24,9 @@
     </parent>
 
     <!-- project meta info -->
-    <name>WrzasqPl CloudFormation password policy handler</name>
-    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-passwordpolicy/</url>
-    <description>Account password policy enforcement handler for CloudFormation.</description>
+    <name>WrzasqPl CloudFormation StackSet handler</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-stackset/</url>
+    <description>StackSet resource handler for CloudFormation.</description>
     <inceptionYear>2019</inceptionYear>
 
     <!-- plugins configuration -->
@@ -63,7 +63,7 @@
 
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-iam</artifactId>
+            <artifactId>aws-java-sdk-cloudformation</artifactId>
             <version>1.11.438</version>
         </dependency>
 

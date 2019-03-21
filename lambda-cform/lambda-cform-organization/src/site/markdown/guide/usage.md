@@ -11,7 +11,7 @@ This resource handler manager organization state (should be applied only on root
 
 # Required permissions
 
-`cform-organization` Lambda needs following permissions:
+`lambda-cform-organization` Lambda needs following permissions:
 
 -   `iam:CreateOrganization`,
 -   `iam:DeleteOrganization`,

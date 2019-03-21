@@ -51,7 +51,7 @@ public class ZipBuilder
     /**
      * Creates new ZIP archive entry.
      *
-     * @param name Entry name.
+     * @param name Entry stackSetName.
      * @param content Binary content of the file.
      * @throws IOException When writing content to archive fails.
      */
@@ -63,7 +63,7 @@ public class ZipBuilder
     /**
      * Creates new ZIP archive entry.
      *
-     * @param name Entry name.
+     * @param name Entry stackSetName.
      * @param stream Content source.
      * @throws IOException When writing content to archive fails.
      */
@@ -84,7 +84,7 @@ public class ZipBuilder
     /**
      * Creates ZIP entry.
      *
-     * @param name Entry name.
+     * @param name Entry stackSetName.
      * @param handler Custom writing logic.
      * @throws IOException When writing to stream fails.
      */

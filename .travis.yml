@@ -96,7 +96,7 @@ after_script: "mvn -e coveralls:report"
 
 before_deploy:
     - "eval \"$(ssh-agent -s)\""
-    - "git config user.name \"Travis CI\""
+    - "git config user.stackSetName \"Travis CI\""
     - "git config user.email \"office@wrzasq.pl\""
     - "openssl aes-256-cbc -md sha256 -k \"${SECRET}\" -in .travis/gpg_key.enc -out .travis/gpg_key -d"
     - "openssl aes-256-cbc -md sha256 -k \"${SECRET}\" -in .travis/id_rsa.enc -out .travis/id_rsa -d"

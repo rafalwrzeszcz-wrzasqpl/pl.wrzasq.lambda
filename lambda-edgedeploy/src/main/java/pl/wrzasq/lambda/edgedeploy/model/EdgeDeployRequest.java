@@ -23,7 +23,7 @@ public class EdgeDeployRequest
     private static final String DEFAULT_CONFIG_FILE = "config.json";
 
     /**
-     * Lambda function name.
+     * Lambda function stackSetName.
      */
     private String functionName;
 

@@ -14,7 +14,7 @@ file with deployment time configuration.
 
 # Required permissions
 
-`edgedeploy` Lambda needs following permissions:
+`lambda-edgedeploy` Lambda needs following permissions:
 
 -   read access to **S3** location where your deployment package is located;
 -   Lambda management permissions;
@@ -169,8 +169,8 @@ version).
                                 Effect: "Allow"
                                 Resource:
                                     # put your source bucket here
-                                    - "arn:aws:s3:::chilldev-repository"
-                                    - "arn:aws:s3:::chilldev-repository/*"
+                                    - "arn:aws:s3:::wrzasqpl-repository"
+                                    - "arn:aws:s3:::wrzasqpl-repository/*"
                 -
                     PolicyName: "AllowManagingLambdas"
                     PolicyDocument:
