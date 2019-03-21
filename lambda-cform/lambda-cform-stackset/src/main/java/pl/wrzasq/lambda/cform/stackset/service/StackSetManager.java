@@ -63,9 +63,10 @@ public class StackSetManager
      * Handles stack set deployment.
      *
      * @param input Resource deployment request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<StackSetResponse> deployStackSet(StackSetRequest input)
+    public CustomResourceResponse<StackSetResponse> deployStackSet(StackSetRequest input, String physicalResourceId)
     {
         StackSetResponse response = new StackSetResponse();
 
@@ -79,22 +80,33 @@ public class StackSetManager
 
             this.updateStackSet(input);
 
+            // preserve existing
+            if (!result.getStackSetId().equals(physicalResourceId)) {
+                this.logger.warn(
+                    "Stack set ID {} differs from CloudFormation-provided physical resource ID {}.",
+                    result.getStackSetId(),
+                    physicalResourceId
+                );
+            }
+
             response.setId(result.getStackSetId());
         } catch (StackSetNotFoundException error) {
             response.setId(this.createStackSet(input));
+            physicalResourceId = response.getId();
         }
 
         response.setStackSetName(input.getStackSetName());
-        return new CustomResourceResponse<>(response, input.getStackSetName());
+        return new CustomResourceResponse<>(response, physicalResourceId);
     }
 
     /**
      * Handles stack set deletion.
      *
      * @param input Resource delete request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<StackSetResponse> deleteStackSet(StackSetRequest input)
+    public CustomResourceResponse<StackSetResponse> deleteStackSet(StackSetRequest input, String physicalResourceId)
     {
         this.cloudFormation.deleteStackSet(
             new DeleteStackSetRequest()
@@ -103,7 +115,7 @@ public class StackSetManager
 
         this.logger.info("Stack set deleted.");
 
-        return new CustomResourceResponse<>(null);
+        return new CustomResourceResponse<>(null, physicalResourceId);
     }
 
     /**

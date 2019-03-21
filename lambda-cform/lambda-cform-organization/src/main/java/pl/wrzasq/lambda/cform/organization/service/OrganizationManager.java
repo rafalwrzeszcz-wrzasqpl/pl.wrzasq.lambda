@@ -49,18 +49,29 @@ public class OrganizationManager
      * Handles organization creation.
      *
      * @param input Resource creation request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<Organization> sync(OrganizationRequest input)
+    public CustomResourceResponse<Organization> sync(OrganizationRequest input, String physicalResourceId)
     {
         try {
             DescribeOrganizationResult result = this.organizations.describeOrganization(
                 new DescribeOrganizationRequest()
             );
+            Organization organization = result.getOrganization();
 
-            this.logger.info("Organization already exists (ARN {}).", result.getOrganization().getArn());
+            // we will keep old ID to avoid calling Delete event in UPDATE_COMPLETE_CLEANUP phase
+            if (!organization.getId().equals(physicalResourceId)) {
+                this.logger.warn(
+                    "Organization ID {} differs from CloudFormation-provided physical resource ID {}.",
+                    organization.getId(),
+                    physicalResourceId
+                );
+            }
 
-            return new CustomResourceResponse<>(result.getOrganization(), result.getOrganization().getId());
+            this.logger.info("Organization already exists (ARN {}).", organization.getArn());
+
+            return new CustomResourceResponse<>(organization, physicalResourceId);
         } catch (SdkBaseException error) {
             this.logger.info("Exception occurred during organization data fetching, probably doesn't exist.", error);
 
@@ -79,14 +90,15 @@ public class OrganizationManager
      * Handles organization deletion.
      *
      * @param input Resource delete request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<Organization> delete(OrganizationRequest input)
+    public CustomResourceResponse<Organization> delete(OrganizationRequest input, String physicalResourceId)
     {
         this.organizations.deleteOrganization(new DeleteOrganizationRequest());
 
         this.logger.info("Organization deleted.");
 
-        return new CustomResourceResponse<>(null);
+        return new CustomResourceResponse<>(null, physicalResourceId);
     }
 }

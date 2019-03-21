@@ -140,7 +140,7 @@ public class LambdaEdgeManagerTest
                     .withMasterArn(LambdaEdgeManagerTest.MASTER_ARN)
             );
 
-        CustomResourceResponse<PublishVersionResult> response = manager.create(input);
+        CustomResourceResponse<PublishVersionResult> response = manager.create(input, null);
 
         Mockito.verify(this.lambda).createFunction(this.createRequest.capture());
 
@@ -290,7 +290,7 @@ public class LambdaEdgeManagerTest
 
         Assertions.assertThrows(
             RuntimeException.class,
-            () -> manager.create(input),
+            () -> manager.create(input, null),
             "LambdaEdgeManager.create() should throw exception when processing target ZIP package fails."
         );
     }
@@ -321,7 +321,7 @@ public class LambdaEdgeManagerTest
                     .withMasterArn(LambdaEdgeManagerTest.MASTER_ARN)
             );
 
-        CustomResourceResponse<PublishVersionResult> response = manager.update(input);
+        CustomResourceResponse<PublishVersionResult> response = manager.update(input, null);
 
         Mockito.verify(this.lambda).updateFunctionCode(this.updateCodeRequest.capture());
         Mockito.verify(this.lambda).updateFunctionConfiguration(this.updateConfigurationRequest.capture());
@@ -430,7 +430,7 @@ public class LambdaEdgeManagerTest
             .when(this.lambda.deleteFunction(this.deleteRequest.capture()))
             .thenReturn(null);
 
-        CustomResourceResponse<PublishVersionResult> result = manager.delete(input);
+        CustomResourceResponse<PublishVersionResult> result = manager.delete(input, null);
 
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
@@ -455,7 +455,7 @@ public class LambdaEdgeManagerTest
             .when(this.lambda.deleteFunction(this.deleteRequest.capture()))
             .thenThrow(ResourceNotFoundException.class);
 
-        CustomResourceResponse<PublishVersionResult> result = manager.delete(input);
+        CustomResourceResponse<PublishVersionResult> result = manager.delete(input, null);
 
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,

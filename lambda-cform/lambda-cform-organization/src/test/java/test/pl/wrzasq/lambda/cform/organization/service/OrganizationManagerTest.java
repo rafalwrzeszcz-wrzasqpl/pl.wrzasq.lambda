@@ -62,7 +62,7 @@ public class OrganizationManagerTest
                     .withOrganization(organization)
             );
 
-        CustomResourceResponse<Organization> result = manager.sync(input);
+        CustomResourceResponse<Organization> result = manager.sync(input, null);
 
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations).createOrganization(Mockito.any(CreateOrganizationRequest.class));
@@ -103,7 +103,7 @@ public class OrganizationManagerTest
                     .withOrganization(organization)
             );
 
-        CustomResourceResponse<Organization> result = manager.sync(input);
+        CustomResourceResponse<Organization> result = manager.sync(input, id);
 
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations, Mockito.never()).createOrganization(Mockito.any());
@@ -121,11 +121,48 @@ public class OrganizationManagerTest
     }
 
     @Test
+    public void syncAlreadyExistsOutOfSync()
+    {
+        String physicalResourceId = "o-another";
+        String id = "o-test";
+
+        Organization organization = new Organization();
+        organization.setId(id);
+
+        OrganizationManager manager = new OrganizationManager(this.organizations);
+
+        OrganizationRequest input = new OrganizationRequest();
+
+        Mockito
+            .when(this.organizations.describeOrganization(Mockito.any(DescribeOrganizationRequest.class)))
+            .thenReturn(
+                new DescribeOrganizationResult()
+                    .withOrganization(organization)
+            );
+
+        CustomResourceResponse<Organization> result = manager.sync(input, physicalResourceId);
+
+        Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
+        Mockito.verify(this.organizations, Mockito.never()).createOrganization(Mockito.any());
+
+        Assertions.assertSame(
+            organization,
+            result.getData(),
+            "OrganizationManager.sync() should return organization data of existing organization."
+        );
+        Assertions.assertEquals(
+            physicalResourceId,
+            result.getPhysicalResourceId(),
+            "OrganizationManager.sync() should preserve physical resource ID to avoid cleanup phase calls."
+        );
+    }
+
+    @Test
     public void delete()
     {
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
-        manager.delete(null);
+        manager.delete(null, null);
 
         Mockito.verify(this.organizations).deleteOrganization(Mockito.any(DeleteOrganizationRequest.class));
     }

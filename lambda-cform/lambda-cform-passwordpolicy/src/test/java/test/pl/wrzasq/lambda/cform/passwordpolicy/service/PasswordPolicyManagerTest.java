@@ -36,14 +36,37 @@ public class PasswordPolicyManagerTest
 
         UpdateAccountPasswordPolicyRequest input = new UpdateAccountPasswordPolicyRequest();
 
-        CustomResourceResponse<UpdateAccountPasswordPolicyRequest> result = manager.setPolicy(input);
+        CustomResourceResponse<UpdateAccountPasswordPolicyRequest> result = manager.setPolicy(input, null);
 
         Mockito.verify(this.iam).updateAccountPasswordPolicy(input);
 
         Assertions.assertEquals(
             "password-policy",
             result.getPhysicalResourceId(),
-            "PasswordPolicyManager.setPolicy() should always set fixed string as a resource ID."
+            "PasswordPolicyManager.setPolicy() should set fixed string as a resource ID."
+        );
+    }
+
+    @Test
+    public void setPolicyUpdate()
+    {
+        String physicalResourceId = "another-id";
+
+        PasswordPolicyManager manager = new PasswordPolicyManager(this.iam);
+
+        UpdateAccountPasswordPolicyRequest input = new UpdateAccountPasswordPolicyRequest();
+
+        CustomResourceResponse<UpdateAccountPasswordPolicyRequest> result = manager.setPolicy(
+            input,
+            physicalResourceId
+        );
+
+        Mockito.verify(this.iam).updateAccountPasswordPolicy(input);
+
+        Assertions.assertEquals(
+            physicalResourceId,
+            result.getPhysicalResourceId(),
+            "PasswordPolicyManager.setPolicy() should re-use existing resource ID to avoid migrations."
         );
     }
 
@@ -52,7 +75,7 @@ public class PasswordPolicyManagerTest
     {
         PasswordPolicyManager manager = new PasswordPolicyManager(this.iam);
 
-        manager.delete(null);
+        manager.delete(null, null);
 
         Mockito.verify(this.iam).deleteAccountPasswordPolicy();
     }

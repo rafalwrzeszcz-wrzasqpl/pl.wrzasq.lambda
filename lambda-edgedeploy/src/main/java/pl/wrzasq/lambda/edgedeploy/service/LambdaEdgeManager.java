@@ -73,9 +73,10 @@ public class LambdaEdgeManager
      * Handles function creation.
      *
      * @param input Resource creation request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<PublishVersionResult> create(EdgeDeployRequest input)
+    public CustomResourceResponse<PublishVersionResult> create(EdgeDeployRequest input, String physicalResourceId)
     {
         this.lambda.createFunction(
             new CreateFunctionRequest()
@@ -103,9 +104,10 @@ public class LambdaEdgeManager
      * Handles function update.
      *
      * @param input Resource update request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<PublishVersionResult> update(EdgeDeployRequest input)
+    public CustomResourceResponse<PublishVersionResult> update(EdgeDeployRequest input, String physicalResourceId)
     {
         this.lambda.updateFunctionCode(
             new UpdateFunctionCodeRequest()
@@ -135,9 +137,10 @@ public class LambdaEdgeManager
      * Handles function deletion.
      *
      * @param input Resource delete request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about deleted version.
      */
-    public CustomResourceResponse<PublishVersionResult> delete(EdgeDeployRequest input)
+    public CustomResourceResponse<PublishVersionResult> delete(EdgeDeployRequest input, String physicalResourceId)
     {
         try {
             this.lambda.deleteFunction(
@@ -150,7 +153,8 @@ public class LambdaEdgeManager
 
         return new CustomResourceResponse<>(
             new PublishVersionResult()
-                .withFunctionName(input.getFunctionName())
+                .withFunctionName(input.getFunctionName()),
+            physicalResourceId
         );
     }
 

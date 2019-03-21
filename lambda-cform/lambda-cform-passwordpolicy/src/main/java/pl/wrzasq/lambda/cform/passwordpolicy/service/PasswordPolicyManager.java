@@ -47,31 +47,41 @@ public class PasswordPolicyManager
      * Updates password policy for current account.
      *
      * @param input Password policy settings request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
     public CustomResourceResponse<UpdateAccountPasswordPolicyRequest> setPolicy(
-        UpdateAccountPasswordPolicyRequest input
+        UpdateAccountPasswordPolicyRequest input,
+        String physicalResourceId
     )
     {
         this.iam.updateAccountPasswordPolicy(input);
 
         this.logger.info("Account password policy set.");
 
-        return new CustomResourceResponse<>(input, PasswordPolicyManager.PHYSICAL_RESOURCE_ID);
+        return new CustomResourceResponse<>(
+            input,
+            // in case of any future changes keep existing ID
+            physicalResourceId == null ? PasswordPolicyManager.PHYSICAL_RESOURCE_ID : physicalResourceId
+        );
     }
 
     /**
      * Handles password policy deletion.
      *
      * @param input Resource delete request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<UpdateAccountPasswordPolicyRequest> delete(UpdateAccountPasswordPolicyRequest input)
+    public CustomResourceResponse<UpdateAccountPasswordPolicyRequest> delete(
+        UpdateAccountPasswordPolicyRequest input,
+        String physicalResourceId
+    )
     {
         this.iam.deleteAccountPasswordPolicy();
 
         this.logger.info("Account password policy removed.");
 
-        return new CustomResourceResponse<>(null, PasswordPolicyManager.PHYSICAL_RESOURCE_ID);
+        return new CustomResourceResponse<>(null, physicalResourceId);
     }
 }
