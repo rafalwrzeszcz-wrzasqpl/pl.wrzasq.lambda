@@ -58,9 +58,9 @@ public class OrganizationManager
                 new DescribeOrganizationRequest()
             );
 
-<span class="fc" id="L61">            this.logger.info(&quot;Organization already exists (ID {}).&quot;, result.getOrganization().getId());</span>
+<span class="fc" id="L61">            this.logger.info(&quot;Organization already exists (ARN {}).&quot;, result.getOrganization().getArn());</span>
 
-<span class="fc" id="L63">            return new CustomResourceResponse&lt;&gt;(result.getOrganization(), result.getOrganization().getArn());</span>
+<span class="fc" id="L63">            return new CustomResourceResponse&lt;&gt;(result.getOrganization(), result.getOrganization().getId());</span>
 <span class="fc" id="L64">        } catch (SdkBaseException error) {</span>
 <span class="fc" id="L65">            this.logger.info(&quot;Exception occurred during organization data fetching, probably doesn't exist.&quot;, error);</span>
 
@@ -69,9 +69,9 @@ public class OrganizationManager
 <span class="fc" id="L69">                    .withFeatureSet(input.getFeatureSet())</span>
             );
 
-<span class="fc" id="L72">            this.logger.info(&quot;Created new organization, ID {}.&quot;, result.getOrganization().getId());</span>
+<span class="fc" id="L72">            this.logger.info(&quot;Created new organization, ARN {}.&quot;, result.getOrganization().getArn());</span>
 
-<span class="fc" id="L74">            return new CustomResourceResponse&lt;&gt;(result.getOrganization(), result.getOrganization().getArn());</span>
+<span class="fc" id="L74">            return new CustomResourceResponse&lt;&gt;(result.getOrganization(), result.getOrganization().getId());</span>
         }
     }
 
@@ -79,7 +79,7 @@ public class OrganizationManager
      * Handles organization deletion.
      *
      * @param input Resource delete request.
-     * @return Data about deleted unit.
+     * @return Empty response.
      */
     public CustomResourceResponse&lt;Organization&gt; delete(OrganizationRequest input)
     {
