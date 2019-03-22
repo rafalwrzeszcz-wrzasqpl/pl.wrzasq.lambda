@@ -3,7 +3,7 @@
 # This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
@@ -14,20 +14,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- core project settings -->
-    <artifactId>lambda-edgedeploy</artifactId>
+    <artifactId>lambda-cform-organization-unit</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>pl.wrzasq.lambda</groupId>
-        <artifactId>lambda</artifactId>
+        <artifactId>lambda-cform</artifactId>
         <version>1.0.3-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
     <!-- project meta info -->
-    <name>WrzasqPl Lambda@Edge deploy</name>
-    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-edgedeploy/</url>
-    <description>Lambda@Edge deployment utility.</description>
-    <inceptionYear>2018</inceptionYear>
+    <name>WrzasqPl CloudFormation Organizational Unit handler</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-organization-unit/</url>
+    <description>Organizational Unit resource handler for CloudFormation.</description>
+    <inceptionYear>2019</inceptionYear>
 
     <!-- plugins configuration -->
     <build>
@@ -37,6 +37,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
                     <usedDependencies>
+                        <usedDependency>${project.groupId}:lambda-json</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor</usedDependency>
                         <usedDependency>io.symphonia:lambda-logging</usedDependency>
@@ -62,19 +63,7 @@
 
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-core</artifactId>
-            <version>1.11.438</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-lambda</artifactId>
-            <version>1.11.438</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
+            <artifactId>aws-java-sdk-organizations</artifactId>
             <version>1.11.438</version>
         </dependency>
 
@@ -94,18 +83,6 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-xray-recorder-sdk-aws-sdk-instrumentor</artifactId>
             <version>2.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.9.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
         </dependency>
 
         <dependency>

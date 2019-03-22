@@ -7,15 +7,16 @@
 
 # Using in CloudFormation
 
-This resource handler manager organization state (should be applied only on root account).
+This resource handler manages organization state (should be applied only on root account).
 
 # Required permissions
 
 `lambda-cform-organization` Lambda needs following permissions:
 
--   `iam:CreateOrganization`,
--   `iam:DeleteOrganization`,
--   `iam:DescribeOrganization`.
+-   `organizations:CreateOrganization`,
+-   `organizations:DeleteOrganization`,
+-   `organizations:DescribeOrganization`,
+-   `organizations:ListRoots`.
 
 Additionally you may want to add following policies to it's role:
 
@@ -34,10 +35,21 @@ Specifies set of features enabled for accounts in organization. Can be either `C
 
 # Output values
 
-Deploy handler exposes entire
+Deploy handler exposes structure with two elements:
+
+```json
+{
+    "organization": object,
+    "root": object
+}
+```
+
+-   `organization`: entire
 [Organization](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/iam/model/Organization.html)
-object. However it's not important as account can manage just one organization and organization data is never needed in
-further calls.
+object;
+-   `root`: entire
+[Root](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/organizations/model/Root.html)
+object.
 
 **Note:** Custom resource physical ID is set as created organization ID.
 
@@ -65,9 +77,10 @@ further calls.
                         Statement:
                             -
                                 Action:
-                                    - "iam:CreateOrganization"
-                                    - "iam:DeleteOrganization"
-                                    - "iam:DescribeOrganization"
+                                    - "organizations:CreateOrganization"
+                                    - "organizations:DeleteOrganization"
+                                    - "organizations:DescribeOrganization"
+                                    - "organizations:ListRoots"
                                 Effect: "Allow"
                                 Resource:
                                     - "*"

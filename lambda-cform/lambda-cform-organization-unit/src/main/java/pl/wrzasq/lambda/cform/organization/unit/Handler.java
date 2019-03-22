@@ -5,16 +5,16 @@
  * @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package pl.wrzasq.lambda.cform.organization;
+package pl.wrzasq.lambda.cform.organization.unit;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.organizations.AWSOrganizations;
 import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
+import com.amazonaws.services.organizations.model.OrganizationalUnit;
 import com.sunrun.cfnresponse.CfnRequest;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
-import pl.wrzasq.lambda.cform.organization.service.OrganizationManager;
+import pl.wrzasq.lambda.cform.organization.unit.model.OrganizationUnitRequest;
+import pl.wrzasq.lambda.cform.organization.unit.service.OrganizationUnitManager;
 
 /**
  * CloudFormation request handler.
@@ -26,12 +26,12 @@ public class Handler
     /**
      * CloudFormation response handler.
      */
-    private static CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> handler;
+    private static CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> handler;
 
     static {
         AWSOrganizations organizations = AWSOrganizationsClientBuilder.defaultClient();
 
-        OrganizationManager deploy = new OrganizationManager(organizations);
+        OrganizationUnitManager deploy = new OrganizationUnitManager(organizations);
 
         Handler.handler = new CustomResourceHandler<>(deploy::sync, deploy::sync, deploy::delete);
     }
@@ -42,7 +42,7 @@ public class Handler
      * @param request CloudFormation request.
      * @param context AWS Lambda context.
      */
-    public void handle(CfnRequest<OrganizationRequest> request, Context context)
+    public void handle(CfnRequest<OrganizationUnitRequest> request, Context context)
     {
         Handler.handler.handle(request, context);
     }

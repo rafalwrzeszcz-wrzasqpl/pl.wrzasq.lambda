@@ -14,8 +14,11 @@ import com.amazonaws.services.organizations.model.CreateOrganizationResult;
 import com.amazonaws.services.organizations.model.DeleteOrganizationRequest;
 import com.amazonaws.services.organizations.model.DescribeOrganizationRequest;
 import com.amazonaws.services.organizations.model.DescribeOrganizationResult;
+import com.amazonaws.services.organizations.model.ListRootsRequest;
+import com.amazonaws.services.organizations.model.ListRootsResult;
 import com.amazonaws.services.organizations.model.Organization;
 import com.amazonaws.services.organizations.model.OrganizationFeatureSet;
+import com.amazonaws.services.organizations.model.Root;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,12 +29,17 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
 import pl.wrzasq.lambda.cform.organization.service.OrganizationManager;
 
 @ExtendWith(MockitoExtension.class)
 public class OrganizationManagerTest
 {
     private static final OrganizationFeatureSet FEATURE_SET = OrganizationFeatureSet.ALL;
+
+    private static final String PHYSICAL_ID_1 = "o-test";
+
+    private static final String PHYSICAL_ID_2 = "o-another";
 
     @Mock
     private AWSOrganizations organizations;
@@ -42,10 +50,9 @@ public class OrganizationManagerTest
     @Test
     public void sync()
     {
-        String id = "o-test";
-
-        Organization organization = new Organization();
-        organization.setId(id);
+        Organization organization = new Organization()
+            .withId(OrganizationManagerTest.PHYSICAL_ID_1);
+        Root root = new Root();
 
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
@@ -61,8 +68,14 @@ public class OrganizationManagerTest
                 new CreateOrganizationResult()
                     .withOrganization(organization)
             );
+        Mockito
+            .when(this.organizations.listRoots(Mockito.any(ListRootsRequest.class)))
+            .thenReturn(
+                new ListRootsResult()
+                    .withRoots(root)
+            );
 
-        CustomResourceResponse<Organization> result = manager.sync(input, null);
+        CustomResourceResponse<OrganizationWithRoot> result = manager.sync(input, null);
 
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations).createOrganization(Mockito.any(CreateOrganizationRequest.class));
@@ -74,11 +87,16 @@ public class OrganizationManagerTest
         );
         Assertions.assertSame(
             organization,
-            result.getData(),
+            result.getData().getOrganization(),
             "OrganizationManager.sync() should return organization data of created organization."
         );
+        Assertions.assertSame(
+            root,
+            result.getData().getRoot(),
+            "OrganizationManager.sync() should return organization root of created organization."
+        );
         Assertions.assertEquals(
-            id,
+            OrganizationManagerTest.PHYSICAL_ID_1,
             result.getPhysicalResourceId(),
             "OrganizationManager.sync() should return organization ID as physical ID."
         );
@@ -87,10 +105,9 @@ public class OrganizationManagerTest
     @Test
     public void syncAlreadyExists()
     {
-        String id = "o-test";
-
-        Organization organization = new Organization();
-        organization.setId(id);
+        Organization organization = new Organization()
+            .withId(OrganizationManagerTest.PHYSICAL_ID_1);
+        Root root = new Root();
 
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
@@ -102,19 +119,33 @@ public class OrganizationManagerTest
                 new DescribeOrganizationResult()
                     .withOrganization(organization)
             );
+        Mockito
+            .when(this.organizations.listRoots(Mockito.any(ListRootsRequest.class)))
+            .thenReturn(
+                new ListRootsResult()
+                    .withRoots(root)
+            );
 
-        CustomResourceResponse<Organization> result = manager.sync(input, id);
+        CustomResourceResponse<OrganizationWithRoot> result = manager.sync(
+            input,
+            OrganizationManagerTest.PHYSICAL_ID_1
+        );
 
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations, Mockito.never()).createOrganization(Mockito.any());
 
         Assertions.assertSame(
             organization,
-            result.getData(),
+            result.getData().getOrganization(),
             "OrganizationManager.sync() should return organization data of existing organization."
         );
+        Assertions.assertSame(
+            root,
+            result.getData().getRoot(),
+            "OrganizationManager.sync() should return organization root of existing organization."
+        );
         Assertions.assertEquals(
-            id,
+            OrganizationManagerTest.PHYSICAL_ID_1,
             result.getPhysicalResourceId(),
             "OrganizationManager.sync() should return organization ID as physical ID."
         );
@@ -123,11 +154,9 @@ public class OrganizationManagerTest
     @Test
     public void syncAlreadyExistsOutOfSync()
     {
-        String physicalResourceId = "o-another";
-        String id = "o-test";
-
-        Organization organization = new Organization();
-        organization.setId(id);
+        Organization organization = new Organization()
+            .withId(OrganizationManagerTest.PHYSICAL_ID_1);
+        Root root = new Root();
 
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
@@ -139,31 +168,80 @@ public class OrganizationManagerTest
                 new DescribeOrganizationResult()
                     .withOrganization(organization)
             );
+        Mockito
+            .when(this.organizations.listRoots(Mockito.any(ListRootsRequest.class)))
+            .thenReturn(
+                new ListRootsResult()
+                    .withRoots(root)
+            );
 
-        CustomResourceResponse<Organization> result = manager.sync(input, physicalResourceId);
+        CustomResourceResponse<OrganizationWithRoot> result = manager.sync(
+            input,
+            OrganizationManagerTest.PHYSICAL_ID_2
+        );
 
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations, Mockito.never()).createOrganization(Mockito.any());
 
         Assertions.assertSame(
             organization,
-            result.getData(),
+            result.getData().getOrganization(),
             "OrganizationManager.sync() should return organization data of existing organization."
         );
+        Assertions.assertSame(
+            root,
+            result.getData().getRoot(),
+            "OrganizationManager.sync() should return organization root of existing organization."
+        );
         Assertions.assertEquals(
-            physicalResourceId,
+            OrganizationManagerTest.PHYSICAL_ID_1,
             result.getPhysicalResourceId(),
-            "OrganizationManager.sync() should preserve physical resource ID to avoid cleanup phase calls."
+            "OrganizationManager.sync() should return organization ID as physical ID."
         );
     }
 
     @Test
     public void delete()
     {
+        Mockito
+            .when(this.organizations.describeOrganization(Mockito.any(DescribeOrganizationRequest.class)))
+            .thenReturn(
+                new DescribeOrganizationResult()
+                    .withOrganization(
+                        new Organization()
+                            .withId(OrganizationManagerTest.PHYSICAL_ID_1)
+                    )
+            );
+
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
-        manager.delete(null, null);
+        manager.delete(null, OrganizationManagerTest.PHYSICAL_ID_1);
 
         Mockito.verify(this.organizations).deleteOrganization(Mockito.any(DeleteOrganizationRequest.class));
+    }
+
+    @Test
+    public void deleteOutOfSync()
+    {
+        Mockito
+            .when(this.organizations.describeOrganization(Mockito.any(DescribeOrganizationRequest.class)))
+            .thenReturn(
+                new DescribeOrganizationResult()
+                    .withOrganization(
+                        new Organization()
+                            .withId(OrganizationManagerTest.PHYSICAL_ID_1)
+                    )
+            );
+
+        OrganizationManager manager = new OrganizationManager(this.organizations);
+
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> manager.delete(null, OrganizationManagerTest.PHYSICAL_ID_2)
+        );
+
+        Mockito
+            .verify(this.organizations, Mockito.never())
+            .deleteOrganization(Mockito.any(DeleteOrganizationRequest.class));
     }
 }

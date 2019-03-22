@@ -49,7 +49,9 @@ public class StackSetManagerTest
 
     private static final String STACK_SET_NAME = "test-stack-set";
 
-    private static final String STACK_SET_ID = "12345abc";
+    private static final String STACK_SET_ID_1 = "12345abc";
+
+    private static final String STACK_SET_ID_2 = "otherid";
 
     private static final String STACK_SET_ARN = "arn:aws:test-stack-set";
 
@@ -93,7 +95,7 @@ public class StackSetManagerTest
     {
         StackSet stackSet = new StackSet()
             .withStackSetName(StackSetManagerTest.STACK_SET_NAME)
-            .withStackSetId(StackSetManagerTest.STACK_SET_ID)
+            .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
             .withStackSetARN(StackSetManagerTest.STACK_SET_ARN);
         String operationId = "foobar";
 
@@ -114,15 +116,15 @@ public class StackSetManagerTest
 
         CustomResourceResponse<StackSetResponse> result = manager.deployStackSet(
             StackSetManagerTest.createStackSetRequest(),
-            StackSetManagerTest.STACK_SET_ID
+            StackSetManagerTest.STACK_SET_ID_1
         );
 
         Mockito.verify(this.cloudFormation, Mockito.never()).createStackSet(Mockito.any(CreateStackSetRequest.class));
 
         Assertions.assertEquals(
-            StackSetManagerTest.STACK_SET_ID,
+            StackSetManagerTest.STACK_SET_ID_1,
             result.getPhysicalResourceId(),
-            "StackSetManager.deployStackSet() should set stack set name as a physical resource ID."
+            "StackSetManager.deployStackSet() should set stack set ID as a physical resource ID."
         );
         Assertions.assertEquals(
             StackSetManagerTest.STACK_SET_NAME,
@@ -130,7 +132,7 @@ public class StackSetManagerTest
             "StackSetManager.deployStackSet() should return stack set name."
         );
         Assertions.assertEquals(
-            StackSetManagerTest.STACK_SET_ID,
+            StackSetManagerTest.STACK_SET_ID_1,
             result.getData().getId(),
             "StackSetManager.deployStackSet() should return stack set id."
         );
@@ -214,7 +216,7 @@ public class StackSetManagerTest
         String physicalResourceId = "another-id";
         StackSet stackSet = new StackSet()
             .withStackSetName(StackSetManagerTest.STACK_SET_NAME)
-            .withStackSetId(StackSetManagerTest.STACK_SET_ID)
+            .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
             .withStackSetARN(StackSetManagerTest.STACK_SET_ARN);
         String operationId = "foobar";
 
@@ -241,9 +243,9 @@ public class StackSetManagerTest
         Mockito.verify(this.cloudFormation, Mockito.never()).createStackSet(Mockito.any(CreateStackSetRequest.class));
 
         Assertions.assertEquals(
-            physicalResourceId,
+            StackSetManagerTest.STACK_SET_ID_1,
             result.getPhysicalResourceId(),
-            "StackSetManager.deployStackSet() should preserve physical resource ID to avoid cleanup phase calls."
+            "StackSetManager.deployStackSet() should set stack set ID as a physical resource ID."
         );
     }
 
@@ -259,7 +261,7 @@ public class StackSetManagerTest
             .when(this.cloudFormation.createStackSet(this.createRequest.capture()))
             .thenReturn(
                 new CreateStackSetResult()
-                    .withStackSetId(StackSetManagerTest.STACK_SET_ID)
+                    .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
             );
 
         CustomResourceResponse<StackSetResponse> result = manager.deployStackSet(
@@ -270,9 +272,9 @@ public class StackSetManagerTest
         Mockito.verify(this.cloudFormation, Mockito.never()).updateStackSet(Mockito.any(UpdateStackSetRequest.class));
 
         Assertions.assertEquals(
-            StackSetManagerTest.STACK_SET_ID,
+            StackSetManagerTest.STACK_SET_ID_1,
             result.getPhysicalResourceId(),
-            "StackSetManager.deployStackSet() should set stack set name as a physical resource ID."
+            "StackSetManager.deployStackSet() should set stack set ID as a physical resource ID."
         );
         Assertions.assertEquals(
             StackSetManagerTest.STACK_SET_NAME,
@@ -280,7 +282,7 @@ public class StackSetManagerTest
             "StackSetManager.deployStackSet() should return stack set name."
         );
         Assertions.assertEquals(
-            StackSetManagerTest.STACK_SET_ID,
+            StackSetManagerTest.STACK_SET_ID_1,
             result.getData().getId(),
             "StackSetManager.deployStackSet() should return stack set id."
         );
@@ -364,12 +366,21 @@ public class StackSetManagerTest
         StackSetManager manager = new StackSetManager(this.cloudFormation);
 
         Mockito
+            .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
+            .thenReturn(
+                new DescribeStackSetResult()
+                    .withStackSet(
+                        new StackSet()
+                            .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
+                    )
+            );
+        Mockito
             .when(this.cloudFormation.deleteStackSet(this.deleteRequest.capture()))
             .thenReturn(new DeleteStackSetResult());
 
         StackSetRequest input = new StackSetRequest();
         input.setStackSetName(StackSetManagerTest.STACK_SET_NAME);
-        manager.deleteStackSet(input, null);
+        manager.deleteStackSet(input, STACK_SET_ID_1);
 
         Mockito.verify(this.cloudFormation).deleteStackSet(Mockito.any(DeleteStackSetRequest.class));
 
@@ -378,6 +389,32 @@ public class StackSetManagerTest
             this.deleteRequest.getValue().getStackSetName(),
             "StackSetManager.deleteStackSet() should request deletion of specified stack set."
         );
+    }
+
+    @Test
+    public void deleteStackSetOutOfSync()
+    {
+        StackSetManager manager = new StackSetManager(this.cloudFormation);
+
+        Mockito
+            .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
+            .thenReturn(
+                new DescribeStackSetResult()
+                    .withStackSet(
+                        new StackSet()
+                            .withStackSetId(StackSetManagerTest.STACK_SET_ID_2)
+                    )
+            );
+
+        StackSetRequest input = new StackSetRequest();
+        input.setStackSetName(StackSetManagerTest.STACK_SET_NAME);
+
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> manager.deleteStackSet(input, STACK_SET_ID_1)
+        );
+
+        Mockito.verify(this.cloudFormation, Mockito.never()).deleteStackSet(Mockito.any(DeleteStackSetRequest.class));
     }
 
     private static StackSetRequest createStackSetRequest()

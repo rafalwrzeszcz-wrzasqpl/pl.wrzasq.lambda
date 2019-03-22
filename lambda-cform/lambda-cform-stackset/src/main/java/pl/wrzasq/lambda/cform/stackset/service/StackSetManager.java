@@ -35,6 +35,12 @@ import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 public class StackSetManager
 {
     /**
+     * Message pattern for drift case.
+     */
+    private static final String DRIFT_LOG_MESSAGE_PATTERN
+        = "Stack set ID {} differs from CloudFormation-provided physical resource ID {}.";
+
+    /**
      * Cast array.
      */
     private static final Capability[] CAPABILITY_CAST = new Capability[0];
@@ -71,32 +77,33 @@ public class StackSetManager
         StackSetResponse response = new StackSetResponse();
 
         try {
-            StackSet result = this.cloudFormation.describeStackSet(
+            StackSet stackSet = this.cloudFormation.describeStackSet(
                 new DescribeStackSetRequest()
                     .withStackSetName(input.getStackSetName())
             )
                 .getStackSet();
-            this.logger.info("Stack set already exists (ARN {}).", result.getStackSetARN());
+            this.logger.info("Stack set already exists (ARN {}).", stackSet.getStackSetARN());
 
             this.updateStackSet(input);
 
-            // preserve existing
-            if (!result.getStackSetId().equals(physicalResourceId)) {
+            // don't do anything here - in worst case it will fail in Delete call in UPDATE_COMPLETE_CLEANUP phase
+            // it will not hurt us (even if fails, as it's post-update phase) and allows to simplify logic of this
+            // method to avoid handling all combinations, which could lead to unhandled edge cases
+            if (!stackSet.getStackSetId().equals(physicalResourceId)) {
                 this.logger.warn(
-                    "Stack set ID {} differs from CloudFormation-provided physical resource ID {}.",
-                    result.getStackSetId(),
+                    StackSetManager.DRIFT_LOG_MESSAGE_PATTERN,
+                    stackSet.getStackSetId(),
                     physicalResourceId
                 );
             }
 
-            response.setId(result.getStackSetId());
+            response.setId(stackSet.getStackSetId());
         } catch (StackSetNotFoundException error) {
             response.setId(this.createStackSet(input));
-            physicalResourceId = response.getId();
         }
 
         response.setStackSetName(input.getStackSetName());
-        return new CustomResourceResponse<>(response, physicalResourceId);
+        return new CustomResourceResponse<>(response, response.getId());
     }
 
     /**
@@ -108,6 +115,28 @@ public class StackSetManager
      */
     public CustomResourceResponse<StackSetResponse> deleteStackSet(StackSetRequest input, String physicalResourceId)
     {
+        StackSet stackSet = this.cloudFormation.describeStackSet(
+            new DescribeStackSetRequest()
+                .withStackSetName(input.getStackSetName())
+        )
+            .getStackSet();
+
+        // avoid removing unknown data
+        if (!stackSet.getStackSetId().equals(physicalResourceId)) {
+            this.logger.error(
+                StackSetManager.DRIFT_LOG_MESSAGE_PATTERN,
+                stackSet.getStackSetId(),
+                physicalResourceId
+            );
+            throw new IllegalStateException(
+                String.format(
+                    "Can not delete Stack set - ID %s doesn't match CloudFormation-provided resource ID %s.",
+                    stackSet.getStackSetId(),
+                    physicalResourceId
+                )
+            );
+        }
+
         this.cloudFormation.deleteStackSet(
             new DeleteStackSetRequest()
                 .withStackSetName(input.getStackSetName())

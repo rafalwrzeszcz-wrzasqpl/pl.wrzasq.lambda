@@ -5,11 +5,12 @@
  * @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package test.pl.wrzasq.lambda.cform.organization;
+package test.pl.wrzasq.lambda.cform.organization.unit;
 
 import java.lang.reflect.Field;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.organizations.model.OrganizationalUnit;
 import com.sunrun.cfnresponse.CfnRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,20 +20,19 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
-import pl.wrzasq.lambda.cform.organization.Handler;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
+import pl.wrzasq.lambda.cform.organization.unit.Handler;
+import pl.wrzasq.lambda.cform.organization.unit.model.OrganizationUnitRequest;
 
 @ExtendWith(MockitoExtension.class)
 public class HandlerTest
 {
     @Mock
-    private CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> handler;
+    private CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> handler;
 
     @Mock
     private Context context;
 
-    private CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> originalHandler;
+    private CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> originalHandler;
 
     @BeforeEach
     public void setUp() throws NoSuchFieldException, IllegalAccessException
@@ -49,23 +49,23 @@ public class HandlerTest
     @Test
     public void handle()
     {
-        CfnRequest<OrganizationRequest> request = new CfnRequest<>();
+        CfnRequest<OrganizationUnitRequest> request = new CfnRequest<>();
         request.setRequestType("Create");
-        request.setResourceProperties(new OrganizationRequest());
+        request.setResourceProperties(new OrganizationUnitRequest());
 
         new Handler().handle(request, this.context);
 
         Mockito.verify(this.handler).handle(request, this.context);
     }
 
-    private CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> setHandler(
-        CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> sender
+    private CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> setHandler(
+        CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> sender
     )
         throws NoSuchFieldException, IllegalAccessException
     {
         Field hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
-        CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> original
+        CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> original
             = CustomResourceHandler.class.cast(hack.get(null));
         hack.set(null, sender);
         return original;

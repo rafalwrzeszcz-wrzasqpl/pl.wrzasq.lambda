@@ -35,11 +35,19 @@ to deploy [**Lambda@Edge**](https://aws.amazon.com/lambda/edge/) functions from 
 [`AWS::CloudFront::Distribution`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html)
 resource.
 
-## [Lambda-CForm Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-organization/)
+## [Lambda-CForm Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-organization/)
 
 **CloudFormation** custom resource handler for organization management.
 
-## [Lambda-CForm PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-passwordpolicy/)
+## [Lambda-CForm Organizational Unit](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-organization-unit/)
+
+**CloudFormation** custom resource handler for organizational unit management.
+
+## [Lambda-CForm StackSet](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-stackset/)
+
+**CloudFormation** stack set resource implementation as **CloudFormation** custom resource.
+
+## [Lambda-CForm PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-passwordpolicy/)
 
 **IAM** password policy enforcer as **CloudFormation** custom resource.
 

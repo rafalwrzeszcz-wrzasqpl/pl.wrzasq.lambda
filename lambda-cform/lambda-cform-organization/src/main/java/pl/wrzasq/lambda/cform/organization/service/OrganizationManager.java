@@ -10,21 +10,28 @@ package pl.wrzasq.lambda.cform.organization.service;
 import com.amazonaws.SdkBaseException;
 import com.amazonaws.services.organizations.AWSOrganizations;
 import com.amazonaws.services.organizations.model.CreateOrganizationRequest;
-import com.amazonaws.services.organizations.model.CreateOrganizationResult;
 import com.amazonaws.services.organizations.model.DeleteOrganizationRequest;
 import com.amazonaws.services.organizations.model.DescribeOrganizationRequest;
-import com.amazonaws.services.organizations.model.DescribeOrganizationResult;
+import com.amazonaws.services.organizations.model.ListRootsRequest;
 import com.amazonaws.services.organizations.model.Organization;
+import com.amazonaws.services.organizations.model.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
 
 /**
  * Organizations API implementation.
  */
 public class OrganizationManager
 {
+    /**
+     * Message pattern for drift case.
+     */
+    private static final String DRIFT_LOG_MESSAGE_PATTERN
+        = "Organization ID {} differs from CloudFormation-provided physical resource ID {}.";
+
     /**
      * Logger.
      */
@@ -52,38 +59,42 @@ public class OrganizationManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<Organization> sync(OrganizationRequest input, String physicalResourceId)
+    public CustomResourceResponse<OrganizationWithRoot> sync(OrganizationRequest input, String physicalResourceId)
     {
+        Organization organization;
         try {
-            DescribeOrganizationResult result = this.organizations.describeOrganization(
+            organization = this.organizations.describeOrganization(
                 new DescribeOrganizationRequest()
-            );
-            Organization organization = result.getOrganization();
+            )
+                .getOrganization();
 
-            // we will keep old ID to avoid calling Delete event in UPDATE_COMPLETE_CLEANUP phase
+            // don't do anything here - in worst case it will fail in Delete call in UPDATE_COMPLETE_CLEANUP phase
+            // it will not hurt us (even if fails, as it's post-update phase) and allows to simplify logic of this
+            // method to avoid handling all combinations, which could lead to unhandled edge cases
             if (!organization.getId().equals(physicalResourceId)) {
                 this.logger.warn(
-                    "Organization ID {} differs from CloudFormation-provided physical resource ID {}.",
+                    OrganizationManager.DRIFT_LOG_MESSAGE_PATTERN,
                     organization.getId(),
                     physicalResourceId
                 );
             }
 
             this.logger.info("Organization already exists (ARN {}).", organization.getArn());
-
-            return new CustomResourceResponse<>(organization, physicalResourceId);
         } catch (SdkBaseException error) {
             this.logger.info("Exception occurred during organization data fetching, probably doesn't exist.", error);
 
-            CreateOrganizationResult result = this.organizations.createOrganization(
+            organization = this.organizations.createOrganization(
                 new CreateOrganizationRequest()
                     .withFeatureSet(input.getFeatureSet())
-            );
+            )
+                .getOrganization();
 
-            this.logger.info("Created new organization, ARN {}.", result.getOrganization().getArn());
-
-            return new CustomResourceResponse<>(result.getOrganization(), result.getOrganization().getId());
+            this.logger.info("Created new organization, ARN {}.", organization.getArn());
         }
+
+        Root root = this.organizations.listRoots(new ListRootsRequest()).getRoots().get(0);
+
+        return new CustomResourceResponse<>(new OrganizationWithRoot(organization, root), organization.getId());
     }
 
     /**
@@ -93,8 +104,29 @@ public class OrganizationManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<Organization> delete(OrganizationRequest input, String physicalResourceId)
+    public CustomResourceResponse<OrganizationWithRoot> delete(OrganizationRequest input, String physicalResourceId)
     {
+        Organization organization = this.organizations.describeOrganization(
+            new DescribeOrganizationRequest()
+        )
+            .getOrganization();
+
+        // avoid removing unknown data
+        if (!organization.getId().equals(physicalResourceId)) {
+            this.logger.error(
+                OrganizationManager.DRIFT_LOG_MESSAGE_PATTERN,
+                organization.getId(),
+                physicalResourceId
+            );
+            throw new IllegalStateException(
+                String.format(
+                    "Can not delete Organization - ID %s doesn't match CloudFormation-provided resource ID %s.",
+                    organization.getId(),
+                    physicalResourceId
+                )
+            );
+        }
+
         this.organizations.deleteOrganization(new DeleteOrganizationRequest());
 
         this.logger.info("Organization deleted.");
