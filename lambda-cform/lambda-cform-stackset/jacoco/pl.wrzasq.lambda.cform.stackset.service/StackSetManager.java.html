@@ -35,14 +35,20 @@ import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 public class StackSetManager
 {
     /**
+     * Message pattern for drift case.
+     */
+    private static final String DRIFT_LOG_MESSAGE_PATTERN
+        = &quot;Stack set ID {} differs from CloudFormation-provided physical resource ID {}.&quot;;
+
+    /**
      * Cast array.
      */
-<span class="fc" id="L40">    private static final Capability[] CAPABILITY_CAST = new Capability[0];</span>
+<span class="fc" id="L46">    private static final Capability[] CAPABILITY_CAST = new Capability[0];</span>
 
     /**
      * Logger.
      */
-<span class="fc" id="L45">    private Logger logger = LoggerFactory.getLogger(StackSetManager.class);</span>
+<span class="fc" id="L51">    private Logger logger = LoggerFactory.getLogger(StackSetManager.class);</span>
 
     /**
      * AWS CloudFormation API client.
@@ -55,55 +61,90 @@ public class StackSetManager
      * @param cloudFormation AWS CloudFormation client.
      */
     public StackSetManager(AmazonCloudFormation cloudFormation)
-<span class="fc" id="L58">    {</span>
-<span class="fc" id="L59">        this.cloudFormation = cloudFormation;</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L64">    {</span>
+<span class="fc" id="L65">        this.cloudFormation = cloudFormation;</span>
+<span class="fc" id="L66">    }</span>
 
     /**
      * Handles stack set deployment.
      *
      * @param input Resource deployment request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse&lt;StackSetResponse&gt; deployStackSet(StackSetRequest input)
+    public CustomResourceResponse&lt;StackSetResponse&gt; deployStackSet(StackSetRequest input, String physicalResourceId)
     {
-<span class="fc" id="L70">        StackSetResponse response = new StackSetResponse();</span>
+<span class="fc" id="L77">        StackSetResponse response = new StackSetResponse();</span>
 
         try {
-<span class="fc" id="L73">            StackSet result = this.cloudFormation.describeStackSet(</span>
+<span class="fc" id="L80">            StackSet stackSet = this.cloudFormation.describeStackSet(</span>
                 new DescribeStackSetRequest()
-<span class="fc" id="L75">                    .withStackSetName(input.getStackSetName())</span>
+<span class="fc" id="L82">                    .withStackSetName(input.getStackSetName())</span>
             )
-<span class="fc" id="L77">                .getStackSet();</span>
-<span class="fc" id="L78">            this.logger.info(&quot;Stack set already exists (ARN {}).&quot;, result.getStackSetARN());</span>
+<span class="fc" id="L84">                .getStackSet();</span>
+<span class="fc" id="L85">            this.logger.info(&quot;Stack set already exists (ARN {}).&quot;, stackSet.getStackSetARN());</span>
 
-<span class="fc" id="L80">            this.updateStackSet(input);</span>
+<span class="fc" id="L87">            this.updateStackSet(input);</span>
 
-<span class="fc" id="L82">            response.setId(result.getStackSetId());</span>
-<span class="fc" id="L83">        } catch (StackSetNotFoundException error) {</span>
-<span class="fc" id="L84">            response.setId(this.createStackSet(input));</span>
-<span class="fc" id="L85">        }</span>
+            // don't do anything here - in worst case it will fail in Delete call in UPDATE_COMPLETE_CLEANUP phase
+            // it will not hurt us (even if fails, as it's post-update phase) and allows to simplify logic of this
+            // method to avoid handling all combinations, which could lead to unhandled edge cases
+<span class="fc bfc" id="L92" title="All 2 branches covered.">            if (!stackSet.getStackSetId().equals(physicalResourceId)) {</span>
+<span class="fc" id="L93">                this.logger.warn(</span>
+                    StackSetManager.DRIFT_LOG_MESSAGE_PATTERN,
+<span class="fc" id="L95">                    stackSet.getStackSetId(),</span>
+                    physicalResourceId
+                );
+            }
 
-<span class="fc" id="L87">        response.setStackSetName(input.getStackSetName());</span>
-<span class="fc" id="L88">        return new CustomResourceResponse&lt;&gt;(response, input.getStackSetName());</span>
+<span class="fc" id="L100">            response.setId(stackSet.getStackSetId());</span>
+<span class="fc" id="L101">        } catch (StackSetNotFoundException error) {</span>
+<span class="fc" id="L102">            response.setId(this.createStackSet(input));</span>
+<span class="fc" id="L103">        }</span>
+
+<span class="fc" id="L105">        response.setStackSetName(input.getStackSetName());</span>
+<span class="fc" id="L106">        return new CustomResourceResponse&lt;&gt;(response, response.getId());</span>
     }
 
     /**
      * Handles stack set deletion.
      *
      * @param input Resource delete request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse&lt;StackSetResponse&gt; deleteStackSet(StackSetRequest input)
+    public CustomResourceResponse&lt;StackSetResponse&gt; deleteStackSet(StackSetRequest input, String physicalResourceId)
     {
-<span class="fc" id="L99">        this.cloudFormation.deleteStackSet(</span>
+<span class="fc" id="L118">        StackSet stackSet = this.cloudFormation.describeStackSet(</span>
+            new DescribeStackSetRequest()
+<span class="fc" id="L120">                .withStackSetName(input.getStackSetName())</span>
+        )
+<span class="fc" id="L122">            .getStackSet();</span>
+
+        // avoid removing unknown data
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (!stackSet.getStackSetId().equals(physicalResourceId)) {</span>
+<span class="fc" id="L126">            this.logger.error(</span>
+                StackSetManager.DRIFT_LOG_MESSAGE_PATTERN,
+<span class="fc" id="L128">                stackSet.getStackSetId(),</span>
+                physicalResourceId
+            );
+<span class="fc" id="L131">            throw new IllegalStateException(</span>
+<span class="fc" id="L132">                String.format(</span>
+                    &quot;Can not delete Stack set - ID %s doesn't match CloudFormation-provided resource ID %s.&quot;,
+<span class="fc" id="L134">                    stackSet.getStackSetId(),</span>
+                    physicalResourceId
+                )
+            );
+        }
+
+<span class="fc" id="L140">        this.cloudFormation.deleteStackSet(</span>
             new DeleteStackSetRequest()
-<span class="fc" id="L101">                .withStackSetName(input.getStackSetName())</span>
+<span class="fc" id="L142">                .withStackSetName(input.getStackSetName())</span>
         );
 
-<span class="fc" id="L104">        this.logger.info(&quot;Stack set deleted.&quot;);</span>
+<span class="fc" id="L145">        this.logger.info(&quot;Stack set deleted.&quot;);</span>
 
-<span class="fc" id="L106">        return new CustomResourceResponse&lt;&gt;(null);</span>
+<span class="fc" id="L147">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
     }
 
     /**
@@ -114,21 +155,21 @@ public class StackSetManager
      */
     private String createStackSet(StackSetRequest input)
     {
-<span class="fc" id="L117">        CreateStackSetResult result = this.cloudFormation.createStackSet(</span>
+<span class="fc" id="L158">        CreateStackSetResult result = this.cloudFormation.createStackSet(</span>
             new CreateStackSetRequest()
-<span class="fc" id="L119">                .withStackSetName(input.getStackSetName())</span>
-<span class="fc" id="L120">                .withTemplateURL(input.getTemplateUrl())</span>
-<span class="fc" id="L121">                .withDescription(input.getDescription())</span>
-<span class="fc" id="L122">                .withAdministrationRoleARN(input.getAdministrationRoleArn())</span>
-<span class="fc" id="L123">                .withExecutionRoleName(input.getExecutionRoleName())</span>
-<span class="fc" id="L124">                .withCapabilities(input.getCapabilities().toArray(StackSetManager.CAPABILITY_CAST))</span>
-<span class="fc" id="L125">                .withParameters(StackSetManager.buildSdkParameters(input))</span>
-<span class="fc" id="L126">                .withTags(StackSetManager.buildSdkTags(input))</span>
+<span class="fc" id="L160">                .withStackSetName(input.getStackSetName())</span>
+<span class="fc" id="L161">                .withTemplateURL(input.getTemplateUrl())</span>
+<span class="fc" id="L162">                .withDescription(input.getDescription())</span>
+<span class="fc" id="L163">                .withAdministrationRoleARN(input.getAdministrationRoleArn())</span>
+<span class="fc" id="L164">                .withExecutionRoleName(input.getExecutionRoleName())</span>
+<span class="fc" id="L165">                .withCapabilities(input.getCapabilities().toArray(StackSetManager.CAPABILITY_CAST))</span>
+<span class="fc" id="L166">                .withParameters(StackSetManager.buildSdkParameters(input))</span>
+<span class="fc" id="L167">                .withTags(StackSetManager.buildSdkTags(input))</span>
         );
 
-<span class="fc" id="L129">        this.logger.info(&quot;Created new stack set, ID {}.&quot;, result.getStackSetId());</span>
+<span class="fc" id="L170">        this.logger.info(&quot;Created new stack set, ID {}.&quot;, result.getStackSetId());</span>
 
-<span class="fc" id="L131">        return result.getStackSetId();</span>
+<span class="fc" id="L172">        return result.getStackSetId();</span>
     }
 
     /**
@@ -138,20 +179,20 @@ public class StackSetManager
      */
     private void updateStackSet(StackSetRequest input)
     {
-<span class="fc" id="L141">        UpdateStackSetResult result = this.cloudFormation.updateStackSet(</span>
+<span class="fc" id="L182">        UpdateStackSetResult result = this.cloudFormation.updateStackSet(</span>
             new UpdateStackSetRequest()
-<span class="fc" id="L143">                .withStackSetName(input.getStackSetName())</span>
-<span class="fc" id="L144">                .withTemplateURL(input.getTemplateUrl())</span>
-<span class="fc" id="L145">                .withDescription(input.getDescription())</span>
-<span class="fc" id="L146">                .withAdministrationRoleARN(input.getAdministrationRoleArn())</span>
-<span class="fc" id="L147">                .withExecutionRoleName(input.getExecutionRoleName())</span>
-<span class="fc" id="L148">                .withCapabilities(input.getCapabilities().toArray(StackSetManager.CAPABILITY_CAST))</span>
-<span class="fc" id="L149">                .withParameters(StackSetManager.buildSdkParameters(input))</span>
-<span class="fc" id="L150">                .withTags(StackSetManager.buildSdkTags(input))</span>
+<span class="fc" id="L184">                .withStackSetName(input.getStackSetName())</span>
+<span class="fc" id="L185">                .withTemplateURL(input.getTemplateUrl())</span>
+<span class="fc" id="L186">                .withDescription(input.getDescription())</span>
+<span class="fc" id="L187">                .withAdministrationRoleARN(input.getAdministrationRoleArn())</span>
+<span class="fc" id="L188">                .withExecutionRoleName(input.getExecutionRoleName())</span>
+<span class="fc" id="L189">                .withCapabilities(input.getCapabilities().toArray(StackSetManager.CAPABILITY_CAST))</span>
+<span class="fc" id="L190">                .withParameters(StackSetManager.buildSdkParameters(input))</span>
+<span class="fc" id="L191">                .withTags(StackSetManager.buildSdkTags(input))</span>
         );
 
-<span class="fc" id="L153">        this.logger.info(&quot;Updated stack set (operation ID: {}).&quot;, result.getOperationId());</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L194">        this.logger.info(&quot;Updated stack set (operation ID: {}).&quot;, result.getOperationId());</span>
+<span class="fc" id="L195">    }</span>
 
     /**
      * Converts key-value mapping into AWS SDK structure.
@@ -161,14 +202,14 @@ public class StackSetManager
      */
     private static Collection&lt;Parameter&gt; buildSdkParameters(StackSetRequest input)
     {
-<span class="fc" id="L164">        return input.getParameters().entrySet().stream()</span>
-<span class="fc" id="L165">            .map(</span>
+<span class="fc" id="L205">        return input.getParameters().entrySet().stream()</span>
+<span class="fc" id="L206">            .map(</span>
                 (Map.Entry&lt;String, String&gt; entry) -&gt;
-<span class="fc" id="L167">                    new Parameter()</span>
-<span class="fc" id="L168">                        .withParameterKey(entry.getKey())</span>
-<span class="fc" id="L169">                        .withParameterValue(entry.getValue())</span>
+<span class="fc" id="L208">                    new Parameter()</span>
+<span class="fc" id="L209">                        .withParameterKey(entry.getKey())</span>
+<span class="fc" id="L210">                        .withParameterValue(entry.getValue())</span>
             )
-<span class="fc" id="L171">            .collect(Collectors.toList());</span>
+<span class="fc" id="L212">            .collect(Collectors.toList());</span>
     }
 
     /**
@@ -179,14 +220,14 @@ public class StackSetManager
      */
     private static Collection&lt;Tag&gt; buildSdkTags(StackSetRequest input)
     {
-<span class="fc" id="L182">        return input.getTags().entrySet().stream()</span>
-<span class="fc" id="L183">            .map(</span>
+<span class="fc" id="L223">        return input.getTags().entrySet().stream()</span>
+<span class="fc" id="L224">            .map(</span>
                 (Map.Entry&lt;String, String&gt; entry) -&gt;
-<span class="fc" id="L185">                    new Tag()</span>
-<span class="fc" id="L186">                        .withKey(entry.getKey())</span>
-<span class="fc" id="L187">                        .withValue(entry.getValue())</span>
+<span class="fc" id="L226">                    new Tag()</span>
+<span class="fc" id="L227">                        .withKey(entry.getKey())</span>
+<span class="fc" id="L228">                        .withValue(entry.getValue())</span>
             )
-<span class="fc" id="L189">            .collect(Collectors.toList());</span>
+<span class="fc" id="L230">            .collect(Collectors.toList());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
