@@ -31,6 +31,7 @@
 
     <!-- sub-components of the project -->
     <modules>
+        <module>lambda-cform-account</module>
         <module>lambda-cform-organization</module>
         <module>lambda-cform-organization-unit</module>
         <module>lambda-cform-passwordpolicy</module>
