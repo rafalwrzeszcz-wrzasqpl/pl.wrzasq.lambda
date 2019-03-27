@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2018 - 2019 Rafał Wrzeszcz - Wrzasq.pl</copyright>
     <item>
-      <title>File: 21,
-             Errors: 466,
+      <title>File: 24,
+             Errors: 566,
              Warnings: 0,
              Infos: 0
       </title>
@@ -242,6 +242,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.stackset.instance.Handler.java">pl/wrzasq/lambda/cform/stackset/instance/Handler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.passwordpolicy.service.PasswordPolicyManager.java">pl/wrzasq/lambda/cform/passwordpolicy/service/PasswordPolicyManager.java</a>
                 </td>
                 <td>
@@ -266,6 +280,34 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest.java">pl/wrzasq/lambda/cform/stackset/instance/model/StackInstanceRequest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  58
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.stackset.instance.service.StackSetInstanceManager.java">pl/wrzasq/lambda/cform/stackset/instance/service/StackSetInstanceManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  42
                 </td>
               </tr>
                           <tr>
