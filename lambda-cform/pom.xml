@@ -36,5 +36,6 @@
         <module>lambda-cform-organization-unit</module>
         <module>lambda-cform-passwordpolicy</module>
         <module>lambda-cform-stackset</module>
+        <module>lambda-cform-stackset-instance</module>
     </modules>
 </project>

@@ -51,6 +51,10 @@ resource.
 
 **CloudFormation** stack set resource implementation as **CloudFormation** custom resource.
 
+## [Lambda-CForm StackSet Instance](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-stackset-instance/)
+
+**CloudFormation** single stack instance resource implementation as **CloudFormation** custom resource.
+
 ## [Lambda-CForm PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-passwordpolicy/)
 
 **IAM** password policy enforcer as **CloudFormation** custom resource.

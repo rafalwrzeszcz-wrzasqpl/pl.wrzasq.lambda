@@ -380,7 +380,7 @@ public class StackSetManagerTest
 
         StackSetRequest input = new StackSetRequest();
         input.setStackSetName(StackSetManagerTest.STACK_SET_NAME);
-        manager.deleteStackSet(input, STACK_SET_ID_1);
+        manager.deleteStackSet(input, StackSetManagerTest.STACK_SET_ID_1);
 
         Mockito.verify(this.cloudFormation).deleteStackSet(Mockito.any(DeleteStackSetRequest.class));
 
@@ -411,7 +411,7 @@ public class StackSetManagerTest
 
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> manager.deleteStackSet(input, STACK_SET_ID_1)
+            () -> manager.deleteStackSet(input, StackSetManagerTest.STACK_SET_ID_1)
         );
 
         Mockito.verify(this.cloudFormation, Mockito.never()).deleteStackSet(Mockito.any(DeleteStackSetRequest.class));
