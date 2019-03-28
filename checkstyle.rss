@@ -26,7 +26,7 @@ under the License.
     <copyright>&#169;2018 - 2019 Rafał Wrzeszcz - Wrzasq.pl</copyright>
     <item>
       <title>File: 24,
-             Errors: 566,
+             Errors: 576,
              Warnings: 0,
              Infos: 0
       </title>
@@ -84,20 +84,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot.java">pl/wrzasq/lambda/cform/organization/model/OrganizationWithRoot.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  35
                 </td>
               </tr>
                           <tr>
@@ -350,6 +336,20 @@ under the License.
                 </td>
                 <td>
                   29
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.organization.model.OrganizationResponse.java">pl/wrzasq/lambda/cform/organization/model/OrganizationResponse.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  45
                 </td>
               </tr>
                           <tr>
