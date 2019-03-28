@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
 
 /**
  * Organizations API implementation.
@@ -59,7 +59,7 @@ public class OrganizationManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse&lt;OrganizationWithRoot&gt; sync(OrganizationRequest input, String physicalResourceId)
+    public CustomResourceResponse&lt;OrganizationResponse&gt; sync(OrganizationRequest input, String physicalResourceId)
     {
         Organization organization;
         try {
@@ -94,7 +94,12 @@ public class OrganizationManager
 
 <span class="fc" id="L95">        Root root = this.organizations.listRoots(new ListRootsRequest()).getRoots().get(0);</span>
 
-<span class="fc" id="L97">        return new CustomResourceResponse&lt;&gt;(new OrganizationWithRoot(organization, root), organization.getId());</span>
+<span class="fc" id="L97">        OrganizationResponse organizationResponse = new OrganizationResponse();</span>
+<span class="fc" id="L98">        organizationResponse.setId(organization.getId());</span>
+<span class="fc" id="L99">        organizationResponse.setArn(organization.getArn());</span>
+<span class="fc" id="L100">        organizationResponse.setRootId(root.getId());</span>
+
+<span class="fc" id="L102">        return new CustomResourceResponse&lt;&gt;(organizationResponse, organization.getId());</span>
     }
 
     /**
@@ -104,34 +109,34 @@ public class OrganizationManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse&lt;OrganizationWithRoot&gt; delete(OrganizationRequest input, String physicalResourceId)
+    public CustomResourceResponse&lt;OrganizationResponse&gt; delete(OrganizationRequest input, String physicalResourceId)
     {
-<span class="fc" id="L109">        Organization organization = this.organizations.describeOrganization(</span>
+<span class="fc" id="L114">        Organization organization = this.organizations.describeOrganization(</span>
             new DescribeOrganizationRequest()
         )
-<span class="fc" id="L112">            .getOrganization();</span>
+<span class="fc" id="L117">            .getOrganization();</span>
 
         // avoid removing unknown data
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!organization.getId().equals(physicalResourceId)) {</span>
-<span class="fc" id="L116">            this.logger.error(</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (!organization.getId().equals(physicalResourceId)) {</span>
+<span class="fc" id="L121">            this.logger.error(</span>
                 OrganizationManager.DRIFT_LOG_MESSAGE_PATTERN,
-<span class="fc" id="L118">                organization.getId(),</span>
+<span class="fc" id="L123">                organization.getId(),</span>
                 physicalResourceId
             );
-<span class="fc" id="L121">            throw new IllegalStateException(</span>
-<span class="fc" id="L122">                String.format(</span>
+<span class="fc" id="L126">            throw new IllegalStateException(</span>
+<span class="fc" id="L127">                String.format(</span>
                     &quot;Can not delete Organization - ID %s doesn't match CloudFormation-provided resource ID %s.&quot;,
-<span class="fc" id="L124">                    organization.getId(),</span>
+<span class="fc" id="L129">                    organization.getId(),</span>
                     physicalResourceId
                 )
             );
         }
 
-<span class="fc" id="L130">        this.organizations.deleteOrganization(new DeleteOrganizationRequest());</span>
+<span class="fc" id="L135">        this.organizations.deleteOrganization(new DeleteOrganizationRequest());</span>
 
-<span class="fc" id="L132">        this.logger.info(&quot;Organization deleted.&quot;);</span>
+<span class="fc" id="L137">        this.logger.info(&quot;Organization deleted.&quot;);</span>
 
-<span class="fc" id="L134">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
+<span class="fc" id="L139">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

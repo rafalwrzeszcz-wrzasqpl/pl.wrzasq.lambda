@@ -88,20 +88,22 @@
 <p>Specifies set of features enabled for accounts in organization. Can be either <tt>CONSOLIDATED_BILLING</tt> or <tt>ALL</tt>.</p>
 <p><b>Note:</b> It only applies during organization creation, will not apply any changes if the value changes between updates.</p>
 <h1>Output values</h1>
-<p>Deploy handler exposes structure with two elements:</p>
+<p>Deploy handler exposes following data structure:</p>
 
 <div>
 <div>
 <pre class="source">{
-    &quot;organization&quot;: object,
-    &quot;root&quot;: object
+    &quot;id&quot;: string,
+    &quot;arn&quot;: string,
+    &quot;rootId&quot;: stirng
 }
 </pre></div></div>
 
 <ul>
 
-<li><tt>organization</tt>: entire <a class="externalLink" href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/iam/model/Organization.html">Organization</a> object;</li>
-<li><tt>root</tt>: entire <a class="externalLink" href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/organizations/model/Root.html">Root</a> object.</li>
+<li><tt>id</tt>: organization ID;</li>
+<li><tt>arn</tt>: organization ARN;</li>
+<li><tt>rootId</tt>: root organizational unit ID.</li>
 </ul>
 <p><b>Note:</b> Custom resource physical ID is set as created organization ID.</p>
 <h1>Example</h1>
@@ -170,7 +172,7 @@
             <p>Copyright &copy;2019
 <a href="https://wrzasq.pl/">Rafał Wrzeszcz - Wrzasq.pl</a>.
 All rights reserved.        <li id="publishDate" class="pull-right">Last Published: 2019-03-28</li>
-          <li id="projectVersion" class="pull-right">Version: 1.0.6</li>
+          <li id="projectVersion" class="pull-right">Version: 1.0.7</li>
 </p>
         </div>
         </div>
