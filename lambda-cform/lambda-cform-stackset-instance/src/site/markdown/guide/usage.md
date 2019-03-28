@@ -110,9 +110,9 @@ object.
             # reference to deploy function
             ServiceToken: !GetAtt "StackInstanceManager.Arn"
             # reference to resource provisioned by lambda-cform-stackset
-            stackSetName: !GetAtt "StackSet.name"
+            stackSetName: !GetAtt "StackSet.Name"
             # reference to resource provisioned by lambda-cform-account
-            accountId: !GetAtt "Account.id"
+            accountId: !GetAtt "Account.Id"
             region: !Ref "AWS::Region"
             parameters:
                 Param1: "Value1"

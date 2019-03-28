@@ -140,5 +140,5 @@ object.
             accountName: "prod"
             administratorRoleName: "OrganizationAdmin"
             # assume OrganizationUnit is a resource created by lambda-cform-organization-unit handler
-            ouId: !GetAtt "OrganizationUnit.id"
+            ouId: !GetAtt "OrganizationUnit.Id"
 ```
