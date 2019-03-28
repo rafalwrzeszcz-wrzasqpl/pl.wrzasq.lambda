@@ -35,21 +35,19 @@ Specifies set of features enabled for accounts in organization. Can be either `C
 
 # Output values
 
-Deploy handler exposes structure with two elements:
+Deploy handler exposes following data structure:
 
 ```json
 {
-    "organization": object,
-    "root": object
+    "id": string,
+    "arn": string,
+    "rootId": stirng
 }
 ```
 
--   `organization`: entire
-[Organization](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/iam/model/Organization.html)
-object;
--   `root`: entire
-[Root](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/organizations/model/Root.html)
-object.
+-   `id`: organization ID;
+-   `arn`: organization ARN;
+-   `rootId`: root organizational unit ID.
 
 **Note:** Custom resource physical ID is set as created organization ID.
 

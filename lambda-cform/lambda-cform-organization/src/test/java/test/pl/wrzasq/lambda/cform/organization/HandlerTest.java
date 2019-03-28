@@ -21,18 +21,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
 import pl.wrzasq.lambda.cform.organization.Handler;
 import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class HandlerTest
 {
     @Mock
-    private CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> handler;
+    private CustomResourceHandler<OrganizationRequest, OrganizationResponse> handler;
 
     @Mock
     private Context context;
 
-    private CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> originalHandler;
+    private CustomResourceHandler<OrganizationRequest, OrganizationResponse> originalHandler;
 
     @BeforeEach
     public void setUp() throws NoSuchFieldException, IllegalAccessException
@@ -58,14 +58,14 @@ public class HandlerTest
         Mockito.verify(this.handler).handle(request, this.context);
     }
 
-    private CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> setHandler(
-        CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> sender
+    private CustomResourceHandler<OrganizationRequest, OrganizationResponse> setHandler(
+        CustomResourceHandler<OrganizationRequest, OrganizationResponse> sender
     )
         throws NoSuchFieldException, IllegalAccessException
     {
         Field hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
-        CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> original
+        CustomResourceHandler<OrganizationRequest, OrganizationResponse> original
             = CustomResourceHandler.class.cast(hack.get(null));
         hack.set(null, sender);
         return original;

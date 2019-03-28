@@ -13,7 +13,7 @@ import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.sunrun.cfnresponse.CfnRequest;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
 import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
 import pl.wrzasq.lambda.cform.organization.service.OrganizationManager;
 
 /**
@@ -26,7 +26,7 @@ public class Handler
     /**
      * CloudFormation response handler.
      */
-    private static CustomResourceHandler<OrganizationRequest, OrganizationWithRoot> handler;
+    private static CustomResourceHandler<OrganizationRequest, OrganizationResponse> handler;
 
     static {
         AWSOrganizations organizations = AWSOrganizationsClientBuilder.defaultClient();

@@ -29,7 +29,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
 import pl.wrzasq.lambda.cform.organization.service.OrganizationManager;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +41,10 @@ public class OrganizationManagerTest
 
     private static final String PHYSICAL_ID_2 = "o-another";
 
+    private static final String ARN = "arn:aws:test";
+
+    private static final String ROOT_ID = "r-root";
+
     @Mock
     private AWSOrganizations organizations;
 
@@ -51,8 +55,10 @@ public class OrganizationManagerTest
     public void sync()
     {
         Organization organization = new Organization()
-            .withId(OrganizationManagerTest.PHYSICAL_ID_1);
-        Root root = new Root();
+            .withId(OrganizationManagerTest.PHYSICAL_ID_1)
+            .withArn(OrganizationManagerTest.ARN);
+        Root root = new Root()
+            .withId(OrganizationManagerTest.ROOT_ID);
 
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
@@ -75,7 +81,7 @@ public class OrganizationManagerTest
                     .withRoots(root)
             );
 
-        CustomResourceResponse<OrganizationWithRoot> result = manager.sync(input, null);
+        CustomResourceResponse<OrganizationResponse> result = manager.sync(input, null);
 
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations).createOrganization(Mockito.any(CreateOrganizationRequest.class));
@@ -85,15 +91,20 @@ public class OrganizationManagerTest
             this.createRequest.getValue().getFeatureSet(),
             "OrganizationManager.sync() should pass specified feature set for created organization."
         );
-        Assertions.assertSame(
-            organization,
-            result.getData().getOrganization(),
-            "OrganizationManager.sync() should return organization data of created organization."
+        Assertions.assertEquals(
+            OrganizationManagerTest.PHYSICAL_ID_1,
+            result.getData().getId(),
+            "OrganizationManager.sync() should return ID of created organization."
         );
         Assertions.assertSame(
-            root,
-            result.getData().getRoot(),
-            "OrganizationManager.sync() should return organization root of created organization."
+            OrganizationManagerTest.ARN,
+            result.getData().getArn(),
+            "OrganizationManager.sync() should return ARN of created organization."
+        );
+        Assertions.assertSame(
+            OrganizationManagerTest.ROOT_ID,
+            result.getData().getRootId(),
+            "OrganizationManager.sync() should return ID of created organization root unit."
         );
         Assertions.assertEquals(
             OrganizationManagerTest.PHYSICAL_ID_1,
@@ -106,8 +117,10 @@ public class OrganizationManagerTest
     public void syncAlreadyExists()
     {
         Organization organization = new Organization()
-            .withId(OrganizationManagerTest.PHYSICAL_ID_1);
-        Root root = new Root();
+            .withId(OrganizationManagerTest.PHYSICAL_ID_1)
+            .withArn(OrganizationManagerTest.ARN);
+        Root root = new Root()
+            .withId(OrganizationManagerTest.ROOT_ID);
 
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
@@ -126,7 +139,7 @@ public class OrganizationManagerTest
                     .withRoots(root)
             );
 
-        CustomResourceResponse<OrganizationWithRoot> result = manager.sync(
+        CustomResourceResponse<OrganizationResponse> result = manager.sync(
             input,
             OrganizationManagerTest.PHYSICAL_ID_1
         );
@@ -134,15 +147,20 @@ public class OrganizationManagerTest
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations, Mockito.never()).createOrganization(Mockito.any());
 
-        Assertions.assertSame(
-            organization,
-            result.getData().getOrganization(),
-            "OrganizationManager.sync() should return organization data of existing organization."
+        Assertions.assertEquals(
+            OrganizationManagerTest.PHYSICAL_ID_1,
+            result.getData().getId(),
+            "OrganizationManager.sync() should return ID of existing organization."
         );
         Assertions.assertSame(
-            root,
-            result.getData().getRoot(),
-            "OrganizationManager.sync() should return organization root of existing organization."
+            OrganizationManagerTest.ARN,
+            result.getData().getArn(),
+            "OrganizationManager.sync() should return ARN of existing organization."
+        );
+        Assertions.assertSame(
+            OrganizationManagerTest.ROOT_ID,
+            result.getData().getRootId(),
+            "OrganizationManager.sync() should return ID of existing organization root unit."
         );
         Assertions.assertEquals(
             OrganizationManagerTest.PHYSICAL_ID_1,
@@ -155,8 +173,10 @@ public class OrganizationManagerTest
     public void syncAlreadyExistsOutOfSync()
     {
         Organization organization = new Organization()
-            .withId(OrganizationManagerTest.PHYSICAL_ID_1);
-        Root root = new Root();
+            .withId(OrganizationManagerTest.PHYSICAL_ID_1)
+            .withArn(OrganizationManagerTest.ARN);
+        Root root = new Root()
+            .withId(OrganizationManagerTest.ROOT_ID);
 
         OrganizationManager manager = new OrganizationManager(this.organizations);
 
@@ -175,7 +195,7 @@ public class OrganizationManagerTest
                     .withRoots(root)
             );
 
-        CustomResourceResponse<OrganizationWithRoot> result = manager.sync(
+        CustomResourceResponse<OrganizationResponse> result = manager.sync(
             input,
             OrganizationManagerTest.PHYSICAL_ID_2
         );
@@ -183,15 +203,20 @@ public class OrganizationManagerTest
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations, Mockito.never()).createOrganization(Mockito.any());
 
-        Assertions.assertSame(
-            organization,
-            result.getData().getOrganization(),
-            "OrganizationManager.sync() should return organization data of existing organization."
+        Assertions.assertEquals(
+            OrganizationManagerTest.PHYSICAL_ID_1,
+            result.getData().getId(),
+            "OrganizationManager.sync() should return ID of existing organization."
         );
         Assertions.assertSame(
-            root,
-            result.getData().getRoot(),
-            "OrganizationManager.sync() should return organization root of existing organization."
+            OrganizationManagerTest.ARN,
+            result.getData().getArn(),
+            "OrganizationManager.sync() should return ARN of existing organization."
+        );
+        Assertions.assertSame(
+            OrganizationManagerTest.ROOT_ID,
+            result.getData().getRootId(),
+            "OrganizationManager.sync() should return ID of existing organization root unit."
         );
         Assertions.assertEquals(
             OrganizationManagerTest.PHYSICAL_ID_1,

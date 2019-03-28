@@ -103,5 +103,5 @@ object.
             ServiceToken: !GetAtt "OrganizationUnitManager.Arn"
             name: "internal services"
             # assume Organization is a resource created by lambda-cform-organization handler
-            parentId: !GetAtt "Organization.Root.Id"
+            parentId: !GetAtt "Organization.rootId"
 ```

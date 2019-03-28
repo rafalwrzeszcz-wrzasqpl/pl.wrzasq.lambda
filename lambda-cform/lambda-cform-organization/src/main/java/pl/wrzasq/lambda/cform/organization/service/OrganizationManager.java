@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationWithRoot;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
 
 /**
  * Organizations API implementation.
@@ -59,7 +59,7 @@ public class OrganizationManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<OrganizationWithRoot> sync(OrganizationRequest input, String physicalResourceId)
+    public CustomResourceResponse<OrganizationResponse> sync(OrganizationRequest input, String physicalResourceId)
     {
         Organization organization;
         try {
@@ -94,7 +94,12 @@ public class OrganizationManager
 
         Root root = this.organizations.listRoots(new ListRootsRequest()).getRoots().get(0);
 
-        return new CustomResourceResponse<>(new OrganizationWithRoot(organization, root), organization.getId());
+        OrganizationResponse organizationResponse = new OrganizationResponse();
+        organizationResponse.setId(organization.getId());
+        organizationResponse.setArn(organization.getArn());
+        organizationResponse.setRootId(root.getId());
+
+        return new CustomResourceResponse<>(organizationResponse, organization.getId());
     }
 
     /**
@@ -104,7 +109,7 @@ public class OrganizationManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<OrganizationWithRoot> delete(OrganizationRequest input, String physicalResourceId)
+    public CustomResourceResponse<OrganizationResponse> delete(OrganizationRequest input, String physicalResourceId)
     {
         Organization organization = this.organizations.describeOrganization(
             new DescribeOrganizationRequest()
