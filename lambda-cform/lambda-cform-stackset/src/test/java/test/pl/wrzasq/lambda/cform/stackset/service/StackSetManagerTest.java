@@ -361,6 +361,38 @@ public class StackSetManagerTest
     }
 
     @Test
+    public void deployStackSetNullParameters()
+    {
+        StackSetManager manager = new StackSetManager(this.cloudFormation);
+
+        Mockito
+            .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
+            .thenThrow(StackSetNotFoundException.class);
+        Mockito
+            .when(this.cloudFormation.createStackSet(this.createRequest.capture()))
+            .thenReturn(
+                new CreateStackSetResult()
+                    .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
+            );
+
+        StackSetRequest input = StackSetManagerTest.createStackSetRequest();
+        input.setParameters(null);
+        input.setTags(null);
+
+        manager.deployStackSet(input, null);
+
+        CreateStackSetRequest request = this.createRequest.getValue();
+        Assertions.assertTrue(
+            request.getParameters().isEmpty(),
+            "StackSetManager.deployStackSet() should set empty mapping if no parameters were given."
+        );
+        Assertions.assertTrue(
+            request.getTags().isEmpty(),
+            "StackSetManager.deployStackSet() should set empty mapping no tags were given."
+        );
+    }
+
+    @Test
     public void deleteStackSet()
     {
         StackSetManager manager = new StackSetManager(this.cloudFormation);

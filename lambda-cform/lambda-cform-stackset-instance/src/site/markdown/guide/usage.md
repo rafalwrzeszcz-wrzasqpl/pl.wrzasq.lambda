@@ -95,7 +95,7 @@ object.
             Code:
                 # put your source bucket
                 S3Bucket: "your-bucket"
-                S3Key: "lambda-cform-stackset-1.0.6-standalone.jar"
+                S3Key: "lambda-cform-stackset-instance-1.0.6-standalone.jar"
             Handler: "pl.wrzasq.lambda.cform.stackset.instance.Handler::handle"
             MemorySize: 256
             Description: "AWS CloudFormation stack instance manager deployment."
@@ -110,7 +110,7 @@ object.
             # reference to deploy function
             ServiceToken: !GetAtt "StackInstanceManager.Arn"
             # reference to resource provisioned by lambda-cform-stackset
-            stackSetName: !GetAtt "StackSet.Name"
+            stackSetName: !GetAtt "StackSet.StackSetName"
             # reference to resource provisioned by lambda-cform-account
             accountId: !GetAtt "Account.Id"
             region: !Ref "AWS::Region"

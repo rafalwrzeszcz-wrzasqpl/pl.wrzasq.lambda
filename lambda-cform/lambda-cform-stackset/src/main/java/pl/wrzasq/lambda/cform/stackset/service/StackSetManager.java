@@ -8,7 +8,9 @@
 package pl.wrzasq.lambda.cform.stackset.service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.amazonaws.services.cloudformation.AmazonCloudFormation;
@@ -202,7 +204,10 @@ public class StackSetManager
      */
     private static Collection<Parameter> buildSdkParameters(StackSetRequest input)
     {
-        return input.getParameters().entrySet().stream()
+        return Optional.ofNullable(input.getParameters())
+            .orElse(Collections.emptyMap())
+            .entrySet()
+            .stream()
             .map(
                 (Map.Entry<String, String> entry) ->
                     new Parameter()
@@ -220,7 +225,10 @@ public class StackSetManager
      */
     private static Collection<Tag> buildSdkTags(StackSetRequest input)
     {
-        return input.getTags().entrySet().stream()
+        return Optional.ofNullable(input.getTags())
+            .orElse(Collections.emptyMap())
+            .entrySet()
+            .stream()
             .map(
                 (Map.Entry<String, String> entry) ->
                     new Tag()

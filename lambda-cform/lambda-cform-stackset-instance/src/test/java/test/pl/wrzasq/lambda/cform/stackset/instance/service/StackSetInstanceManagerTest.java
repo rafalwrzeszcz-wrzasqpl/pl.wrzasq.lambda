@@ -87,7 +87,7 @@ public class StackSetInstanceManagerTest
     {
         StackInstance stackInstance = new StackInstance();
 
-        StackSetInstanceManager manager = new StackSetInstanceManager(this.cloudFormation);
+        StackSetInstanceManager manager = this.createStackSetInstanceManager();
 
         Mockito
             .when(this.cloudFormation.describeStackInstance(this.describeRequest.capture()))
@@ -227,7 +227,7 @@ public class StackSetInstanceManagerTest
     {
         StackInstance stackInstance = new StackInstance();
 
-        StackSetInstanceManager manager = new StackSetInstanceManager(this.cloudFormation);
+        StackSetInstanceManager manager = this.createStackSetInstanceManager();
 
         Mockito
             .when(this.cloudFormation.describeStackInstance(this.describeRequest.capture()))
@@ -349,7 +349,7 @@ public class StackSetInstanceManagerTest
     @Test
     public void deployStackInstanceFailed()
     {
-        StackSetInstanceManager manager = new StackSetInstanceManager(this.cloudFormation);
+        StackSetInstanceManager manager = this.createStackSetInstanceManager();
 
         Mockito
             .when(this.cloudFormation.describeStackInstance(Mockito.any(DescribeStackInstanceRequest.class)))
@@ -381,9 +381,51 @@ public class StackSetInstanceManagerTest
     }
 
     @Test
+    public void deployStackSetInstanceNullParameters()
+    {
+        StackInstance stackInstance = new StackInstance();
+
+        StackSetInstanceManager manager = this.createStackSetInstanceManager();
+
+        Mockito
+            .when(this.cloudFormation.describeStackInstance(this.describeRequest.capture()))
+            .thenThrow(StackInstanceNotFoundException.class)
+            .thenReturn(
+                new DescribeStackInstanceResult()
+                    .withStackInstance(stackInstance)
+            );
+        Mockito
+            .when(this.cloudFormation.createStackInstances(this.createRequest.capture()))
+            .thenReturn(
+                new CreateStackInstancesResult()
+                    .withOperationId(StackSetInstanceManagerTest.OPERATION_ID)
+            );
+        Mockito
+            .when(this.cloudFormation.describeStackSetOperation(this.describeOperationRequest.capture()))
+            .thenReturn(
+                new DescribeStackSetOperationResult()
+                    .withStackSetOperation(
+                        new StackSetOperation()
+                            .withStatus(StackSetOperationStatus.SUCCEEDED)
+                    )
+            );
+
+        StackInstanceRequest input = StackSetInstanceManagerTest.createStackInstanceRequest();
+        input.setParameterOverrides(null);
+
+        manager.deployStackInstance(input, null);
+
+        CreateStackInstancesRequest request = this.createRequest.getValue();
+        Assertions.assertTrue(
+            request.getParameterOverrides().isEmpty(),
+            "StackSetInstanceManager.deployStackInstance() should set empty mapping if no parameters were given."
+        );
+    }
+
+    @Test
     public void deleteStackInstance()
     {
-        StackSetInstanceManager manager = new StackSetInstanceManager(this.cloudFormation);
+        StackSetInstanceManager manager = this.createStackSetInstanceManager();
 
         manager.deleteStackInstance(null, StackSetInstanceManagerTest.PHYSICAL_ID);
 
@@ -414,5 +456,12 @@ public class StackSetInstanceManagerTest
         request.setRegion(StackSetInstanceManagerTest.REGION);
         request.setParameterOverrides(StackSetInstanceManagerTest.PARAMETERS);
         return request;
+    }
+    
+    private StackSetInstanceManager createStackSetInstanceManager()
+    {
+        StackSetInstanceManager manager = new StackSetInstanceManager(this.cloudFormation);
+        manager.setSleepInterval(1);
+        return manager;
     }
 }
