@@ -12,6 +12,7 @@ import com.amazonaws.services.cloudformation.AmazonCloudFormationClientBuilder;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.sunrun.cfnresponse.CfnRequest;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
+import pl.wrzasq.commons.aws.cloudformation.StackSetHandler;
 import pl.wrzasq.lambda.cform.stackset.model.StackSetRequest;
 import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 import pl.wrzasq.lambda.cform.stackset.service.StackSetManager;
@@ -31,7 +32,9 @@ public class Handler
     static {
         AmazonCloudFormation cloudFormation = AmazonCloudFormationClientBuilder.defaultClient();
 
-        StackSetManager deploy = new StackSetManager(cloudFormation);
+        StackSetHandler stackSetHandler = new StackSetHandler(cloudFormation);
+
+        StackSetManager deploy = new StackSetManager(cloudFormation, stackSetHandler);
 
         Handler.handler = new CustomResourceHandler<>(
             deploy::deployStackSet,

@@ -8,26 +8,20 @@
 package pl.wrzasq.lambda.cform.stackset.instance.service;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.amazonaws.services.cloudformation.AmazonCloudFormation;
 import com.amazonaws.services.cloudformation.model.CreateStackInstancesRequest;
 import com.amazonaws.services.cloudformation.model.DeleteStackInstancesRequest;
 import com.amazonaws.services.cloudformation.model.DescribeStackInstanceRequest;
-import com.amazonaws.services.cloudformation.model.DescribeStackSetOperationRequest;
 import com.amazonaws.services.cloudformation.model.Parameter;
 import com.amazonaws.services.cloudformation.model.StackInstance;
 import com.amazonaws.services.cloudformation.model.StackInstanceNotFoundException;
-import com.amazonaws.services.cloudformation.model.StackSetOperation;
-import com.amazonaws.services.cloudformation.model.StackSetOperationStatus;
 import com.amazonaws.services.cloudformation.model.UpdateStackInstancesRequest;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
+import pl.wrzasq.commons.aws.cloudformation.StackSetHandler;
+import pl.wrzasq.commons.aws.cloudformation.StackUtils;
 import pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest;
 
 /**
@@ -35,11 +29,6 @@ import pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest;
  */
 public class StackSetInstanceManager
 {
-    /**
-     * Default sleep interval (1 minute).
-     */
-    private static final long DEFAULT_SLEEP_INTERVAL = 60000;
-
     /**
      * Logger.
      */
@@ -51,19 +40,20 @@ public class StackSetInstanceManager
     private AmazonCloudFormation cloudFormation;
 
     /**
-     * Sleep interval for status change checks.
+     * Stack set operations helper.
      */
-    @Setter
-    private long sleepInterval = StackSetInstanceManager.DEFAULT_SLEEP_INTERVAL;
+    private StackSetHandler stackSetHandler;
 
     /**
      * Initializes object with given CloudFormation client.
      *
      * @param cloudFormation AWS CloudFormation client.
+     * @param stackSetHandler Stack set operations helper.
      */
-    public StackSetInstanceManager(AmazonCloudFormation cloudFormation)
+    public StackSetInstanceManager(AmazonCloudFormation cloudFormation, StackSetHandler stackSetHandler)
     {
         this.cloudFormation = cloudFormation;
+        this.stackSetHandler = stackSetHandler;
     }
 
     /**
@@ -85,43 +75,7 @@ public class StackSetInstanceManager
             operationId = this.createStackInstance(input);
         }
 
-        // wait until operation is finished
-        StackSetOperation operation;
-        do {
-            operation = this.cloudFormation.describeStackSetOperation(
-                new DescribeStackSetOperationRequest()
-                    .withStackSetName(input.getStackSetName())
-                    .withOperationId(operationId)
-            )
-                .getStackSetOperation();
-
-            switch (StackSetOperationStatus.fromValue(operation.getStatus())) {
-                case FAILED:
-                case STOPPED:
-                    this.logger.error("Stack operation {} failed with status.", operationId, operation.getStatus());
-                    throw new IllegalStateException(
-                        String.format(
-                            "Stack operation %s (%s) for stack %s in %s %s failed with status %s.",
-                            operation.getAction(),
-                            operationId,
-                            operation.getStackSetId(),
-                            input.getAccountId(),
-                            input.getRegion(),
-                            operation.getStatus()
-                        )
-                    );
-
-                case RUNNING:
-                case STOPPING:
-                    this.logger.info("Stack operation {} in progress.", operationId);
-                    this.sleep();
-                    break;
-
-                case SUCCEEDED:
-                    this.logger.info("Stack operation {} succeeded.", operationId);
-                    break;
-            }
-        } while (StackSetOperationStatus.fromValue(operation.getStatus()) != StackSetOperationStatus.SUCCEEDED);
+        this.stackSetHandler.waitForStackSetOperation(input.getStackSetName(), operationId);
 
         StackInstance stackInstance = this.cloudFormation.describeStackInstance(
             new DescribeStackInstanceRequest()
@@ -228,17 +182,13 @@ public class StackSetInstanceManager
      */
     private static Collection<Parameter> buildSdkParameters(StackInstanceRequest input)
     {
-        return Optional.ofNullable(input.getParameterOverrides())
-            .orElse(Collections.emptyMap())
-            .entrySet()
-            .stream()
-            .map(
-                (Map.Entry<String, String> entry) ->
-                    new Parameter()
-                        .withParameterKey(entry.getKey())
-                        .withParameterValue(entry.getValue())
-            )
-            .collect(Collectors.toList());
+        return StackUtils.buildSdkList(
+            input.getParameterOverrides(),
+            (String key, String value) ->
+                new Parameter()
+                    .withParameterKey(key)
+                    .withParameterValue(value)
+        );
     }
 
     /**
@@ -271,17 +221,5 @@ public class StackSetInstanceManager
             input.getAccountId(),
             input.getRegion()
         );
-    }
-
-    /**
-     * Performs a wait.
-     */
-    private void sleep()
-    {
-        try {
-            Thread.sleep(this.sleepInterval);
-        } catch (InterruptedException error) {
-            this.logger.error("Wait interval interrupted.", error);
-        }
     }
 }

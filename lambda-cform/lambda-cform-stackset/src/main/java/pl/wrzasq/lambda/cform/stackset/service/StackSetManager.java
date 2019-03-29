@@ -8,10 +8,6 @@
 package pl.wrzasq.lambda.cform.stackset.service;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.amazonaws.services.cloudformation.AmazonCloudFormation;
 import com.amazonaws.services.cloudformation.model.Capability;
@@ -28,6 +24,8 @@ import com.amazonaws.services.cloudformation.model.UpdateStackSetResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
+import pl.wrzasq.commons.aws.cloudformation.StackSetHandler;
+import pl.wrzasq.commons.aws.cloudformation.StackUtils;
 import pl.wrzasq.lambda.cform.stackset.model.StackSetRequest;
 import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 
@@ -58,13 +56,20 @@ public class StackSetManager
     private AmazonCloudFormation cloudFormation;
 
     /**
+     * Stack set operations helper.
+     */
+    private StackSetHandler stackSetHandler;
+
+    /**
      * Initializes object with given CloudFormation client.
      *
      * @param cloudFormation AWS CloudFormation client.
+     * @param stackSetHandler Stack set operations helper.
      */
-    public StackSetManager(AmazonCloudFormation cloudFormation)
+    public StackSetManager(AmazonCloudFormation cloudFormation, StackSetHandler stackSetHandler)
     {
         this.cloudFormation = cloudFormation;
+        this.stackSetHandler = stackSetHandler;
     }
 
     /**
@@ -193,6 +198,8 @@ public class StackSetManager
                 .withTags(StackSetManager.buildSdkTags(input))
         );
 
+        this.stackSetHandler.waitForStackSetOperation(input.getStackSetName(), result.getOperationId());
+
         this.logger.info("Updated stack set (operation ID: {}).", result.getOperationId());
     }
 
@@ -204,17 +211,13 @@ public class StackSetManager
      */
     private static Collection<Parameter> buildSdkParameters(StackSetRequest input)
     {
-        return Optional.ofNullable(input.getParameters())
-            .orElse(Collections.emptyMap())
-            .entrySet()
-            .stream()
-            .map(
-                (Map.Entry<String, String> entry) ->
-                    new Parameter()
-                        .withParameterKey(entry.getKey())
-                        .withParameterValue(entry.getValue())
-            )
-            .collect(Collectors.toList());
+        return StackUtils.buildSdkList(
+            input.getParameters(),
+            (String key, String value) ->
+                new Parameter()
+                    .withParameterKey(key)
+                    .withParameterValue(value)
+        );
     }
 
     /**
@@ -225,16 +228,12 @@ public class StackSetManager
      */
     private static Collection<Tag> buildSdkTags(StackSetRequest input)
     {
-        return Optional.ofNullable(input.getTags())
-            .orElse(Collections.emptyMap())
-            .entrySet()
-            .stream()
-            .map(
-                (Map.Entry<String, String> entry) ->
-                    new Tag()
-                        .withKey(entry.getKey())
-                        .withValue(entry.getValue())
-            )
-            .collect(Collectors.toList());
+        return StackUtils.buildSdkList(
+            input.getTags(),
+            (String key, String value) ->
+                new Tag()
+                    .withKey(key)
+                    .withValue(value)
+        );
     }
 }

@@ -32,6 +32,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
+import pl.wrzasq.commons.aws.cloudformation.StackSetHandler;
 import pl.wrzasq.lambda.cform.stackset.model.StackSetRequest;
 import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 import pl.wrzasq.lambda.cform.stackset.service.StackSetManager;
@@ -78,6 +79,9 @@ public class StackSetManagerTest
     @Mock
     private AmazonCloudFormation cloudFormation;
 
+    @Mock
+    private StackSetHandler stackSetHandler;
+
     @Captor
     ArgumentCaptor<DescribeStackSetRequest> describeRequest;
 
@@ -99,7 +103,7 @@ public class StackSetManagerTest
             .withStackSetARN(StackSetManagerTest.STACK_SET_ARN);
         String operationId = "foobar";
 
-        StackSetManager manager = new StackSetManager(this.cloudFormation);
+        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -120,6 +124,12 @@ public class StackSetManagerTest
         );
 
         Mockito.verify(this.cloudFormation, Mockito.never()).createStackSet(Mockito.any(CreateStackSetRequest.class));
+        Mockito
+            .verify(this.stackSetHandler)
+            .waitForStackSetOperation(
+                StackSetManagerTest.STACK_SET_NAME,
+                operationId
+            );
 
         Assertions.assertEquals(
             StackSetManagerTest.STACK_SET_ID_1,
@@ -220,7 +230,7 @@ public class StackSetManagerTest
             .withStackSetARN(StackSetManagerTest.STACK_SET_ARN);
         String operationId = "foobar";
 
-        StackSetManager manager = new StackSetManager(this.cloudFormation);
+        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -241,6 +251,12 @@ public class StackSetManagerTest
         );
 
         Mockito.verify(this.cloudFormation, Mockito.never()).createStackSet(Mockito.any(CreateStackSetRequest.class));
+        Mockito
+            .verify(this.stackSetHandler)
+            .waitForStackSetOperation(
+                StackSetManagerTest.STACK_SET_NAME,
+                operationId
+            );
 
         Assertions.assertEquals(
             StackSetManagerTest.STACK_SET_ID_1,
@@ -252,7 +268,7 @@ public class StackSetManagerTest
     @Test
     public void deployStackSetNotExists()
     {
-        StackSetManager manager = new StackSetManager(this.cloudFormation);
+        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -363,7 +379,7 @@ public class StackSetManagerTest
     @Test
     public void deployStackSetNullParameters()
     {
-        StackSetManager manager = new StackSetManager(this.cloudFormation);
+        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -395,7 +411,7 @@ public class StackSetManagerTest
     @Test
     public void deleteStackSet()
     {
-        StackSetManager manager = new StackSetManager(this.cloudFormation);
+        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -426,7 +442,7 @@ public class StackSetManagerTest
     @Test
     public void deleteStackSetOutOfSync()
     {
-        StackSetManager manager = new StackSetManager(this.cloudFormation);
+        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))

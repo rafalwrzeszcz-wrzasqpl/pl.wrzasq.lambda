@@ -17,12 +17,8 @@ import com.amazonaws.services.cloudformation.model.CreateStackInstancesResult;
 import com.amazonaws.services.cloudformation.model.DeleteStackInstancesRequest;
 import com.amazonaws.services.cloudformation.model.DescribeStackInstanceRequest;
 import com.amazonaws.services.cloudformation.model.DescribeStackInstanceResult;
-import com.amazonaws.services.cloudformation.model.DescribeStackSetOperationRequest;
-import com.amazonaws.services.cloudformation.model.DescribeStackSetOperationResult;
 import com.amazonaws.services.cloudformation.model.StackInstance;
 import com.amazonaws.services.cloudformation.model.StackInstanceNotFoundException;
-import com.amazonaws.services.cloudformation.model.StackSetOperation;
-import com.amazonaws.services.cloudformation.model.StackSetOperationStatus;
 import com.amazonaws.services.cloudformation.model.UpdateStackInstancesRequest;
 import com.amazonaws.services.cloudformation.model.UpdateStackInstancesResult;
 import org.junit.jupiter.api.Assertions;
@@ -34,6 +30,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
+import pl.wrzasq.commons.aws.cloudformation.StackSetHandler;
 import pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest;
 import pl.wrzasq.lambda.cform.stackset.instance.service.StackSetInstanceManager;
 
@@ -67,11 +64,11 @@ public class StackSetInstanceManagerTest
     @Mock
     private AmazonCloudFormation cloudFormation;
 
-    @Captor
-    ArgumentCaptor<DescribeStackInstanceRequest> describeRequest;
+    @Mock
+    private StackSetHandler stackSetHandler;
 
     @Captor
-    ArgumentCaptor<DescribeStackSetOperationRequest> describeOperationRequest;
+    ArgumentCaptor<DescribeStackInstanceRequest> describeRequest;
 
     @Captor
     ArgumentCaptor<CreateStackInstancesRequest> createRequest;
@@ -102,20 +99,6 @@ public class StackSetInstanceManagerTest
                 new CreateStackInstancesResult()
                     .withOperationId(StackSetInstanceManagerTest.OPERATION_ID)
             );
-        Mockito
-            .when(this.cloudFormation.describeStackSetOperation(this.describeOperationRequest.capture()))
-            .thenReturn(
-                new DescribeStackSetOperationResult()
-                    .withStackSetOperation(
-                        new StackSetOperation()
-                            .withStatus(StackSetOperationStatus.RUNNING)
-                    ),
-                new DescribeStackSetOperationResult()
-                    .withStackSetOperation(
-                        new StackSetOperation()
-                            .withStatus(StackSetOperationStatus.SUCCEEDED)
-                    )
-            );
 
         CustomResourceResponse<StackInstance> result = manager.deployStackInstance(
             StackSetInstanceManagerTest.createStackInstanceRequest(),
@@ -125,6 +108,12 @@ public class StackSetInstanceManagerTest
         Mockito
             .verify(this.cloudFormation, Mockito.never())
             .updateStackInstances(Mockito.any(UpdateStackInstancesRequest.class));
+        Mockito
+            .verify(this.stackSetHandler)
+            .waitForStackSetOperation(
+                StackSetInstanceManagerTest.STACK_SET_NAME,
+                StackSetInstanceManagerTest.OPERATION_ID
+            );
 
         Assertions.assertEquals(
             StackSetInstanceManagerTest.STACK_SET_NAME,
@@ -190,27 +179,6 @@ public class StackSetInstanceManagerTest
         );
 
         Assertions.assertEquals(
-            StackSetInstanceManagerTest.STACK_SET_NAME,
-            this.describeOperationRequest.getAllValues().get(0).getStackSetName(),
-            "StackSetInstanceManager.deployStackInstance() should track operation status."
-        );
-        Assertions.assertEquals(
-            StackSetInstanceManagerTest.OPERATION_ID,
-            this.describeOperationRequest.getAllValues().get(0).getOperationId(),
-            "StackSetInstanceManager.deployStackInstance() should track operation status."
-        );
-        Assertions.assertEquals(
-            StackSetInstanceManagerTest.STACK_SET_NAME,
-            this.describeOperationRequest.getAllValues().get(1).getStackSetName(),
-            "StackSetInstanceManager.deployStackInstance() should track operation status."
-        );
-        Assertions.assertEquals(
-            StackSetInstanceManagerTest.OPERATION_ID,
-            this.describeOperationRequest.getAllValues().get(1).getOperationId(),
-            "StackSetInstanceManager.deployStackInstance() should track operation status."
-        );
-
-        Assertions.assertEquals(
             StackSetInstanceManagerTest.PHYSICAL_ID,
             result.getPhysicalResourceId(),
             "StackSetInstanceManager.deployStackInstance() should set compound physical resource ID."
@@ -241,15 +209,6 @@ public class StackSetInstanceManagerTest
                 new UpdateStackInstancesResult()
                     .withOperationId(StackSetInstanceManagerTest.OPERATION_ID)
             );
-        Mockito
-            .when(this.cloudFormation.describeStackSetOperation(this.describeOperationRequest.capture()))
-            .thenReturn(
-                new DescribeStackSetOperationResult()
-                    .withStackSetOperation(
-                        new StackSetOperation()
-                            .withStatus(StackSetOperationStatus.SUCCEEDED)
-                    )
-            );
 
         CustomResourceResponse<StackInstance> result = manager.deployStackInstance(
             StackSetInstanceManagerTest.createStackInstanceRequest(),
@@ -259,6 +218,12 @@ public class StackSetInstanceManagerTest
         Mockito
             .verify(this.cloudFormation, Mockito.never())
             .createStackInstances(Mockito.any(CreateStackInstancesRequest.class));
+        Mockito
+            .verify(this.stackSetHandler)
+            .waitForStackSetOperation(
+                StackSetInstanceManagerTest.STACK_SET_NAME,
+                StackSetInstanceManagerTest.OPERATION_ID
+            );
 
         Assertions.assertEquals(
             StackSetInstanceManagerTest.STACK_SET_NAME,
@@ -324,17 +289,6 @@ public class StackSetInstanceManagerTest
         );
 
         Assertions.assertEquals(
-            StackSetInstanceManagerTest.STACK_SET_NAME,
-            this.describeOperationRequest.getValue().getStackSetName(),
-            "StackSetInstanceManager.deployStackInstance() should track operation status."
-        );
-        Assertions.assertEquals(
-            StackSetInstanceManagerTest.OPERATION_ID,
-            this.describeOperationRequest.getValue().getOperationId(),
-            "StackSetInstanceManager.deployStackInstance() should track operation status."
-        );
-
-        Assertions.assertEquals(
             StackSetInstanceManagerTest.PHYSICAL_ID,
             result.getPhysicalResourceId(),
             "StackSetInstanceManager.deployStackInstance() should set compound physical resource ID."
@@ -343,40 +297,6 @@ public class StackSetInstanceManagerTest
             stackInstance,
             result.getData(),
             "StackSetInstanceManager.deployStackInstance() should return stack instance data as resource properties."
-        );
-    }
-
-    @Test
-    public void deployStackInstanceFailed()
-    {
-        StackSetInstanceManager manager = this.createStackSetInstanceManager();
-
-        Mockito
-            .when(this.cloudFormation.describeStackInstance(Mockito.any(DescribeStackInstanceRequest.class)))
-            .thenThrow(StackInstanceNotFoundException.class);
-        Mockito
-            .when(this.cloudFormation.createStackInstances(Mockito.any(CreateStackInstancesRequest.class)))
-            .thenReturn(
-                new CreateStackInstancesResult()
-                    .withOperationId(StackSetInstanceManagerTest.OPERATION_ID)
-            );
-        Mockito
-            .when(this.cloudFormation.describeStackSetOperation(Mockito.any(DescribeStackSetOperationRequest.class)))
-            .thenReturn(
-                new DescribeStackSetOperationResult()
-                    .withStackSetOperation(
-                        new StackSetOperation()
-                            .withStatus(StackSetOperationStatus.FAILED)
-                    )
-            );
-
-        Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> manager.deployStackInstance(
-                StackSetInstanceManagerTest.createStackInstanceRequest(),
-                null
-            ),
-            "StackSetInstanceManager.deployStackInstance() should report stack deployment failure."
         );
     }
 
@@ -399,15 +319,6 @@ public class StackSetInstanceManagerTest
             .thenReturn(
                 new CreateStackInstancesResult()
                     .withOperationId(StackSetInstanceManagerTest.OPERATION_ID)
-            );
-        Mockito
-            .when(this.cloudFormation.describeStackSetOperation(this.describeOperationRequest.capture()))
-            .thenReturn(
-                new DescribeStackSetOperationResult()
-                    .withStackSetOperation(
-                        new StackSetOperation()
-                            .withStatus(StackSetOperationStatus.SUCCEEDED)
-                    )
             );
 
         StackInstanceRequest input = StackSetInstanceManagerTest.createStackInstanceRequest();
@@ -460,8 +371,6 @@ public class StackSetInstanceManagerTest
     
     private StackSetInstanceManager createStackSetInstanceManager()
     {
-        StackSetInstanceManager manager = new StackSetInstanceManager(this.cloudFormation);
-        manager.setSleepInterval(1);
-        return manager;
+        return new StackSetInstanceManager(this.cloudFormation, this.stackSetHandler);
     }
 }
