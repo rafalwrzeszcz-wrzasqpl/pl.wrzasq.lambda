@@ -15,20 +15,18 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 /**
  * Default Jackson ObjectMapper provider.
  */
-<span class="fc" id="L18">public class ObjectMapperFactory</span>
-{
+<span class="fc" id="L18">public class ObjectMapperFactory {</span>
     /**
      * Creates Jackson mapper.
      *
      * @return Object mapper to be used around the system.
      */
-    public static ObjectMapper createObjectMapper()
-    {
-<span class="fc" id="L27">        ObjectMapper objectMapper = new ObjectMapper();</span>
-<span class="fc" id="L28">        objectMapper.registerModule(new JavaTimeModule());</span>
-<span class="fc" id="L29">        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);</span>
-<span class="fc" id="L30">        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);</span>
-<span class="fc" id="L31">        return objectMapper;</span>
+    public static ObjectMapper createObjectMapper() {
+<span class="fc" id="L25">        ObjectMapper objectMapper = new ObjectMapper();</span>
+<span class="fc" id="L26">        objectMapper.registerModule(new JavaTimeModule());</span>
+<span class="fc" id="L27">        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);</span>
+<span class="fc" id="L28">        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);</span>
+<span class="fc" id="L29">        return objectMapper;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

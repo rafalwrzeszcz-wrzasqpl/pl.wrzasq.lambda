@@ -26,26 +26,25 @@ import pl.wrzasq.lambda.json.ObjectMapperFactory;
  *
  * &lt;p&gt;Recommended memory: 256MB.&lt;/p&gt;
  */
-<span class="fc" id="L29">public class Handler</span>
-{
+<span class="fc" id="L29">public class Handler {</span>
     /**
      * CloudFormation response handler.
      */
     private static CustomResourceHandler&lt;EdgeDeployRequest, PublishVersionResult&gt; handler;
 
     static {
-<span class="fc" id="L37">        ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();</span>
-<span class="fc" id="L38">        AWSLambda lambda = AWSLambdaClientBuilder.standard()</span>
+<span class="fc" id="L36">        ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();</span>
+<span class="fc" id="L37">        AWSLambda lambda = AWSLambdaClientBuilder.standard()</span>
             // Lambda@Edge needs to be deployed in Virginia!
-<span class="fc" id="L40">            .withRegion(Regions.US_EAST_1)</span>
-<span class="fc" id="L41">            .build();</span>
+<span class="fc" id="L39">            .withRegion(Regions.US_EAST_1)</span>
+<span class="fc" id="L40">            .build();</span>
 
-<span class="fc" id="L43">        AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();</span>
+<span class="fc" id="L42">        AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();</span>
 
-<span class="fc" id="L45">        LambdaEdgeManager deploy = new LambdaEdgeManager(lambda, s3, objectMapper);</span>
+<span class="fc" id="L44">        LambdaEdgeManager deploy = new LambdaEdgeManager(lambda, s3, objectMapper);</span>
 
-<span class="fc" id="L47">        Handler.handler = new CustomResourceHandler&lt;&gt;(deploy::create, deploy::update, deploy::delete);</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L46">        Handler.handler = new CustomResourceHandler&lt;&gt;(deploy::create, deploy::update, deploy::delete);</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Handles invocation.
@@ -53,9 +52,8 @@ import pl.wrzasq.lambda.json.ObjectMapperFactory;
      * @param request CloudFormation request.
      * @param context AWS Lambda context.
      */
-    public void handle(CfnRequest&lt;EdgeDeployRequest&gt; request, Context context)
-    {
-<span class="fc" id="L58">        Handler.handler.handle(request, context);</span>
-<span class="fc" id="L59">    }</span>
+    public void handle(CfnRequest&lt;EdgeDeployRequest&gt; request, Context context) {
+<span class="fc" id="L56">        Handler.handler.handle(request, context);</span>
+<span class="fc" id="L57">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -17,14 +17,12 @@ import java.util.zip.ZipOutputStream;
 /**
  * Utility class for building ZIP archive stream.
  */
-<span class="fc" id="L20">public class ZipBuilder</span>
-{
+<span class="fc" id="L20">public class ZipBuilder {</span>
     /**
      * Internal interface for writing operations.
      */
     @FunctionalInterface
-    private interface ContentWriter
-    {
+    private interface ContentWriter {
         /**
          * Performs write operation.
          *
@@ -41,12 +39,12 @@ import java.util.zip.ZipOutputStream;
     /**
      * Output stream.
      */
-<span class="fc" id="L44">    private ByteArrayOutputStream output = new ByteArrayOutputStream();</span>
+<span class="fc" id="L42">    private ByteArrayOutputStream output = new ByteArrayOutputStream();</span>
 
     /**
      * ZIP compression stream.
      */
-<span class="fc" id="L49">    private ZipOutputStream zip = new ZipOutputStream(this.output);</span>
+<span class="fc" id="L47">    private ZipOutputStream zip = new ZipOutputStream(this.output);</span>
 
     /**
      * Creates new ZIP archive entry.
@@ -55,10 +53,9 @@ import java.util.zip.ZipOutputStream;
      * @param content Binary content of the file.
      * @throws IOException When writing content to archive fails.
      */
-    public void writeEntry(String name, byte[] content) throws IOException
-    {
-<span class="fc" id="L60">        this.writeEntry(name, () -&gt; this.zip.write(content));</span>
-<span class="fc" id="L61">    }</span>
+    public void writeEntry(String name, byte[] content) throws IOException {
+<span class="fc" id="L57">        this.writeEntry(name, () -&gt; this.zip.write(content));</span>
+<span class="fc" id="L58">    }</span>
 
     /**
      * Creates new ZIP archive entry.
@@ -67,19 +64,18 @@ import java.util.zip.ZipOutputStream;
      * @param stream Content source.
      * @throws IOException When writing content to archive fails.
      */
-    public void writeEntry(String name, InputStream stream) throws IOException
-    {
-<span class="fc" id="L72">        this.writeEntry(</span>
+    public void writeEntry(String name, InputStream stream) throws IOException {
+<span class="fc" id="L68">        this.writeEntry(</span>
             name,
             () -&gt; {
-<span class="fc" id="L75">                byte[] buffer = new byte[ZipBuilder.BUFFER_SIZE];</span>
+<span class="fc" id="L71">                byte[] buffer = new byte[ZipBuilder.BUFFER_SIZE];</span>
                 int count;
-<span class="fc bfc" id="L77" title="All 2 branches covered.">                while ((count = stream.read(buffer)) &gt; 0) {</span>
-<span class="fc" id="L78">                    this.zip.write(buffer, 0, count);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                while ((count = stream.read(buffer)) &gt; 0) {</span>
+<span class="fc" id="L74">                    this.zip.write(buffer, 0, count);</span>
                 }
-<span class="fc" id="L80">            }</span>
+<span class="fc" id="L76">            }</span>
         );
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Creates ZIP entry.
@@ -88,14 +84,13 @@ import java.util.zip.ZipOutputStream;
      * @param handler Custom writing logic.
      * @throws IOException When writing to stream fails.
      */
-    private void writeEntry(String name, ContentWriter handler) throws IOException
-    {
-<span class="fc" id="L93">        this.zip.putNextEntry(</span>
+    private void writeEntry(String name, ContentWriter handler) throws IOException {
+<span class="fc" id="L88">        this.zip.putNextEntry(</span>
             new ZipEntry(name)
         );
-<span class="fc" id="L96">        handler.write();</span>
-<span class="fc" id="L97">        this.zip.closeEntry();</span>
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L91">        handler.write();</span>
+<span class="fc" id="L92">        this.zip.closeEntry();</span>
+<span class="fc" id="L93">    }</span>
 
     /**
      * Closes active stream.
@@ -103,12 +98,11 @@ import java.util.zip.ZipOutputStream;
      * @return Archive binary content.
      * @throws IOException When dumping ZIP stream fails.
      */
-    public ByteBuffer dump() throws IOException
-    {
-<span class="fc" id="L108">        this.zip.close();</span>
-<span class="fc" id="L109">        this.output.close();</span>
+    public ByteBuffer dump() throws IOException {
+<span class="fc" id="L102">        this.zip.close();</span>
+<span class="fc" id="L103">        this.output.close();</span>
 
-<span class="fc" id="L111">        return ByteBuffer.wrap(this.output.toByteArray());</span>
+<span class="fc" id="L105">        return ByteBuffer.wrap(this.output.toByteArray());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
