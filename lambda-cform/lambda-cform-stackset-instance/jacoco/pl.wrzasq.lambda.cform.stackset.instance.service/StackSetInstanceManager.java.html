@@ -27,12 +27,11 @@ import pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest;
 /**
  * CloudFormation API implementation.
  */
-public class StackSetInstanceManager
-{
+public class StackSetInstanceManager {
     /**
      * Logger.
      */
-<span class="fc" id="L35">    private Logger logger = LoggerFactory.getLogger(StackSetInstanceManager.class);</span>
+<span class="fc" id="L34">    private Logger logger = LoggerFactory.getLogger(StackSetInstanceManager.class);</span>
 
     /**
      * AWS CloudFormation API client.
@@ -50,11 +49,10 @@ public class StackSetInstanceManager
      * @param cloudFormation AWS CloudFormation client.
      * @param stackSetHandler Stack set operations helper.
      */
-    public StackSetInstanceManager(AmazonCloudFormation cloudFormation, StackSetHandler stackSetHandler)
-<span class="fc" id="L54">    {</span>
-<span class="fc" id="L55">        this.cloudFormation = cloudFormation;</span>
-<span class="fc" id="L56">        this.stackSetHandler = stackSetHandler;</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L52">    public StackSetInstanceManager(AmazonCloudFormation cloudFormation, StackSetHandler stackSetHandler) {</span>
+<span class="fc" id="L53">        this.cloudFormation = cloudFormation;</span>
+<span class="fc" id="L54">        this.stackSetHandler = stackSetHandler;</span>
+<span class="fc" id="L55">    }</span>
 
     /**
      * Handles stack set deployment.
@@ -66,26 +64,25 @@ public class StackSetInstanceManager
     public CustomResourceResponse&lt;StackInstance&gt; deployStackInstance(
         StackInstanceRequest input,
         String physicalResourceId
-    )
-    {
+    ) {
         String operationId;
         try {
-<span class="fc" id="L73">            operationId = this.updateStackInstance(input);</span>
-<span class="fc" id="L74">        } catch (StackInstanceNotFoundException error) {</span>
-<span class="fc" id="L75">            operationId = this.createStackInstance(input);</span>
-<span class="fc" id="L76">        }</span>
+<span class="fc" id="L70">            operationId = this.updateStackInstance(input);</span>
+<span class="fc" id="L71">        } catch (StackInstanceNotFoundException error) {</span>
+<span class="fc" id="L72">            operationId = this.createStackInstance(input);</span>
+<span class="fc" id="L73">        }</span>
 
-<span class="fc" id="L78">        this.stackSetHandler.waitForStackSetOperation(input.getStackSetName(), operationId);</span>
+<span class="fc" id="L75">        this.stackSetHandler.waitForStackSetOperation(input.getStackSetName(), operationId);</span>
 
-<span class="fc" id="L80">        StackInstance stackInstance = this.cloudFormation.describeStackInstance(</span>
+<span class="fc" id="L77">        StackInstance stackInstance = this.cloudFormation.describeStackInstance(</span>
             new DescribeStackInstanceRequest()
-<span class="fc" id="L82">                .withStackSetName(input.getStackSetName())</span>
-<span class="fc" id="L83">                .withStackInstanceAccount(input.getAccountId())</span>
-<span class="fc" id="L84">                .withStackInstanceRegion(input.getRegion())</span>
+<span class="fc" id="L79">                .withStackSetName(input.getStackSetName())</span>
+<span class="fc" id="L80">                .withStackInstanceAccount(input.getAccountId())</span>
+<span class="fc" id="L81">                .withStackInstanceRegion(input.getRegion())</span>
         )
-<span class="fc" id="L86">            .getStackInstance();</span>
+<span class="fc" id="L83">            .getStackInstance();</span>
 
-<span class="fc" id="L88">        return new CustomResourceResponse&lt;&gt;(stackInstance, StackSetInstanceManager.buildPhysicalResourceId(input));</span>
+<span class="fc" id="L85">        return new CustomResourceResponse&lt;&gt;(stackInstance, StackSetInstanceManager.buildPhysicalResourceId(input));</span>
     }
 
     /**
@@ -98,20 +95,19 @@ public class StackSetInstanceManager
     public CustomResourceResponse&lt;StackInstance&gt; deleteStackInstance(
         StackInstanceRequest input,
         String physicalResourceId
-    )
-    {
-<span class="fc" id="L103">        StackInstanceRequest spec = StackSetInstanceManager.parsePhysicalResourceId(physicalResourceId);</span>
+    ) {
+<span class="fc" id="L99">        StackInstanceRequest spec = StackSetInstanceManager.parsePhysicalResourceId(physicalResourceId);</span>
 
-<span class="fc" id="L105">        this.cloudFormation.deleteStackInstances(</span>
+<span class="fc" id="L101">        this.cloudFormation.deleteStackInstances(</span>
             new DeleteStackInstancesRequest()
-<span class="fc" id="L107">                .withStackSetName(spec.getStackSetName())</span>
-<span class="fc" id="L108">                .withAccounts(spec.getAccountId())</span>
-<span class="fc" id="L109">                .withRegions(spec.getRegion())</span>
+<span class="fc" id="L103">                .withStackSetName(spec.getStackSetName())</span>
+<span class="fc" id="L104">                .withAccounts(spec.getAccountId())</span>
+<span class="fc" id="L105">                .withRegions(spec.getRegion())</span>
         );
 
-<span class="fc" id="L112">        this.logger.info(&quot;Stack instance deleted.&quot;);</span>
+<span class="fc" id="L108">        this.logger.info(&quot;Stack instance deleted.&quot;);</span>
 
-<span class="fc" id="L114">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
+<span class="fc" id="L110">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
     }
 
     /**
@@ -120,23 +116,22 @@ public class StackSetInstanceManager
      * @param input Stack instance specification.
      * @return Stack set operation ID.
      */
-    private String createStackInstance(StackInstanceRequest input)
-    {
-<span class="fc" id="L125">        this.logger.info(</span>
+    private String createStackInstance(StackInstanceRequest input) {
+<span class="fc" id="L120">        this.logger.info(</span>
             &quot;Stack set {} instance not found for account {} in {}, creating new one.&quot;,
-<span class="fc" id="L127">            input.getStackSetName(),</span>
-<span class="fc" id="L128">            input.getAccountId(),</span>
-<span class="fc" id="L129">            input.getRegion()</span>
+<span class="fc" id="L122">            input.getStackSetName(),</span>
+<span class="fc" id="L123">            input.getAccountId(),</span>
+<span class="fc" id="L124">            input.getRegion()</span>
         );
 
-<span class="fc" id="L132">        return this.cloudFormation.createStackInstances(</span>
+<span class="fc" id="L127">        return this.cloudFormation.createStackInstances(</span>
             new CreateStackInstancesRequest()
-<span class="fc" id="L134">                .withStackSetName(input.getStackSetName())</span>
-<span class="fc" id="L135">                .withAccounts(input.getAccountId())</span>
-<span class="fc" id="L136">                .withRegions(input.getRegion())</span>
-<span class="fc" id="L137">                .withParameterOverrides(StackSetInstanceManager.buildSdkParameters(input))</span>
+<span class="fc" id="L129">                .withStackSetName(input.getStackSetName())</span>
+<span class="fc" id="L130">                .withAccounts(input.getAccountId())</span>
+<span class="fc" id="L131">                .withRegions(input.getRegion())</span>
+<span class="fc" id="L132">                .withParameterOverrides(StackSetInstanceManager.buildSdkParameters(input))</span>
         )
-<span class="fc" id="L139">            .getOperationId();</span>
+<span class="fc" id="L134">            .getOperationId();</span>
     }
 
     /**
@@ -145,33 +140,32 @@ public class StackSetInstanceManager
      * @param input Stack instance specification.
      * @return Stack set operation ID.
      */
-    private String updateStackInstance(StackInstanceRequest input)
-    {
-<span class="fc" id="L150">        StackInstance stackInstance = this.cloudFormation.describeStackInstance(</span>
+    private String updateStackInstance(StackInstanceRequest input) {
+<span class="fc" id="L144">        StackInstance stackInstance = this.cloudFormation.describeStackInstance(</span>
             new DescribeStackInstanceRequest()
-<span class="fc" id="L152">                .withStackSetName(input.getStackSetName())</span>
-<span class="fc" id="L153">                .withStackInstanceAccount(input.getAccountId())</span>
-<span class="fc" id="L154">                .withStackInstanceRegion(input.getRegion())</span>
+<span class="fc" id="L146">                .withStackSetName(input.getStackSetName())</span>
+<span class="fc" id="L147">                .withStackInstanceAccount(input.getAccountId())</span>
+<span class="fc" id="L148">                .withStackInstanceRegion(input.getRegion())</span>
         )
-<span class="fc" id="L156">            .getStackInstance();</span>
+<span class="fc" id="L150">            .getStackInstance();</span>
 
-<span class="fc" id="L158">        this.logger.info(</span>
+<span class="fc" id="L152">        this.logger.info(</span>
             &quot;Updating only parameters for stack set {} instance for account {} in {}, creating new one - ID {}.&quot;,
-<span class="fc" id="L160">            input.getStackSetName(),</span>
-<span class="fc" id="L161">            input.getAccountId(),</span>
-<span class="fc" id="L162">            input.getRegion(),</span>
-<span class="fc" id="L163">            stackInstance.getStackId()</span>
+<span class="fc" id="L154">            input.getStackSetName(),</span>
+<span class="fc" id="L155">            input.getAccountId(),</span>
+<span class="fc" id="L156">            input.getRegion(),</span>
+<span class="fc" id="L157">            stackInstance.getStackId()</span>
         );
 
         // we only update parameters
-<span class="fc" id="L167">        return this.cloudFormation.updateStackInstances(</span>
+<span class="fc" id="L161">        return this.cloudFormation.updateStackInstances(</span>
             new UpdateStackInstancesRequest()
-<span class="fc" id="L169">                .withStackSetName(input.getStackSetName())</span>
-<span class="fc" id="L170">                .withAccounts(input.getAccountId())</span>
-<span class="fc" id="L171">                .withRegions(input.getRegion())</span>
-<span class="fc" id="L172">                .withParameterOverrides(StackSetInstanceManager.buildSdkParameters(input))</span>
+<span class="fc" id="L163">                .withStackSetName(input.getStackSetName())</span>
+<span class="fc" id="L164">                .withAccounts(input.getAccountId())</span>
+<span class="fc" id="L165">                .withRegions(input.getRegion())</span>
+<span class="fc" id="L166">                .withParameterOverrides(StackSetInstanceManager.buildSdkParameters(input))</span>
         )
-<span class="fc" id="L174">            .getOperationId();</span>
+<span class="fc" id="L168">            .getOperationId();</span>
     }
 
     /**
@@ -180,14 +174,13 @@ public class StackSetInstanceManager
      * @param input Request data.
      * @return Collection of AWS SDK DTOs.
      */
-    private static Collection&lt;Parameter&gt; buildSdkParameters(StackInstanceRequest input)
-    {
-<span class="fc" id="L185">        return StackUtils.buildSdkList(</span>
-<span class="fc" id="L186">            input.getParameterOverrides(),</span>
+    private static Collection&lt;Parameter&gt; buildSdkParameters(StackInstanceRequest input) {
+<span class="fc" id="L178">        return StackUtils.buildSdkList(</span>
+<span class="fc" id="L179">            input.getParameterOverrides(),</span>
             (String key, String value) -&gt;
-<span class="fc" id="L188">                new Parameter()</span>
-<span class="fc" id="L189">                    .withParameterKey(key)</span>
-<span class="fc" id="L190">                    .withParameterValue(value)</span>
+<span class="fc" id="L181">                new Parameter()</span>
+<span class="fc" id="L182">                    .withParameterKey(key)</span>
+<span class="fc" id="L183">                    .withParameterValue(value)</span>
         );
     }
 
@@ -197,14 +190,13 @@ public class StackSetInstanceManager
      * @param physicalResourceId Compound identifier.
      * @return Stack instance request specification.
      */
-    private static StackInstanceRequest parsePhysicalResourceId(String physicalResourceId)
-    {
-<span class="fc" id="L202">        String[] parts = physicalResourceId.split(&quot;:&quot;);</span>
-<span class="fc" id="L203">        StackInstanceRequest request = new StackInstanceRequest();</span>
-<span class="fc" id="L204">        request.setStackSetName(parts[0]);</span>
-<span class="fc" id="L205">        request.setAccountId(parts[1]);</span>
-<span class="fc" id="L206">        request.setRegion(parts[2]);</span>
-<span class="fc" id="L207">        return request;</span>
+    private static StackInstanceRequest parsePhysicalResourceId(String physicalResourceId) {
+<span class="fc" id="L194">        String[] parts = physicalResourceId.split(&quot;:&quot;);</span>
+<span class="fc" id="L195">        StackInstanceRequest request = new StackInstanceRequest();</span>
+<span class="fc" id="L196">        request.setStackSetName(parts[0]);</span>
+<span class="fc" id="L197">        request.setAccountId(parts[1]);</span>
+<span class="fc" id="L198">        request.setRegion(parts[2]);</span>
+<span class="fc" id="L199">        return request;</span>
     }
 
     /**
@@ -213,13 +205,12 @@ public class StackSetInstanceManager
      * @param input Stack instance request specification.
      * @return Compound identifier.
      */
-    private static String buildPhysicalResourceId(StackInstanceRequest input)
-    {
-<span class="fc" id="L218">        return String.format(</span>
+    private static String buildPhysicalResourceId(StackInstanceRequest input) {
+<span class="fc" id="L209">        return String.format(</span>
             &quot;%s:%s:%s&quot;,
-<span class="fc" id="L220">            input.getStackSetName(),</span>
-<span class="fc" id="L221">            input.getAccountId(),</span>
-<span class="fc" id="L222">            input.getRegion()</span>
+<span class="fc" id="L211">            input.getStackSetName(),</span>
+<span class="fc" id="L212">            input.getAccountId(),</span>
+<span class="fc" id="L213">            input.getRegion()</span>
         );
     }
 }
