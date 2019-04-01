@@ -32,8 +32,7 @@ import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 /**
  * CloudFormation API implementation.
  */
-public class StackSetManager
-{
+public class StackSetManager {
     /**
      * Message pattern for drift case.
      */
@@ -66,8 +65,7 @@ public class StackSetManager
      * @param cloudFormation AWS CloudFormation client.
      * @param stackSetHandler Stack set operations helper.
      */
-    public StackSetManager(AmazonCloudFormation cloudFormation, StackSetHandler stackSetHandler)
-    {
+    public StackSetManager(AmazonCloudFormation cloudFormation, StackSetHandler stackSetHandler) {
         this.cloudFormation = cloudFormation;
         this.stackSetHandler = stackSetHandler;
     }
@@ -79,8 +77,7 @@ public class StackSetManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<StackSetResponse> deployStackSet(StackSetRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<StackSetResponse> deployStackSet(StackSetRequest input, String physicalResourceId) {
         StackSetResponse response = new StackSetResponse();
 
         try {
@@ -120,8 +117,7 @@ public class StackSetManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<StackSetResponse> deleteStackSet(StackSetRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<StackSetResponse> deleteStackSet(StackSetRequest input, String physicalResourceId) {
         StackSet stackSet = this.cloudFormation.describeStackSet(
             new DescribeStackSetRequest()
                 .withStackSetName(input.getStackSetName())
@@ -160,8 +156,7 @@ public class StackSetManager
      * @param input Stack set specification.
      * @return Created stack set ID.
      */
-    private String createStackSet(StackSetRequest input)
-    {
+    private String createStackSet(StackSetRequest input) {
         CreateStackSetResult result = this.cloudFormation.createStackSet(
             new CreateStackSetRequest()
                 .withStackSetName(input.getStackSetName())
@@ -184,8 +179,7 @@ public class StackSetManager
      *
      * @param input Stack set specification.
      */
-    private void updateStackSet(StackSetRequest input)
-    {
+    private void updateStackSet(StackSetRequest input) {
         UpdateStackSetResult result = this.cloudFormation.updateStackSet(
             new UpdateStackSetRequest()
                 .withStackSetName(input.getStackSetName())
@@ -209,8 +203,7 @@ public class StackSetManager
      * @param input Request data.
      * @return Collection of AWS SDK DTOs.
      */
-    private static Collection<Parameter> buildSdkParameters(StackSetRequest input)
-    {
+    private static Collection<Parameter> buildSdkParameters(StackSetRequest input) {
         return StackUtils.buildSdkList(
             input.getParameters(),
             (String key, String value) ->
@@ -226,8 +219,7 @@ public class StackSetManager
      * @param input Request data.
      * @return Collection of AWS SDK DTOs.
      */
-    private static Collection<Tag> buildSdkTags(StackSetRequest input)
-    {
+    private static Collection<Tag> buildSdkTags(StackSetRequest input) {
         return StackUtils.buildSdkList(
             input.getTags(),
             (String key, String value) ->

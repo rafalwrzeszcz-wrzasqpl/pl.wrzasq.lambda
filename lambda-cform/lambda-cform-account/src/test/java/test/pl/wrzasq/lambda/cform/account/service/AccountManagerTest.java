@@ -44,8 +44,7 @@ import pl.wrzasq.lambda.cform.account.model.AccountRequest;
 import pl.wrzasq.lambda.cform.account.service.AccountManager;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountManagerTest
-{
+public class AccountManagerTest {
     private static final String STATUS_ID = "fooactioninprogress";
 
     private static final String PHYSICAL_ID_1 = "1234567890";
@@ -94,8 +93,7 @@ public class AccountManagerTest
     ArgumentCaptor<RemoveAccountFromOrganizationRequest> removeRequest;
 
     @Test
-    public void provision()
-    {
+    public void provision() {
         Account account = new Account();
 
         Mockito
@@ -207,8 +205,7 @@ public class AccountManagerTest
     }
 
     @Test
-    public void provisionFails()
-    {
+    public void provisionFails() {
         Mockito
             .when(this.organizations.createAccount(Mockito.any(CreateAccountRequest.class)))
             .thenReturn(
@@ -234,8 +231,7 @@ public class AccountManagerTest
     }
 
     @Test
-    public void provisionInvite()
-    {
+    public void provisionInvite() {
         Account account = new Account();
 
         Mockito
@@ -332,8 +328,7 @@ public class AccountManagerTest
     }
 
     @Test
-    public void provisionInviteFails()
-    {
+    public void provisionInviteFails() {
         Mockito
             .when(
                 this.organizations.inviteAccountToOrganization(Mockito.any(InviteAccountToOrganizationRequest.class))
@@ -364,8 +359,7 @@ public class AccountManagerTest
     }
 
     @Test
-    public void provisionNotExistingAccount()
-    {
+    public void provisionNotExistingAccount() {
         Account account = new Account();
 
         Mockito
@@ -454,8 +448,7 @@ public class AccountManagerTest
     }
 
     @Test
-    public void provisionChangedName()
-    {
+    public void provisionChangedName() {
         Account account = new Account();
         account.setEmail(AccountManagerTest.EMAIL_1);
         account.setName(AccountManagerTest.ACCOUNT_NAME_1);
@@ -549,8 +542,7 @@ public class AccountManagerTest
     }
 
     @Test
-    public void provisionChangedEmail()
-    {
+    public void provisionChangedEmail() {
         Account account = new Account();
         account.setEmail(AccountManagerTest.EMAIL_1);
         account.setName(AccountManagerTest.ACCOUNT_NAME_1);
@@ -644,8 +636,7 @@ public class AccountManagerTest
     }
 
     @Test
-    public void provisionMove()
-    {
+    public void provisionMove() {
         Account account = new Account();
         account.setEmail(AccountManagerTest.EMAIL_1);
         account.setName(AccountManagerTest.ACCOUNT_NAME_1);
@@ -731,8 +722,7 @@ public class AccountManagerTest
     }
 
     @Test
-    public void delete()
-    {
+    public void delete() {
         AccountManager manager = this.createAccountManager();
 
         manager.delete(null, AccountManagerTest.PHYSICAL_ID_1);
@@ -746,8 +736,7 @@ public class AccountManagerTest
         );
     }
 
-    private AccountManager createAccountManager()
-    {
+    private AccountManager createAccountManager() {
         AccountManager manager = new AccountManager(this.organizations);
         manager.setSleepInterval(1);
         return manager;

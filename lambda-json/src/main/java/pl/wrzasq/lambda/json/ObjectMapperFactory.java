@@ -15,15 +15,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 /**
  * Default Jackson ObjectMapper provider.
  */
-public class ObjectMapperFactory
-{
+public class ObjectMapperFactory {
     /**
      * Creates Jackson mapper.
      *
      * @return Object mapper to be used around the system.
      */
-    public static ObjectMapper createObjectMapper()
-    {
+    public static ObjectMapper createObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

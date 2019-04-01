@@ -24,8 +24,7 @@ import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
 /**
  * Organizations API implementation.
  */
-public class OrganizationManager
-{
+public class OrganizationManager {
     /**
      * Message pattern for drift case.
      */
@@ -47,8 +46,7 @@ public class OrganizationManager
      *
      * @param organizations AWS Organizations client.
      */
-    public OrganizationManager(AWSOrganizations organizations)
-    {
+    public OrganizationManager(AWSOrganizations organizations) {
         this.organizations = organizations;
     }
 
@@ -59,8 +57,7 @@ public class OrganizationManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<OrganizationResponse> sync(OrganizationRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<OrganizationResponse> sync(OrganizationRequest input, String physicalResourceId) {
         Organization organization;
         try {
             organization = this.organizations.describeOrganization(
@@ -109,8 +106,7 @@ public class OrganizationManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<OrganizationResponse> delete(OrganizationRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<OrganizationResponse> delete(OrganizationRequest input, String physicalResourceId) {
         Organization organization = this.organizations.describeOrganization(
             new DescribeOrganizationRequest()
         )

@@ -35,8 +35,7 @@ import pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest;
 import pl.wrzasq.lambda.cform.stackset.instance.service.StackSetInstanceManager;
 
 @ExtendWith(MockitoExtension.class)
-public class StackSetInstanceManagerTest
-{
+public class StackSetInstanceManagerTest {
     private static final String PARAMETER_KEY = "param1";
 
     private static final String PARAMETER_VALUE = "test value";
@@ -80,8 +79,7 @@ public class StackSetInstanceManagerTest
     ArgumentCaptor<DeleteStackInstancesRequest> deleteRequest;
 
     @Test
-    public void deployStackInstance()
-    {
+    public void deployStackInstance() {
         StackInstance stackInstance = new StackInstance();
 
         StackSetInstanceManager manager = this.createStackSetInstanceManager();
@@ -191,8 +189,7 @@ public class StackSetInstanceManagerTest
     }
 
     @Test
-    public void deployStackInstanceUpdate()
-    {
+    public void deployStackInstanceUpdate() {
         StackInstance stackInstance = new StackInstance();
 
         StackSetInstanceManager manager = this.createStackSetInstanceManager();
@@ -301,8 +298,7 @@ public class StackSetInstanceManagerTest
     }
 
     @Test
-    public void deployStackSetInstanceNullParameters()
-    {
+    public void deployStackSetInstanceNullParameters() {
         StackInstance stackInstance = new StackInstance();
 
         StackSetInstanceManager manager = this.createStackSetInstanceManager();
@@ -334,8 +330,7 @@ public class StackSetInstanceManagerTest
     }
 
     @Test
-    public void deleteStackInstance()
-    {
+    public void deleteStackInstance() {
         StackSetInstanceManager manager = this.createStackSetInstanceManager();
 
         manager.deleteStackInstance(null, StackSetInstanceManagerTest.PHYSICAL_ID);
@@ -359,8 +354,7 @@ public class StackSetInstanceManagerTest
         );
     }
 
-    private static StackInstanceRequest createStackInstanceRequest()
-    {
+    private static StackInstanceRequest createStackInstanceRequest() {
         StackInstanceRequest request = new StackInstanceRequest();
         request.setStackSetName(StackSetInstanceManagerTest.STACK_SET_NAME);
         request.setAccountId(StackSetInstanceManagerTest.ACCOUNT_ID);
@@ -368,9 +362,8 @@ public class StackSetInstanceManagerTest
         request.setParameterOverrides(StackSetInstanceManagerTest.PARAMETERS);
         return request;
     }
-    
-    private StackSetInstanceManager createStackSetInstanceManager()
-    {
+
+    private StackSetInstanceManager createStackSetInstanceManager() {
         return new StackSetInstanceManager(this.cloudFormation, this.stackSetHandler);
     }
 }

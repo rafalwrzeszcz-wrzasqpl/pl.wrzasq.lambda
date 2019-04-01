@@ -24,8 +24,7 @@ import pl.wrzasq.lambda.cform.account.Handler;
 import pl.wrzasq.lambda.cform.account.model.AccountRequest;
 
 @ExtendWith(MockitoExtension.class)
-public class HandlerTest
-{
+public class HandlerTest {
     @Mock
     private CustomResourceHandler<AccountRequest, Account> handler;
 
@@ -35,20 +34,17 @@ public class HandlerTest
     private CustomResourceHandler<AccountRequest, Account> originalHandler;
 
     @BeforeEach
-    public void setUp() throws NoSuchFieldException, IllegalAccessException
-    {
+    public void setUp() throws NoSuchFieldException, IllegalAccessException {
         this.originalHandler = this.setHandler(this.handler);
     }
 
     @AfterEach
-    public void tearDown() throws NoSuchFieldException, IllegalAccessException
-    {
+    public void tearDown() throws NoSuchFieldException, IllegalAccessException {
         this.setHandler(this.originalHandler);
     }
 
     @Test
-    public void handle()
-    {
+    public void handle() {
         CfnRequest<AccountRequest> request = new CfnRequest<>();
         request.setRequestType("Create");
         request.setResourceProperties(new AccountRequest());
@@ -61,8 +57,7 @@ public class HandlerTest
     private CustomResourceHandler<AccountRequest, Account> setHandler(
         CustomResourceHandler<AccountRequest, Account> sender
     )
-        throws NoSuchFieldException, IllegalAccessException
-    {
+        throws NoSuchFieldException, IllegalAccessException {
         Field hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
         CustomResourceHandler<AccountRequest, Account> original

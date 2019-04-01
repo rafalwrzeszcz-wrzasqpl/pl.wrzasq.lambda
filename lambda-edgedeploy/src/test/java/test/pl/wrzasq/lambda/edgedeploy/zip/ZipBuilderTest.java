@@ -18,11 +18,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.wrzasq.lambda.edgedeploy.zip.ZipBuilder;
 
-public class ZipBuilderTest
-{
+public class ZipBuilderTest {
     @Test
-    public void writeEntryFromBytes() throws IOException
-    {
+    public void writeEntryFromBytes() throws IOException {
         ZipBuilder zip = new ZipBuilder();
         zip.writeEntry("test.txt", new byte[]{'t', 'e', 's', 't'});
         ByteBuffer buffer = zip.dump();
@@ -45,8 +43,7 @@ public class ZipBuilderTest
     }
 
     @Test
-    public void writeEntryFromStream() throws IOException
-    {
+    public void writeEntryFromStream() throws IOException {
         ZipBuilder zip = new ZipBuilder();
         zip.writeEntry("test.txt", new ByteArrayInputStream(new byte[]{'t', 'e', 's', 't'}));
         ByteBuffer buffer = zip.dump();

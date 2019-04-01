@@ -13,8 +13,7 @@ import lombok.Data;
  * Organizational Unit CloudFormation request.
  */
 @Data
-public class OrganizationUnitRequest
-{
+public class OrganizationUnitRequest {
     /**
      * Organizational unit name.
      */

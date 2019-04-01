@@ -13,8 +13,7 @@ import lombok.Data;
  * StackSet CloudFormation result response.
  */
 @Data
-public class StackSetResponse
-{
+public class StackSetResponse {
     /**
      * Stack set ID.
      */

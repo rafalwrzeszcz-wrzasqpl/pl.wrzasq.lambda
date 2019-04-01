@@ -13,8 +13,7 @@ import lombok.Data;
  * Account CloudFormation request.
  */
 @Data
-public class AccountRequest
-{
+public class AccountRequest {
     /**
      * Existing account ID to invite into organization.
      */

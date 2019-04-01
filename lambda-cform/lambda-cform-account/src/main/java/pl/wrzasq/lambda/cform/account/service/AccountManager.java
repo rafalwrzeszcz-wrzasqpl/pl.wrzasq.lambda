@@ -34,8 +34,7 @@ import pl.wrzasq.lambda.cform.account.model.AccountRequest;
 /**
  * Organizations API implementation.
  */
-public class AccountManager
-{
+public class AccountManager {
     /**
      * Default sleep interval (1 minute).
      */
@@ -62,8 +61,7 @@ public class AccountManager
      *
      * @param organizations AWS Organizations client.
      */
-    public AccountManager(AWSOrganizations organizations)
-    {
+    public AccountManager(AWSOrganizations organizations) {
         this.organizations = organizations;
     }
 
@@ -74,8 +72,7 @@ public class AccountManager
      * @param physicalResourceId Physical ID of existing resource (in this case always null).
      * @return Data about published version.
      */
-    public CustomResourceResponse<Account> provision(AccountRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<Account> provision(AccountRequest input, String physicalResourceId) {
         if (physicalResourceId != null) {
             physicalResourceId = resolveExistingAccount(physicalResourceId, input);
         }
@@ -119,8 +116,7 @@ public class AccountManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<Account> delete(AccountRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<Account> delete(AccountRequest input, String physicalResourceId) {
         this.organizations.removeAccountFromOrganization(
             new RemoveAccountFromOrganizationRequest()
                 .withAccountId(physicalResourceId)
@@ -141,8 +137,7 @@ public class AccountManager
      * @param input Account specification.
      * @return Account ID.
      */
-    private String initializeAccount(AccountRequest input)
-    {
+    private String initializeAccount(AccountRequest input) {
         return input.getAccountId() == null
             ? this.createAccount(input.getEmail(), input.getAccountName(), input.getAdministratorRoleName())
             : this.inviteAccount(input.getAccountId());
@@ -156,8 +151,7 @@ public class AccountManager
      * @param roleName Administration role name.
      * @return Account ID.
      */
-    private String createAccount(String email, String name, String roleName)
-    {
+    private String createAccount(String email, String name, String roleName) {
         CreateAccountStatus status = this.organizations.createAccount(
             new CreateAccountRequest()
                 .withEmail(email)
@@ -202,8 +196,7 @@ public class AccountManager
      * @param accountId Existing account ID.
      * @return Account ID.
      */
-    private String inviteAccount(String accountId)
-    {
+    private String inviteAccount(String accountId) {
         Handshake handshake = this.organizations.inviteAccountToOrganization(
             new InviteAccountToOrganizationRequest()
                 .withTarget(
@@ -247,8 +240,7 @@ public class AccountManager
      * @param input Desired account specification.
      * @return Resolved account ID.
      */
-    private String resolveExistingAccount(String accountId, AccountRequest input)
-    {
+    private String resolveExistingAccount(String accountId, AccountRequest input) {
         try {
             Account account = this.organizations.describeAccount(
                 new DescribeAccountRequest()
@@ -273,8 +265,7 @@ public class AccountManager
     /**
      * Performs a wait.
      */
-    private void sleep()
-    {
+    private void sleep() {
         try {
             Thread.sleep(this.sleepInterval);
         } catch (InterruptedException error) {

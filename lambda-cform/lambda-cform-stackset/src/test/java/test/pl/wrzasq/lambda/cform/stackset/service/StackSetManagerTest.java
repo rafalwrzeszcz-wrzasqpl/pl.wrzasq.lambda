@@ -38,8 +38,7 @@ import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 import pl.wrzasq.lambda.cform.stackset.service.StackSetManager;
 
 @ExtendWith(MockitoExtension.class)
-public class StackSetManagerTest
-{
+public class StackSetManagerTest {
     private static final String PARAMETER_KEY = "param1";
 
     private static final String PARAMETER_VALUE = "test value";
@@ -95,8 +94,7 @@ public class StackSetManagerTest
     ArgumentCaptor<DeleteStackSetRequest> deleteRequest;
 
     @Test
-    public void deployStackSet()
-    {
+    public void deployStackSet() {
         StackSet stackSet = new StackSet()
             .withStackSetName(StackSetManagerTest.STACK_SET_NAME)
             .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
@@ -221,8 +219,7 @@ public class StackSetManagerTest
     }
 
     @Test
-    public void deployStackSetOutOfSync()
-    {
+    public void deployStackSetOutOfSync() {
         String physicalResourceId = "another-id";
         StackSet stackSet = new StackSet()
             .withStackSetName(StackSetManagerTest.STACK_SET_NAME)
@@ -266,8 +263,7 @@ public class StackSetManagerTest
     }
 
     @Test
-    public void deployStackSetNotExists()
-    {
+    public void deployStackSetNotExists() {
         StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
@@ -377,8 +373,7 @@ public class StackSetManagerTest
     }
 
     @Test
-    public void deployStackSetNullParameters()
-    {
+    public void deployStackSetNullParameters() {
         StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
@@ -409,8 +404,7 @@ public class StackSetManagerTest
     }
 
     @Test
-    public void deleteStackSet()
-    {
+    public void deleteStackSet() {
         StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
@@ -440,8 +434,7 @@ public class StackSetManagerTest
     }
 
     @Test
-    public void deleteStackSetOutOfSync()
-    {
+    public void deleteStackSetOutOfSync() {
         StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
@@ -465,8 +458,7 @@ public class StackSetManagerTest
         Mockito.verify(this.cloudFormation, Mockito.never()).deleteStackSet(Mockito.any(DeleteStackSetRequest.class));
     }
 
-    private static StackSetRequest createStackSetRequest()
-    {
+    private static StackSetRequest createStackSetRequest() {
         StackSetRequest input = new StackSetRequest();
         input.setStackSetName(StackSetManagerTest.STACK_SET_NAME);
         input.setDescription(StackSetManagerTest.STACK_SET_DESCRIPTION);

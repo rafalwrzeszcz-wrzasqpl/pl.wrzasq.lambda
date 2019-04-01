@@ -49,8 +49,7 @@ import pl.wrzasq.lambda.edgedeploy.zip.ZipBuilder;
 import pl.wrzasq.lambda.json.ObjectMapperFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class LambdaEdgeManagerTest
-{
+public class LambdaEdgeManagerTest {
     private static final String FUNCTION_NAME = "test";
 
     private static final String FUNCTION_DESCRIPTION = "Test function.";
@@ -114,8 +113,7 @@ public class LambdaEdgeManagerTest
     }
 
     @Test
-    public void create() throws IOException
-    {
+    public void create() throws IOException {
         LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
         EdgeDeployRequest input = this.buildRequest();
@@ -274,8 +272,7 @@ public class LambdaEdgeManagerTest
     }
 
     @Test
-    public void createZipIoException() throws IOException
-    {
+    public void createZipIoException() throws IOException {
         LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
         EdgeDeployRequest input = this.buildRequest();
@@ -296,8 +293,7 @@ public class LambdaEdgeManagerTest
     }
 
     @Test
-    public void update() throws IOException
-    {
+    public void update() throws IOException {
         LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
         String configFile = "data.json";
@@ -420,8 +416,7 @@ public class LambdaEdgeManagerTest
     }
 
     @Test
-    public void delete()
-    {
+    public void delete() {
         LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
         EdgeDeployRequest input = this.buildRequest();
@@ -445,8 +440,7 @@ public class LambdaEdgeManagerTest
     }
 
     @Test
-    public void deleteNotFound()
-    {
+    public void deleteNotFound() {
         LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
         EdgeDeployRequest input = this.buildRequest();
@@ -469,8 +463,7 @@ public class LambdaEdgeManagerTest
         );
     }
 
-    private EdgeDeployRequest buildRequest()
-    {
+    private EdgeDeployRequest buildRequest() {
         EdgeDeployRequest request = new EdgeDeployRequest();
         request.setFunctionName(LambdaEdgeManagerTest.FUNCTION_NAME);
         request.setFunctionDescription(LambdaEdgeManagerTest.FUNCTION_DESCRIPTION);
@@ -485,8 +478,7 @@ public class LambdaEdgeManagerTest
         return request;
     }
 
-    private S3Object buildS3Object(InputStream inputStream)
-    {
+    private S3Object buildS3Object(InputStream inputStream) {
         S3Object s3Object = new S3Object();
         s3Object.setObjectContent(inputStream);
         return s3Object;

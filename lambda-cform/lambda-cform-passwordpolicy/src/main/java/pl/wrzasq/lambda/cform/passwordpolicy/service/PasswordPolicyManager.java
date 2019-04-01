@@ -16,8 +16,7 @@ import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 /**
  * Password policy API implementation.
  */
-public class PasswordPolicyManager
-{
+public class PasswordPolicyManager {
     /**
      * Static value for physical ID to ensure no deletes will happen in the update.
      */
@@ -38,8 +37,7 @@ public class PasswordPolicyManager
      *
      * @param iam AWS IAM client.
      */
-    public PasswordPolicyManager(AmazonIdentityManagement iam)
-    {
+    public PasswordPolicyManager(AmazonIdentityManagement iam) {
         this.iam = iam;
     }
 
@@ -53,8 +51,7 @@ public class PasswordPolicyManager
     public CustomResourceResponse<UpdateAccountPasswordPolicyRequest> setPolicy(
         UpdateAccountPasswordPolicyRequest input,
         String physicalResourceId
-    )
-    {
+    ) {
         this.iam.updateAccountPasswordPolicy(input);
 
         this.logger.info("Account password policy set.");
@@ -76,8 +73,7 @@ public class PasswordPolicyManager
     public CustomResourceResponse<UpdateAccountPasswordPolicyRequest> delete(
         UpdateAccountPasswordPolicyRequest input,
         String physicalResourceId
-    )
-    {
+    ) {
         this.iam.deleteAccountPasswordPolicy();
 
         this.logger.info("Account password policy removed.");

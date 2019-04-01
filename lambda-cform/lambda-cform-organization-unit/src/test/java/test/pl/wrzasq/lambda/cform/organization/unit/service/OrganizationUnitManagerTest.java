@@ -31,8 +31,7 @@ import pl.wrzasq.lambda.cform.organization.unit.model.OrganizationUnitRequest;
 import pl.wrzasq.lambda.cform.organization.unit.service.OrganizationUnitManager;
 
 @ExtendWith(MockitoExtension.class)
-public class OrganizationUnitManagerTest
-{
+public class OrganizationUnitManagerTest {
     private static final String PHYSICAL_RESOURCE_ID = "ou-123";
 
     private static final String OU_NAME = "test";
@@ -57,8 +56,7 @@ public class OrganizationUnitManagerTest
     ArgumentCaptor<DeleteOrganizationalUnitRequest> deleteRequest;
 
     @Test
-    public void sync()
-    {
+    public void sync() {
         OrganizationalUnit unit = new OrganizationalUnit();
         unit.setId(OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 
@@ -97,8 +95,7 @@ public class OrganizationUnitManagerTest
     }
 
     @Test
-    public void syncAlreadyExists()
-    {
+    public void syncAlreadyExists() {
         OrganizationalUnit unit = new OrganizationalUnit();
         unit.setId(OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 
@@ -146,8 +143,7 @@ public class OrganizationUnitManagerTest
     }
 
     @Test
-    public void syncNotExistingPhysicalId()
-    {
+    public void syncNotExistingPhysicalId() {
         OrganizationalUnit unit = new OrganizationalUnit();
         unit.setId(OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 
@@ -189,8 +185,7 @@ public class OrganizationUnitManagerTest
     }
 
     @Test
-    public void syncChangedParent()
-    {
+    public void syncChangedParent() {
         OrganizationalUnit unit = new OrganizationalUnit();
         unit.setId(OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 
@@ -238,8 +233,7 @@ public class OrganizationUnitManagerTest
     }
 
     @Test
-    public void delete()
-    {
+    public void delete() {
         OrganizationUnitManager manager = new OrganizationUnitManager(this.organizations);
 
         manager.delete(null, OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);

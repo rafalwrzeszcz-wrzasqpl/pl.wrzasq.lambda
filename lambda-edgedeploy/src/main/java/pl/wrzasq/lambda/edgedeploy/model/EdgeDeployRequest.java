@@ -15,8 +15,7 @@ import lombok.Data;
  * Lambda@Edge deploy CloudFormation request.
  */
 @Data
-public class EdgeDeployRequest
-{
+public class EdgeDeployRequest {
     /**
      * Lambda configuration filename.
      */

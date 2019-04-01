@@ -16,11 +16,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.wrzasq.lambda.json.ObjectMapperFactory;
 
-public class ObjectMapperFactoryTest
-{
+public class ObjectMapperFactoryTest {
     @Test
-    public void handleJava8TimeApiSerialization() throws IOException
-    {
+    public void handleJava8TimeApiSerialization() throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();
 
         LocalDate date = LocalDate.of(2011, Month.JANUARY, 30);
@@ -35,8 +33,7 @@ public class ObjectMapperFactoryTest
     }
 
     @Test
-    public void handleJava8TimeApiDeserialization() throws IOException
-    {
+    public void handleJava8TimeApiDeserialization() throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();
 
         LocalDate date = objectMapper.readValue("\"2015-07-02\"", LocalDate.class);
@@ -59,8 +56,7 @@ public class ObjectMapperFactoryTest
     }
 
     @Test
-    public void handleUnknownProperties() throws IOException
-    {
+    public void handleUnknownProperties() throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();
 
         ObjectMapperFactory pojo = objectMapper.readValue("{\"nonExisting\":12}", ObjectMapperFactory.class);

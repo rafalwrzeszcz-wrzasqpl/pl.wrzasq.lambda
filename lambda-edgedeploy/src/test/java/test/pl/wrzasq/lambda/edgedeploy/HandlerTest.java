@@ -24,8 +24,7 @@ import pl.wrzasq.lambda.edgedeploy.Handler;
 import pl.wrzasq.lambda.edgedeploy.model.EdgeDeployRequest;
 
 @ExtendWith(MockitoExtension.class)
-public class HandlerTest
-{
+public class HandlerTest {
     @Mock
     private CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> handler;
 
@@ -35,20 +34,17 @@ public class HandlerTest
     private CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> originalHandler;
 
     @BeforeEach
-    public void setUp() throws NoSuchFieldException, IllegalAccessException
-    {
+    public void setUp() throws NoSuchFieldException, IllegalAccessException {
         this.originalHandler = this.setHandler(this.handler);
     }
 
     @AfterEach
-    public void tearDown() throws NoSuchFieldException, IllegalAccessException
-    {
+    public void tearDown() throws NoSuchFieldException, IllegalAccessException {
         this.setHandler(this.originalHandler);
     }
 
     @Test
-    public void handle()
-    {
+    public void handle() {
         CfnRequest<EdgeDeployRequest> request = new CfnRequest<>();
         request.setRequestType("Create");
         request.setResourceProperties(new EdgeDeployRequest());
@@ -61,8 +57,7 @@ public class HandlerTest
     private CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> setHandler(
         CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> sender
     )
-        throws NoSuchFieldException, IllegalAccessException
-    {
+        throws NoSuchFieldException, IllegalAccessException {
         Field hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
         CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> original

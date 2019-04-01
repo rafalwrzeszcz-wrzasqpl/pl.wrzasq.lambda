@@ -13,8 +13,7 @@ import lombok.Data;
  * Organization data response model.
  */
 @Data
-public class OrganizationResponse
-{
+public class OrganizationResponse {
     /**
      * Organization ID.
      */

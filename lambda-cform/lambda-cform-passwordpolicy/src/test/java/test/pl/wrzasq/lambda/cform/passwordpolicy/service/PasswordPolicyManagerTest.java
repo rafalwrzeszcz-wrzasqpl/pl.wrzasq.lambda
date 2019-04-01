@@ -21,8 +21,7 @@ import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.passwordpolicy.service.PasswordPolicyManager;
 
 @ExtendWith(MockitoExtension.class)
-public class PasswordPolicyManagerTest
-{
+public class PasswordPolicyManagerTest {
     @Mock
     private AmazonIdentityManagement iam;
 
@@ -30,8 +29,7 @@ public class PasswordPolicyManagerTest
     ArgumentCaptor<UpdateAccountPasswordPolicyRequest> createRequest;
 
     @Test
-    public void setPolicy()
-    {
+    public void setPolicy() {
         PasswordPolicyManager manager = new PasswordPolicyManager(this.iam);
 
         UpdateAccountPasswordPolicyRequest input = new UpdateAccountPasswordPolicyRequest();
@@ -48,8 +46,7 @@ public class PasswordPolicyManagerTest
     }
 
     @Test
-    public void setPolicyUpdate()
-    {
+    public void setPolicyUpdate() {
         String physicalResourceId = "another-id";
 
         PasswordPolicyManager manager = new PasswordPolicyManager(this.iam);
@@ -71,8 +68,7 @@ public class PasswordPolicyManagerTest
     }
 
     @Test
-    public void delete()
-    {
+    public void delete() {
         PasswordPolicyManager manager = new PasswordPolicyManager(this.iam);
 
         manager.delete(null, null);

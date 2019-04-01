@@ -14,8 +14,7 @@ import lombok.Data;
  * Organization CloudFormation request.
  */
 @Data
-public class OrganizationRequest
-{
+public class OrganizationRequest {
     /**
      * Feature set enabled for organization (only applies at creation time).
      */

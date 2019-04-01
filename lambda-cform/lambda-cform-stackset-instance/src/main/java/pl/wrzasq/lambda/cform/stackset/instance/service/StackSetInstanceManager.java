@@ -27,8 +27,7 @@ import pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest;
 /**
  * CloudFormation API implementation.
  */
-public class StackSetInstanceManager
-{
+public class StackSetInstanceManager {
     /**
      * Logger.
      */
@@ -50,8 +49,7 @@ public class StackSetInstanceManager
      * @param cloudFormation AWS CloudFormation client.
      * @param stackSetHandler Stack set operations helper.
      */
-    public StackSetInstanceManager(AmazonCloudFormation cloudFormation, StackSetHandler stackSetHandler)
-    {
+    public StackSetInstanceManager(AmazonCloudFormation cloudFormation, StackSetHandler stackSetHandler) {
         this.cloudFormation = cloudFormation;
         this.stackSetHandler = stackSetHandler;
     }
@@ -66,8 +64,7 @@ public class StackSetInstanceManager
     public CustomResourceResponse<StackInstance> deployStackInstance(
         StackInstanceRequest input,
         String physicalResourceId
-    )
-    {
+    ) {
         String operationId;
         try {
             operationId = this.updateStackInstance(input);
@@ -98,8 +95,7 @@ public class StackSetInstanceManager
     public CustomResourceResponse<StackInstance> deleteStackInstance(
         StackInstanceRequest input,
         String physicalResourceId
-    )
-    {
+    ) {
         StackInstanceRequest spec = StackSetInstanceManager.parsePhysicalResourceId(physicalResourceId);
 
         this.cloudFormation.deleteStackInstances(
@@ -120,8 +116,7 @@ public class StackSetInstanceManager
      * @param input Stack instance specification.
      * @return Stack set operation ID.
      */
-    private String createStackInstance(StackInstanceRequest input)
-    {
+    private String createStackInstance(StackInstanceRequest input) {
         this.logger.info(
             "Stack set {} instance not found for account {} in {}, creating new one.",
             input.getStackSetName(),
@@ -145,8 +140,7 @@ public class StackSetInstanceManager
      * @param input Stack instance specification.
      * @return Stack set operation ID.
      */
-    private String updateStackInstance(StackInstanceRequest input)
-    {
+    private String updateStackInstance(StackInstanceRequest input) {
         StackInstance stackInstance = this.cloudFormation.describeStackInstance(
             new DescribeStackInstanceRequest()
                 .withStackSetName(input.getStackSetName())
@@ -180,8 +174,7 @@ public class StackSetInstanceManager
      * @param input Request data.
      * @return Collection of AWS SDK DTOs.
      */
-    private static Collection<Parameter> buildSdkParameters(StackInstanceRequest input)
-    {
+    private static Collection<Parameter> buildSdkParameters(StackInstanceRequest input) {
         return StackUtils.buildSdkList(
             input.getParameterOverrides(),
             (String key, String value) ->
@@ -197,8 +190,7 @@ public class StackSetInstanceManager
      * @param physicalResourceId Compound identifier.
      * @return Stack instance request specification.
      */
-    private static StackInstanceRequest parsePhysicalResourceId(String physicalResourceId)
-    {
+    private static StackInstanceRequest parsePhysicalResourceId(String physicalResourceId) {
         String[] parts = physicalResourceId.split(":");
         StackInstanceRequest request = new StackInstanceRequest();
         request.setStackSetName(parts[0]);
@@ -213,8 +205,7 @@ public class StackSetInstanceManager
      * @param input Stack instance request specification.
      * @return Compound identifier.
      */
-    private static String buildPhysicalResourceId(StackInstanceRequest input)
-    {
+    private static String buildPhysicalResourceId(StackInstanceRequest input) {
         return String.format(
             "%s:%s:%s",
             input.getStackSetName(),

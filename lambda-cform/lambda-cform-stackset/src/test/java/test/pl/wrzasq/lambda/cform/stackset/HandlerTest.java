@@ -24,8 +24,7 @@ import pl.wrzasq.lambda.cform.stackset.model.StackSetRequest;
 import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class HandlerTest
-{
+public class HandlerTest {
     @Mock
     private CustomResourceHandler<StackSetRequest, StackSetResponse> handler;
 
@@ -35,20 +34,17 @@ public class HandlerTest
     private CustomResourceHandler<StackSetRequest, StackSetResponse> originalHandler;
 
     @BeforeEach
-    public void setUp() throws NoSuchFieldException, IllegalAccessException
-    {
+    public void setUp() throws NoSuchFieldException, IllegalAccessException {
         this.originalHandler = this.setHandler(this.handler);
     }
 
     @AfterEach
-    public void tearDown() throws NoSuchFieldException, IllegalAccessException
-    {
+    public void tearDown() throws NoSuchFieldException, IllegalAccessException {
         this.setHandler(this.originalHandler);
     }
 
     @Test
-    public void handle()
-    {
+    public void handle() {
         CfnRequest<StackSetRequest> request = new CfnRequest<>();
         request.setRequestType("Create");
         request.setResourceProperties(new StackSetRequest());
@@ -61,8 +57,7 @@ public class HandlerTest
     private CustomResourceHandler<StackSetRequest, StackSetResponse> setHandler(
         CustomResourceHandler<StackSetRequest, StackSetResponse> sender
     )
-        throws NoSuchFieldException, IllegalAccessException
-    {
+        throws NoSuchFieldException, IllegalAccessException {
         Field hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
         CustomResourceHandler<StackSetRequest, StackSetResponse> original

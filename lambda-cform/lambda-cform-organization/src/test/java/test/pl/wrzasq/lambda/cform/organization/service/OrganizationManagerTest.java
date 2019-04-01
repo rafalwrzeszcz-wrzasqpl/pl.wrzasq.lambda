@@ -33,8 +33,7 @@ import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
 import pl.wrzasq.lambda.cform.organization.service.OrganizationManager;
 
 @ExtendWith(MockitoExtension.class)
-public class OrganizationManagerTest
-{
+public class OrganizationManagerTest {
     private static final OrganizationFeatureSet FEATURE_SET = OrganizationFeatureSet.ALL;
 
     private static final String PHYSICAL_ID_1 = "o-test";
@@ -52,8 +51,7 @@ public class OrganizationManagerTest
     ArgumentCaptor<CreateOrganizationRequest> createRequest;
 
     @Test
-    public void sync()
-    {
+    public void sync() {
         Organization organization = new Organization()
             .withId(OrganizationManagerTest.PHYSICAL_ID_1)
             .withArn(OrganizationManagerTest.ARN);
@@ -114,8 +112,7 @@ public class OrganizationManagerTest
     }
 
     @Test
-    public void syncAlreadyExists()
-    {
+    public void syncAlreadyExists() {
         Organization organization = new Organization()
             .withId(OrganizationManagerTest.PHYSICAL_ID_1)
             .withArn(OrganizationManagerTest.ARN);
@@ -170,8 +167,7 @@ public class OrganizationManagerTest
     }
 
     @Test
-    public void syncAlreadyExistsOutOfSync()
-    {
+    public void syncAlreadyExistsOutOfSync() {
         Organization organization = new Organization()
             .withId(OrganizationManagerTest.PHYSICAL_ID_1)
             .withArn(OrganizationManagerTest.ARN);
@@ -226,8 +222,7 @@ public class OrganizationManagerTest
     }
 
     @Test
-    public void delete()
-    {
+    public void delete() {
         Mockito
             .when(this.organizations.describeOrganization(Mockito.any(DescribeOrganizationRequest.class)))
             .thenReturn(
@@ -246,8 +241,7 @@ public class OrganizationManagerTest
     }
 
     @Test
-    public void deleteOutOfSync()
-    {
+    public void deleteOutOfSync() {
         Mockito
             .when(this.organizations.describeOrganization(Mockito.any(DescribeOrganizationRequest.class)))
             .thenReturn(

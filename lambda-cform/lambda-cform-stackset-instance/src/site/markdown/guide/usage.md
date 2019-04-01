@@ -79,8 +79,8 @@ object.
                         Statement:
                             -
                                 Action:
-                                    - "cloudformation:CreateStackInstance"
-                                    - "cloudformation:DeleteStackInstance"
+                                    - "cloudformation:CreateStackInstances"
+                                    - "cloudformation:DeleteStackInstances"
                                     - "cloudformation:DescribeStackInstance"
                                     - "cloudformation:DescribeStackSetOperation"
                                     - "cloudformation:UpdateStackInstances"

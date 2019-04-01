@@ -119,6 +119,7 @@ Name of created stack set. It's the same as name passed to it. But in future nam
                                     - "cloudformation:CreateStackSet"
                                     - "cloudformation:DeleteStackSet"
                                     - "cloudformation:DescribeStackSet"
+                                    - "cloudformation:DescribeStackSetOperation"
                                     - "cloudformation:UpdateStackSet"
                                 Effect: "Allow"
                                 Resource:

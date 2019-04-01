@@ -17,14 +17,12 @@ import java.util.zip.ZipOutputStream;
 /**
  * Utility class for building ZIP archive stream.
  */
-public class ZipBuilder
-{
+public class ZipBuilder {
     /**
      * Internal interface for writing operations.
      */
     @FunctionalInterface
-    private interface ContentWriter
-    {
+    private interface ContentWriter {
         /**
          * Performs write operation.
          *
@@ -55,8 +53,7 @@ public class ZipBuilder
      * @param content Binary content of the file.
      * @throws IOException When writing content to archive fails.
      */
-    public void writeEntry(String name, byte[] content) throws IOException
-    {
+    public void writeEntry(String name, byte[] content) throws IOException {
         this.writeEntry(name, () -> this.zip.write(content));
     }
 
@@ -67,8 +64,7 @@ public class ZipBuilder
      * @param stream Content source.
      * @throws IOException When writing content to archive fails.
      */
-    public void writeEntry(String name, InputStream stream) throws IOException
-    {
+    public void writeEntry(String name, InputStream stream) throws IOException {
         this.writeEntry(
             name,
             () -> {
@@ -88,8 +84,7 @@ public class ZipBuilder
      * @param handler Custom writing logic.
      * @throws IOException When writing to stream fails.
      */
-    private void writeEntry(String name, ContentWriter handler) throws IOException
-    {
+    private void writeEntry(String name, ContentWriter handler) throws IOException {
         this.zip.putNextEntry(
             new ZipEntry(name)
         );
@@ -103,8 +98,7 @@ public class ZipBuilder
      * @return Archive binary content.
      * @throws IOException When dumping ZIP stream fails.
      */
-    public ByteBuffer dump() throws IOException
-    {
+    public ByteBuffer dump() throws IOException {
         this.zip.close();
         this.output.close();
 

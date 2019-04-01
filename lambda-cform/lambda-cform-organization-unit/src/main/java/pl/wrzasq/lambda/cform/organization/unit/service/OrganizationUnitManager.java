@@ -23,8 +23,7 @@ import pl.wrzasq.lambda.cform.organization.unit.model.OrganizationUnitRequest;
 /**
  * Organizations API implementation.
  */
-public class OrganizationUnitManager
-{
+public class OrganizationUnitManager {
     /**
      * Logger.
      */
@@ -40,8 +39,7 @@ public class OrganizationUnitManager
      *
      * @param organizations AWS Organizations client.
      */
-    public OrganizationUnitManager(AWSOrganizations organizations)
-    {
+    public OrganizationUnitManager(AWSOrganizations organizations) {
         this.organizations = organizations;
     }
 
@@ -52,8 +50,7 @@ public class OrganizationUnitManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<OrganizationalUnit> sync(OrganizationUnitRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<OrganizationalUnit> sync(OrganizationUnitRequest input, String physicalResourceId) {
         // check if the parent ID got changed
         if (physicalResourceId != null) {
             try {
@@ -109,8 +106,7 @@ public class OrganizationUnitManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Empty response.
      */
-    public CustomResourceResponse<OrganizationalUnit> delete(OrganizationUnitRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<OrganizationalUnit> delete(OrganizationUnitRequest input, String physicalResourceId) {
         this.organizations.deleteOrganizationalUnit(
             new DeleteOrganizationalUnitRequest()
                 .withOrganizationalUnitId(physicalResourceId)

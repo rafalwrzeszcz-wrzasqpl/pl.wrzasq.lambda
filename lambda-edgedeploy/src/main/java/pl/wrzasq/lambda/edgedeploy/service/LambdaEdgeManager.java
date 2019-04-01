@@ -33,8 +33,7 @@ import pl.wrzasq.lambda.edgedeploy.zip.ZipBuilder;
 /**
  * Lambda API implementation.
  */
-public class LambdaEdgeManager
-{
+public class LambdaEdgeManager {
     /**
      * Logger.
      */
@@ -62,8 +61,7 @@ public class LambdaEdgeManager
      * @param s3 AWS S3 client.
      * @param objectMapper JSON generator.
      */
-    public LambdaEdgeManager(AWSLambda lambda, AmazonS3 s3, ObjectMapper objectMapper)
-    {
+    public LambdaEdgeManager(AWSLambda lambda, AmazonS3 s3, ObjectMapper objectMapper) {
         this.lambda = lambda;
         this.s3 = s3;
         this.objectMapper = objectMapper;
@@ -76,8 +74,7 @@ public class LambdaEdgeManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<PublishVersionResult> create(EdgeDeployRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<PublishVersionResult> create(EdgeDeployRequest input, String physicalResourceId) {
         this.lambda.createFunction(
             new CreateFunctionRequest()
                 .withFunctionName(input.getFunctionName())
@@ -107,8 +104,7 @@ public class LambdaEdgeManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about published version.
      */
-    public CustomResourceResponse<PublishVersionResult> update(EdgeDeployRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<PublishVersionResult> update(EdgeDeployRequest input, String physicalResourceId) {
         this.lambda.updateFunctionCode(
             new UpdateFunctionCodeRequest()
                 .withFunctionName(input.getFunctionName())
@@ -140,8 +136,7 @@ public class LambdaEdgeManager
      * @param physicalResourceId Physical ID of existing resource (if present).
      * @return Data about deleted version.
      */
-    public CustomResourceResponse<PublishVersionResult> delete(EdgeDeployRequest input, String physicalResourceId)
-    {
+    public CustomResourceResponse<PublishVersionResult> delete(EdgeDeployRequest input, String physicalResourceId) {
         try {
             this.lambda.deleteFunction(
                 new DeleteFunctionRequest()
@@ -164,8 +159,7 @@ public class LambdaEdgeManager
      * @param functionName Function stackSetName.
      * @return Published version data.
      */
-    private CustomResourceResponse<PublishVersionResult> publishLambdaVersion(String functionName)
-    {
+    private CustomResourceResponse<PublishVersionResult> publishLambdaVersion(String functionName) {
         PublishVersionResult result = this.lambda.publishVersion(
             new PublishVersionRequest()
                 .withFunctionName(functionName)
@@ -180,15 +174,13 @@ public class LambdaEdgeManager
      * @param input Function setup.
      * @return ZIP file buffer.
      */
-    private ByteBuffer buildZipFile(EdgeDeployRequest input)
-    {
+    private ByteBuffer buildZipFile(EdgeDeployRequest input) {
         ZipBuilder zip = new ZipBuilder();
         try (
             ZipInputStream archive = new ZipInputStream(
                 this.s3.getObject(input.getPackageBucket(), input.getPackageKey()).getObjectContent()
             )
-        )
-        {
+        ) {
             // copy entire package content
             ZipEntry entry;
             while ((entry = archive.getNextEntry()) != null) {

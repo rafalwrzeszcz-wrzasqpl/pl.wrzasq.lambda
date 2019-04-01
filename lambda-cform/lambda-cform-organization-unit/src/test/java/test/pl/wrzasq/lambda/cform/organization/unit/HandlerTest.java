@@ -24,8 +24,7 @@ import pl.wrzasq.lambda.cform.organization.unit.Handler;
 import pl.wrzasq.lambda.cform.organization.unit.model.OrganizationUnitRequest;
 
 @ExtendWith(MockitoExtension.class)
-public class HandlerTest
-{
+public class HandlerTest {
     @Mock
     private CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> handler;
 
@@ -35,20 +34,17 @@ public class HandlerTest
     private CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> originalHandler;
 
     @BeforeEach
-    public void setUp() throws NoSuchFieldException, IllegalAccessException
-    {
+    public void setUp() throws NoSuchFieldException, IllegalAccessException {
         this.originalHandler = this.setHandler(this.handler);
     }
 
     @AfterEach
-    public void tearDown() throws NoSuchFieldException, IllegalAccessException
-    {
+    public void tearDown() throws NoSuchFieldException, IllegalAccessException {
         this.setHandler(this.originalHandler);
     }
 
     @Test
-    public void handle()
-    {
+    public void handle() {
         CfnRequest<OrganizationUnitRequest> request = new CfnRequest<>();
         request.setRequestType("Create");
         request.setResourceProperties(new OrganizationUnitRequest());
@@ -61,8 +57,7 @@ public class HandlerTest
     private CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> setHandler(
         CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> sender
     )
-        throws NoSuchFieldException, IllegalAccessException
-    {
+        throws NoSuchFieldException, IllegalAccessException {
         Field hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
         CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> original

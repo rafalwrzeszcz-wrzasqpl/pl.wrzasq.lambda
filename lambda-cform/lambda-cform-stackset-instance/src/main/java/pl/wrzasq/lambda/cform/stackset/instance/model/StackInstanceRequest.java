@@ -15,8 +15,7 @@ import lombok.Data;
  * Stack instance CloudFormation request.
  */
 @Data
-public class StackInstanceRequest
-{
+public class StackInstanceRequest {
     /**
      * Containing stack set.
      */

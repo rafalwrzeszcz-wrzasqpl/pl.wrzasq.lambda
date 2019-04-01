@@ -20,8 +20,7 @@ import pl.wrzasq.lambda.cform.passwordpolicy.service.PasswordPolicyManager;
  *
  * <p>Recommended memory: 256MB.</p>
  */
-public class Handler
-{
+public class Handler {
     /**
      * CloudFormation response handler.
      */
@@ -42,8 +41,7 @@ public class Handler
      * @param request CloudFormation request.
      * @param context AWS Lambda context.
      */
-    public void handle(CfnRequest<UpdateAccountPasswordPolicyRequest> request, Context context)
-    {
+    public void handle(CfnRequest<UpdateAccountPasswordPolicyRequest> request, Context context) {
         Handler.handler.handle(request, context);
     }
 }

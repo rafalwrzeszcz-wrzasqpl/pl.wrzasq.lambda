@@ -17,8 +17,7 @@ import lombok.Data;
  * StackSet CloudFormation request.
  */
 @Data
-public class StackSetRequest
-{
+public class StackSetRequest {
     /**
      * Stack set stackSetName.
      */
