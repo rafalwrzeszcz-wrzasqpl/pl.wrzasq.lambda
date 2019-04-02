@@ -25,8 +25,8 @@ git remote add origin ${SSH_REPO}
 git checkout ${TRAVIS_BRANCH}
 
 # first make current version release
-mvn build-helper:parse-version versions:set versions:commit \
-    -DnewVersion="\${semver.majorVersion}.\${semver.minorVersion}.\${semver.incrementalVersion}"
+mvn versions:set versions:commit \
+    -DremoveSnapshot=true
 git add -u
 git commit -m "[auto] Automated release release."
 git push origin ${TRAVIS_BRANCH}:master
