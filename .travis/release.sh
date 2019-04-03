@@ -13,7 +13,7 @@ REPO=$(git config remote.origin.url)
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 
 # prevent looping
-if [ "${TRAVIS_COMMIT_MESSAGE:0:6}" == "[auto]" ] ; then
+if [[ "${TRAVIS_COMMIT_MESSAGE:0:6}" == "[auto]" ]] ; then
     exit
 fi
 
