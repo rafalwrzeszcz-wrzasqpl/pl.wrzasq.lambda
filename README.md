@@ -10,7 +10,7 @@
 **WrzasqPl-Lambda** is a set of generic **AWS Lambda**s.
 
 [![Build Status](https://travis-ci.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda.svg)](https://travis-ci.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
-[![Coverage Status](https://coveralls.io/repos/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/badge.svg?branch=develop)](https://coveralls.io/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/badge.svg)](https://coveralls.io/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
 [![Known Vulnerabilities](https://snyk.io/test/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/badge.svg)](https://snyk.io/test/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
 
@@ -62,7 +62,7 @@ resource.
 # Resources
 
 -   [GitHub page with API documentation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda)
--   [Contribution guide](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/blob/develop/CONTRIBUTING.md)
+-   [Contribution guide](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/blob/master/CONTRIBUTING.md)
 -   [Issues tracker](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/issues)
 -   [Maven packages](https://search.maven.org/search?q=g:pl.wrzasq.lambda)
 -   [Wrzasq.pl @ GitHub](https://github.com/rafalwrzeszcz-wrzasqpl)

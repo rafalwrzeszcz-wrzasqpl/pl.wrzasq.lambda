@@ -11,7 +11,7 @@ This project is published under [MIT license](https://github.com/rafalwrzeszcz-w
 
 # How to send a pull request
 
-When you publish your pull request make sure your branch is rebased on top of latest upstream state. Please also make sure you target `develop` branch as this is our development branch (please read our [Git workflow](http://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/gitflow.html) guide for details).
+When you publish your pull request make sure your branch is rebased on top of latest upstream state.
 
 Feel free to also add yourself to list of authors of the project.
 

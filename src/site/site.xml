@@ -53,10 +53,6 @@
 
         <menu ref="modules"/>
 
-        <menu name="Contribution guide">
-            <item name="Git workflow" href="gitflow.html"/>
-        </menu>
-
         <menu name="Usage guide">
             <item name="S3 upload" href="guide/upload.html"/>
         </menu>

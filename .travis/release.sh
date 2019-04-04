@@ -12,11 +12,6 @@ set -ex
 REPO=$(git config remote.origin.url)
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 
-# prevent looping
-if [[ "${TRAVIS_COMMIT_MESSAGE:0:6}" == "[auto]" ]] ; then
-    exit
-fi
-
 # change origin URL to SSH to allow uploading with SSH key
 git remote rm origin
 git remote add origin ${SSH_REPO}
@@ -28,8 +23,11 @@ git checkout ${TRAVIS_BRANCH}
 mvn versions:set versions:commit \
     -DremoveSnapshot=true
 git add -u
-git commit -m "[auto] Automated release release."
+git commit -m "[skip ci] Automated release release."
 git push origin ${TRAVIS_BRANCH}:master
+
+# perform a release
+mvn -e clean deploy site-deploy -P deploy --settings .travis/settings.xml -Dmessage="${TRAVIS_COMMIT_MESSAGE}"
 
 # now create a new version commit
 mvn build-helper:parse-version versions:set versions:commit \
