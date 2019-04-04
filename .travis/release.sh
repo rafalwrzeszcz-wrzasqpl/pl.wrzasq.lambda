@@ -20,17 +20,16 @@ git remote add origin ${SSH_REPO}
 git checkout ${TRAVIS_BRANCH}
 
 # first make current version release
-mvn versions:set versions:commit \
+mvn -B versions:set versions:commit \
     -DremoveSnapshot=true
 git add -u
 git commit -m "[skip ci] Automated release release."
-git push origin ${TRAVIS_BRANCH}:master
 
 # perform a release
-mvn -e clean deploy site-deploy -P deploy --settings .travis/settings.xml -Dmessage="${TRAVIS_COMMIT_MESSAGE}"
+mvn -B -e clean deploy site-deploy -P deploy --settings .travis/settings.xml -Dmessage="${TRAVIS_COMMIT_MESSAGE}"
 
 # now create a new version commit
-mvn build-helper:parse-version versions:set versions:commit \
+mvn -B build-helper:parse-version versions:set versions:commit \
     -DnewVersion="\${semver.majorVersion}.\${semver.minorVersion}.\${semver.nextIncrementalVersion}-SNAPSHOT"
 git add -u
 git commit -m "[skip ci] New version bump."

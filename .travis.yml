@@ -90,9 +90,9 @@ env:
 # this is not a boolean, this is a Linux `true` command to simply override this step
 install: "true"
 
-script: "mvn -e verify site"
+script: "mvn -B -e verify site"
 
-after_script: "mvn -e coveralls:report"
+after_script: "mvn -B -e coveralls:report"
 
 before_deploy:
     - "eval \"$(ssh-agent -s)\""
