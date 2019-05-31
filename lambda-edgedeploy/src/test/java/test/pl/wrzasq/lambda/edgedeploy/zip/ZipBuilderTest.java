@@ -64,4 +64,30 @@ public class ZipBuilderTest {
             "ZipBuilder.writeEntry() should write file content."
         );
     }
+
+    @Test
+    public void copyFrom() throws IOException {
+        ZipBuilder zip = new ZipBuilder();
+        zip.writeEntry("test.txt", new ByteArrayInputStream(new byte[]{'t', 'e', 's', 't'}));
+        ByteBuffer buffer = zip.dump();
+
+        ZipBuilder destination = new ZipBuilder();
+        destination.copyFrom(new ZipInputStream(new ByteArrayInputStream(buffer.array())));
+
+        ZipInputStream stream = new ZipInputStream(new ByteArrayInputStream(buffer.array()));
+        ZipEntry entry = stream.getNextEntry();
+
+        Scanner scanner = new Scanner(stream);
+
+        Assertions.assertEquals(
+            "test.txt",
+            entry.getName(),
+            "ZipBuilder.copyFrom() should copy entry filename."
+        );
+        Assertions.assertEquals(
+            "test",
+            scanner.next(),
+            "ZipBuilder.copyFrom() should copy file content."
+        );
+    }
 }

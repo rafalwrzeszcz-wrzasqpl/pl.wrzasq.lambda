@@ -19,6 +19,7 @@ import java.util.zip.ZipInputStream;
 
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.model.CreateFunctionRequest;
+import com.amazonaws.services.lambda.model.CreateFunctionResult;
 import com.amazonaws.services.lambda.model.DeleteFunctionRequest;
 import com.amazonaws.services.lambda.model.PublishVersionRequest;
 import com.amazonaws.services.lambda.model.PublishVersionResult;
@@ -70,7 +71,7 @@ public class LambdaEdgeManagerTest {
 
     private static final String PACKAGE_KEY = "maven/release/pl/wrzasq/lambda.zip";
 
-    private static final String MASTER_ARN = "arn:aws:lambda:test";
+    private static final String FUNCTION_ARN = "arn:aws:lambda:test";
 
     private static final String VARIABLE_1_KEY = "id";
 
@@ -135,7 +136,13 @@ public class LambdaEdgeManagerTest {
             .when(this.lambda.publishVersion(this.publishRequest.capture()))
             .thenReturn(
                 new PublishVersionResult()
-                    .withMasterArn(LambdaEdgeManagerTest.MASTER_ARN)
+                    .withMasterArn(LambdaEdgeManagerTest.FUNCTION_ARN)
+            );
+        Mockito
+            .when(this.lambda.createFunction(this.createRequest.capture()))
+            .thenReturn(
+                new CreateFunctionResult()
+                    .withFunctionArn(LambdaEdgeManagerTest.FUNCTION_ARN)
             );
 
         CustomResourceResponse<PublishVersionResult> response = manager.create(input, null);
@@ -265,9 +272,9 @@ public class LambdaEdgeManagerTest {
         );
 
         Assertions.assertEquals(
-            LambdaEdgeManagerTest.MASTER_ARN,
+            LambdaEdgeManagerTest.FUNCTION_ARN,
             response.getPhysicalResourceId(),
-            "LambdaEdgeManager.create() should set master function ARN as it's physical ID."
+            "LambdaEdgeManager.create() should set function ARN as it's physical ID."
         );
     }
 
@@ -314,10 +321,13 @@ public class LambdaEdgeManagerTest {
             .when(this.lambda.publishVersion(this.publishRequest.capture()))
             .thenReturn(
                 new PublishVersionResult()
-                    .withMasterArn(LambdaEdgeManagerTest.MASTER_ARN)
+                    .withMasterArn(LambdaEdgeManagerTest.FUNCTION_ARN)
             );
 
-        CustomResourceResponse<PublishVersionResult> response = manager.update(input, null);
+        CustomResourceResponse<PublishVersionResult> response = manager.update(
+            input,
+            LambdaEdgeManagerTest.FUNCTION_ARN
+        );
 
         Mockito.verify(this.lambda).updateFunctionCode(this.updateCodeRequest.capture());
         Mockito.verify(this.lambda).updateFunctionConfiguration(this.updateConfigurationRequest.capture());
@@ -409,9 +419,9 @@ public class LambdaEdgeManagerTest {
         );
 
         Assertions.assertEquals(
-            LambdaEdgeManagerTest.MASTER_ARN,
+            LambdaEdgeManagerTest.FUNCTION_ARN,
             response.getPhysicalResourceId(),
-            "LambdaEdgeManager.update() should set master function ARN as it's physical ID."
+            "LambdaEdgeManager.update() should set function ARN as it's physical ID."
         );
     }
 

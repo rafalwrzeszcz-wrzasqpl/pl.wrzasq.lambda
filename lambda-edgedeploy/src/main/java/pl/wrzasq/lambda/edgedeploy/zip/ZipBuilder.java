@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -90,6 +91,20 @@ public class ZipBuilder {
         );
         handler.write();
         this.zip.closeEntry();
+    }
+
+    /**
+     * Copies another archive into current one.
+     *
+     * @param archive Source.
+     * @throws IOException When reading source archive fails.
+     */
+    public void copyFrom(ZipInputStream archive) throws IOException {
+        // copy entire package content
+        ZipEntry entry;
+        while ((entry = archive.getNextEntry()) != null) {
+            this.writeEntry(entry.getName(), archive);
+        }
     }
 
     /**

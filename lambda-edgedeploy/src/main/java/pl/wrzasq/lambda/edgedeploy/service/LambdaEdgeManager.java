@@ -9,11 +9,11 @@ package pl.wrzasq.lambda.edgedeploy.service;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.model.CreateFunctionRequest;
+import com.amazonaws.services.lambda.model.CreateFunctionResult;
 import com.amazonaws.services.lambda.model.DeleteFunctionRequest;
 import com.amazonaws.services.lambda.model.FunctionCode;
 import com.amazonaws.services.lambda.model.PublishVersionRequest;
@@ -75,7 +75,7 @@ public class LambdaEdgeManager {
      * @return Data about published version.
      */
     public CustomResourceResponse<PublishVersionResult> create(EdgeDeployRequest input, String physicalResourceId) {
-        this.lambda.createFunction(
+        CreateFunctionResult result = this.lambda.createFunction(
             new CreateFunctionRequest()
                 .withFunctionName(input.getFunctionName())
                 .withDescription(input.getFunctionDescription())
@@ -94,7 +94,10 @@ public class LambdaEdgeManager {
                 )
         );
 
-        return this.publishLambdaVersion(input.getFunctionName());
+        return new CustomResourceResponse<>(
+            this.publishLambdaVersion(input.getFunctionName()),
+            result.getFunctionArn()
+        );
     }
 
     /**
@@ -126,7 +129,10 @@ public class LambdaEdgeManager {
                 )
         );
 
-        return this.publishLambdaVersion(input.getFunctionName());
+        return new CustomResourceResponse<>(
+            this.publishLambdaVersion(input.getFunctionName()),
+            physicalResourceId
+        );
     }
 
     /**
@@ -159,13 +165,11 @@ public class LambdaEdgeManager {
      * @param functionName Function stackSetName.
      * @return Published version data.
      */
-    private CustomResourceResponse<PublishVersionResult> publishLambdaVersion(String functionName) {
-        PublishVersionResult result = this.lambda.publishVersion(
+    private PublishVersionResult publishLambdaVersion(String functionName) {
+        return this.lambda.publishVersion(
             new PublishVersionRequest()
                 .withFunctionName(functionName)
         );
-
-        return new CustomResourceResponse<>(result, result.getMasterArn());
     }
 
     /**
@@ -181,11 +185,7 @@ public class LambdaEdgeManager {
                 this.s3.getObject(input.getPackageBucket(), input.getPackageKey()).getObjectContent()
             )
         ) {
-            // copy entire package content
-            ZipEntry entry;
-            while ((entry = archive.getNextEntry()) != null) {
-                zip.writeEntry(entry.getName(), archive);
-            }
+            zip.copyFrom(archive);
 
             // dump custom configuration from request
             zip.writeEntry(
