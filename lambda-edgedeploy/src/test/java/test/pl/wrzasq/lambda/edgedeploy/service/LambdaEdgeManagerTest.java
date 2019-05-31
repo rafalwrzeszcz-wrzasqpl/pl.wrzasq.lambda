@@ -133,12 +133,6 @@ public class LambdaEdgeManagerTest {
             .thenReturn(this.buildS3Object(new ByteArrayInputStream(buffer.array())));
 
         Mockito
-            .when(this.lambda.publishVersion(this.publishRequest.capture()))
-            .thenReturn(
-                new PublishVersionResult()
-                    .withMasterArn(LambdaEdgeManagerTest.FUNCTION_ARN)
-            );
-        Mockito
             .when(this.lambda.createFunction(this.createRequest.capture()))
             .thenReturn(
                 new CreateFunctionResult()
@@ -148,6 +142,7 @@ public class LambdaEdgeManagerTest {
         CustomResourceResponse<PublishVersionResult> response = manager.create(input, null);
 
         Mockito.verify(this.lambda).createFunction(this.createRequest.capture());
+        Mockito.verify(this.lambda).publishVersion(this.publishRequest.capture());
 
         CreateFunctionRequest createRequest = this.createRequest.getValue();
         PublishVersionRequest publishRequest = this.publishRequest.getValue();
@@ -317,13 +312,6 @@ public class LambdaEdgeManagerTest {
             .when(this.s3.getObject(LambdaEdgeManagerTest.PACKAGE_BUCKET, LambdaEdgeManagerTest.PACKAGE_KEY))
             .thenReturn(this.buildS3Object(new ByteArrayInputStream(buffer.array())));
 
-        Mockito
-            .when(this.lambda.publishVersion(this.publishRequest.capture()))
-            .thenReturn(
-                new PublishVersionResult()
-                    .withMasterArn(LambdaEdgeManagerTest.FUNCTION_ARN)
-            );
-
         CustomResourceResponse<PublishVersionResult> response = manager.update(
             input,
             LambdaEdgeManagerTest.FUNCTION_ARN
@@ -331,6 +319,7 @@ public class LambdaEdgeManagerTest {
 
         Mockito.verify(this.lambda).updateFunctionCode(this.updateCodeRequest.capture());
         Mockito.verify(this.lambda).updateFunctionConfiguration(this.updateConfigurationRequest.capture());
+        Mockito.verify(this.lambda).publishVersion(this.publishRequest.capture());
 
         UpdateFunctionCodeRequest updateCodeRequest = this.updateCodeRequest.getValue();
         UpdateFunctionConfigurationRequest updateConfigurationRequest = this.updateConfigurationRequest.getValue();
