@@ -9,11 +9,11 @@ package pl.wrzasq.lambda.edgedeploy.service;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.model.CreateFunctionRequest;
+import com.amazonaws.services.lambda.model.CreateFunctionResult;
 import com.amazonaws.services.lambda.model.DeleteFunctionRequest;
 import com.amazonaws.services.lambda.model.FunctionCode;
 import com.amazonaws.services.lambda.model.PublishVersionRequest;
@@ -75,7 +75,7 @@ public class LambdaEdgeManager {
      * @return Data about published version.
      */
     public CustomResourceResponse&lt;PublishVersionResult&gt; create(EdgeDeployRequest input, String physicalResourceId) {
-<span class="fc" id="L78">        this.lambda.createFunction(</span>
+<span class="fc" id="L78">        CreateFunctionResult result = this.lambda.createFunction(</span>
             new CreateFunctionRequest()
 <span class="fc" id="L80">                .withFunctionName(input.getFunctionName())</span>
 <span class="fc" id="L81">                .withDescription(input.getFunctionDescription())</span>
@@ -94,7 +94,10 @@ public class LambdaEdgeManager {
                 )
         );
 
-<span class="fc" id="L97">        return this.publishLambdaVersion(input.getFunctionName());</span>
+<span class="fc" id="L97">        return new CustomResourceResponse&lt;&gt;(</span>
+<span class="fc" id="L98">            this.publishLambdaVersion(input.getFunctionName()),</span>
+<span class="fc" id="L99">            result.getFunctionArn()</span>
+        );
     }
 
     /**
@@ -105,28 +108,31 @@ public class LambdaEdgeManager {
      * @return Data about published version.
      */
     public CustomResourceResponse&lt;PublishVersionResult&gt; update(EdgeDeployRequest input, String physicalResourceId) {
-<span class="fc" id="L108">        this.lambda.updateFunctionCode(</span>
+<span class="fc" id="L111">        this.lambda.updateFunctionCode(</span>
             new UpdateFunctionCodeRequest()
-<span class="fc" id="L110">                .withFunctionName(input.getFunctionName())</span>
-<span class="fc" id="L111">                .withZipFile(this.buildZipFile(input))</span>
+<span class="fc" id="L113">                .withFunctionName(input.getFunctionName())</span>
+<span class="fc" id="L114">                .withZipFile(this.buildZipFile(input))</span>
         );
 
-<span class="fc" id="L114">        this.lambda.updateFunctionConfiguration(</span>
+<span class="fc" id="L117">        this.lambda.updateFunctionConfiguration(</span>
             new UpdateFunctionConfigurationRequest()
-<span class="fc" id="L116">                .withFunctionName(input.getFunctionName())</span>
-<span class="fc" id="L117">                .withDescription(input.getFunctionDescription())</span>
-<span class="fc" id="L118">                .withRuntime(input.getRuntime())</span>
-<span class="fc" id="L119">                .withHandler(input.getHandler())</span>
-<span class="fc" id="L120">                .withMemorySize(input.getMemory())</span>
-<span class="fc" id="L121">                .withTimeout(input.getTimeout())</span>
-<span class="fc" id="L122">                .withRole(input.getRoleArn())</span>
-<span class="fc" id="L123">                .withTracingConfig(</span>
+<span class="fc" id="L119">                .withFunctionName(input.getFunctionName())</span>
+<span class="fc" id="L120">                .withDescription(input.getFunctionDescription())</span>
+<span class="fc" id="L121">                .withRuntime(input.getRuntime())</span>
+<span class="fc" id="L122">                .withHandler(input.getHandler())</span>
+<span class="fc" id="L123">                .withMemorySize(input.getMemory())</span>
+<span class="fc" id="L124">                .withTimeout(input.getTimeout())</span>
+<span class="fc" id="L125">                .withRole(input.getRoleArn())</span>
+<span class="fc" id="L126">                .withTracingConfig(</span>
                     new TracingConfig()
-<span class="fc" id="L125">                        .withMode(input.getTracingMode())</span>
+<span class="fc" id="L128">                        .withMode(input.getTracingMode())</span>
                 )
         );
 
-<span class="fc" id="L129">        return this.publishLambdaVersion(input.getFunctionName());</span>
+<span class="fc" id="L132">        return new CustomResourceResponse&lt;&gt;(</span>
+<span class="fc" id="L133">            this.publishLambdaVersion(input.getFunctionName()),</span>
+            physicalResourceId
+        );
     }
 
     /**
@@ -138,17 +144,17 @@ public class LambdaEdgeManager {
      */
     public CustomResourceResponse&lt;PublishVersionResult&gt; delete(EdgeDeployRequest input, String physicalResourceId) {
         try {
-<span class="fc" id="L141">            this.lambda.deleteFunction(</span>
+<span class="fc" id="L147">            this.lambda.deleteFunction(</span>
                 new DeleteFunctionRequest()
-<span class="fc" id="L143">                    .withFunctionName(input.getFunctionName())</span>
+<span class="fc" id="L149">                    .withFunctionName(input.getFunctionName())</span>
             );
-<span class="fc" id="L145">        } catch (ResourceNotFoundException error) {</span>
-<span class="fc" id="L146">            this.logger.warn(&quot;Attempt to delete non-existing Lambda {}.&quot;, input.getFunctionName(), error);</span>
-<span class="fc" id="L147">        }</span>
+<span class="fc" id="L151">        } catch (ResourceNotFoundException error) {</span>
+<span class="fc" id="L152">            this.logger.warn(&quot;Attempt to delete non-existing Lambda {}.&quot;, input.getFunctionName(), error);</span>
+<span class="fc" id="L153">        }</span>
 
-<span class="fc" id="L149">        return new CustomResourceResponse&lt;&gt;(</span>
+<span class="fc" id="L155">        return new CustomResourceResponse&lt;&gt;(</span>
             new PublishVersionResult()
-<span class="fc" id="L151">                .withFunctionName(input.getFunctionName()),</span>
+<span class="fc" id="L157">                .withFunctionName(input.getFunctionName()),</span>
             physicalResourceId
         );
     }
@@ -159,13 +165,11 @@ public class LambdaEdgeManager {
      * @param functionName Function stackSetName.
      * @return Published version data.
      */
-    private CustomResourceResponse&lt;PublishVersionResult&gt; publishLambdaVersion(String functionName) {
-<span class="fc" id="L163">        PublishVersionResult result = this.lambda.publishVersion(</span>
+    private PublishVersionResult publishLambdaVersion(String functionName) {
+<span class="fc" id="L169">        return this.lambda.publishVersion(</span>
             new PublishVersionRequest()
-<span class="fc" id="L165">                .withFunctionName(functionName)</span>
+<span class="fc" id="L171">                .withFunctionName(functionName)</span>
         );
-
-<span class="fc" id="L168">        return new CustomResourceResponse&lt;&gt;(result, result.getMasterArn());</span>
     }
 
     /**
@@ -175,17 +179,13 @@ public class LambdaEdgeManager {
      * @return ZIP file buffer.
      */
     private ByteBuffer buildZipFile(EdgeDeployRequest input) {
-<span class="fc" id="L178">        ZipBuilder zip = new ZipBuilder();</span>
-<span class="fc" id="L179">        try (</span>
-<span class="fc" id="L180">            ZipInputStream archive = new ZipInputStream(</span>
-<span class="fc" id="L181">                this.s3.getObject(input.getPackageBucket(), input.getPackageKey()).getObjectContent()</span>
+<span class="fc" id="L182">        ZipBuilder zip = new ZipBuilder();</span>
+<span class="fc" id="L183">        try (</span>
+<span class="fc" id="L184">            ZipInputStream archive = new ZipInputStream(</span>
+<span class="fc" id="L185">                this.s3.getObject(input.getPackageBucket(), input.getPackageKey()).getObjectContent()</span>
             )
         ) {
-            // copy entire package content
-            ZipEntry entry;
-<span class="fc bfc" id="L186" title="All 2 branches covered.">            while ((entry = archive.getNextEntry()) != null) {</span>
-<span class="fc" id="L187">                zip.writeEntry(entry.getName(), archive);</span>
-            }
+<span class="fc" id="L188">            zip.copyFrom(archive);</span>
 
             // dump custom configuration from request
 <span class="fc" id="L191">            zip.writeEntry(</span>

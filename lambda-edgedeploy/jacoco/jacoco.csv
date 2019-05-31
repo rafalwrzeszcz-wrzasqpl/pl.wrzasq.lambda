@@ -1,4 +1,4 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-WrzasqPl Lambda@Edge deploy,pl.wrzasq.lambda.edgedeploy.service,LambdaEdgeManager,0,217,0,2,0,55,0,7,0,6
-WrzasqPl Lambda@Edge deploy,pl.wrzasq.lambda.edgedeploy.zip,ZipBuilder,0,75,0,2,0,18,0,8,0,7
+WrzasqPl Lambda@Edge deploy,pl.wrzasq.lambda.edgedeploy.service,LambdaEdgeManager,0,211,0,0,0,56,0,6,0,6
+WrzasqPl Lambda@Edge deploy,pl.wrzasq.lambda.edgedeploy.zip,ZipBuilder,0,87,0,4,0,21,0,10,0,8
 WrzasqPl Lambda@Edge deploy,pl.wrzasq.lambda.edgedeploy,Handler,0,46,0,0,0,11,0,3,0,3
