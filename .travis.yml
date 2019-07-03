@@ -21,18 +21,15 @@ jdk:
     - "openjdk8"
     - "oraclejdk8"
     - "oraclejdk9"
+    - "openjdk10"
     - "openjdk11"
     - "oraclejdk11"
 
-# TODO: temporary as delombok won't work here
+# TODO: temporary as delombok won't work here, OpenJDK 10 because of failing certs
 matrix:
-    include:
+    allow_failures:
         -
             jdk: "openjdk10"
-            before_install:
-                - "rm ${JAVA_HOME}/lib/security/cacerts"
-                - "ln -s /etc/ssl/certs/java/cacerts ${JAVA_HOME}/lib/security/cacerts"
-    allow_failures:
         -
             jdk: "openjdk11"
         -
