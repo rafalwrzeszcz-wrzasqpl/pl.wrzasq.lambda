@@ -64,7 +64,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-iam</artifactId>
-            <version>1.11.544</version>
+            <version>1.11.588</version>
         </dependency>
 
         <dependency>
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>com.sunrun</groupId>
             <artifactId>cfn-response</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1</version>
         </dependency>
 
         <dependency>
@@ -112,7 +112,7 @@
         <dependency>
             <groupId>pl.wrzasq.commons</groupId>
             <artifactId>commons-aws</artifactId>
-            <version>1.0.15</version>
+            <version>1.0.21</version>
         </dependency>
     </dependencies>
 </project>
