@@ -59,6 +59,10 @@ resource.
 
 **IAM** password policy enforcer as **CloudFormation** custom resource.
 
+## [Lambda-CForm LogRetention](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-logretention/)
+
+**CloudFormation** custom resource handler for setting log retention for **CloudWatch** log groups.
+
 # Resources
 
 -   [GitHub page with API documentation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda)
