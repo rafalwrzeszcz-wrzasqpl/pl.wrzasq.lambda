@@ -19,7 +19,7 @@
     <parent>
         <groupId>pl.wrzasq.lambda</groupId>
         <artifactId>lambda-metrics</artifactId>
-        <version>1.0.32-SNAPSHOT</version>
+        <version>1.0.32</version>
         <relativePath>../</relativePath>
     </parent>
 
