@@ -63,6 +63,10 @@ resource.
 
 **CloudFormation** custom resource handler for setting log retention for **CloudWatch** log groups.
 
+## [Lambda-Metrics DynamoDb](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-metrics/lambda-metrics-dynamodb/)
+
+**CloudWatch** custom metrics for **DynamoDb**.
+
 # Resources
 
 -   [GitHub page with API documentation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda)
