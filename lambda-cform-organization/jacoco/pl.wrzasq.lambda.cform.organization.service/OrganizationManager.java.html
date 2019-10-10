@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrganizationManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl CloudFormation Organization handler</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.lambda.cform.organization.service</a> &gt; <span class="el_source">OrganizationManager.java</span></div><h1>OrganizationManager.java</h1><pre class="source lang-java linenums">/*
+ * This file is part of the pl.wrzasq.lambda.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.lambda.cform.organization.service;
+
+import com.amazonaws.SdkBaseException;
+import com.amazonaws.services.organizations.AWSOrganizations;
+import com.amazonaws.services.organizations.model.CreateOrganizationRequest;
+import com.amazonaws.services.organizations.model.DeleteOrganizationRequest;
+import com.amazonaws.services.organizations.model.DescribeOrganizationRequest;
+import com.amazonaws.services.organizations.model.ListRootsRequest;
+import com.amazonaws.services.organizations.model.Organization;
+import com.amazonaws.services.organizations.model.Root;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
+import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
+
+/**
+ * Organizations API implementation.
+ */
+public class OrganizationManager {
+    /**
+     * Message pattern for drift case.
+     */
+    private static final String DRIFT_LOG_MESSAGE_PATTERN
+        = &quot;Organization ID {} differs from CloudFormation-provided physical resource ID {}.&quot;;
+
+    /**
+     * Logger.
+     */
+<span class="fc" id="L37">    private Logger logger = LoggerFactory.getLogger(OrganizationManager.class);</span>
+
+    /**
+     * AWS Organizations API client.
+     */
+    private AWSOrganizations organizations;
+
+    /**
+     * Initializes object with given Organizations client.
+     *
+     * @param organizations AWS Organizations client.
+     */
+<span class="fc" id="L49">    public OrganizationManager(AWSOrganizations organizations) {</span>
+<span class="fc" id="L50">        this.organizations = organizations;</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Handles organization creation.
+     *
+     * @param input Resource creation request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
+     * @return Data about published version.
+     */
+    public CustomResourceResponse&lt;OrganizationResponse&gt; sync(OrganizationRequest input, String physicalResourceId) {
+        Organization organization;
+        try {
+<span class="fc" id="L63">            organization = this.organizations.describeOrganization(</span>
+                new DescribeOrganizationRequest()
+            )
+<span class="fc" id="L66">                .getOrganization();</span>
+
+            // don't do anything here - in worst case it will fail in Delete call in UPDATE_COMPLETE_CLEANUP phase
+            // it will not hurt us (even if fails, as it's post-update phase) and allows to simplify logic of this
+            // method to avoid handling all combinations, which could lead to unhandled edge cases
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if (!organization.getId().equals(physicalResourceId)) {</span>
+<span class="fc" id="L72">                this.logger.warn(</span>
+                    OrganizationManager.DRIFT_LOG_MESSAGE_PATTERN,
+<span class="fc" id="L74">                    organization.getId(),</span>
+                    physicalResourceId
+                );
+            }
+
+<span class="fc" id="L79">            this.logger.info(&quot;Organization already exists (ARN {}).&quot;, organization.getArn());</span>
+<span class="fc" id="L80">        } catch (SdkBaseException error) {</span>
+<span class="fc" id="L81">            this.logger.info(&quot;Exception occurred during organization data fetching, probably doesn't exist.&quot;, error);</span>
+
+<span class="fc" id="L83">            organization = this.organizations.createOrganization(</span>
+                new CreateOrganizationRequest()
+<span class="fc" id="L85">                    .withFeatureSet(input.getFeatureSet())</span>
+            )
+<span class="fc" id="L87">                .getOrganization();</span>
+
+<span class="fc" id="L89">            this.logger.info(&quot;Created new organization, ARN {}.&quot;, organization.getArn());</span>
+<span class="fc" id="L90">        }</span>
+
+<span class="fc" id="L92">        Root root = this.organizations.listRoots(new ListRootsRequest()).getRoots().get(0);</span>
+
+<span class="fc" id="L94">        OrganizationResponse organizationResponse = new OrganizationResponse();</span>
+<span class="fc" id="L95">        organizationResponse.setId(organization.getId());</span>
+<span class="fc" id="L96">        organizationResponse.setArn(organization.getArn());</span>
+<span class="fc" id="L97">        organizationResponse.setRootId(root.getId());</span>
+
+<span class="fc" id="L99">        return new CustomResourceResponse&lt;&gt;(organizationResponse, organization.getId());</span>
+    }
+
+    /**
+     * Handles organization deletion.
+     *
+     * @param input Resource delete request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
+     * @return Empty response.
+     */
+    public CustomResourceResponse&lt;OrganizationResponse&gt; delete(OrganizationRequest input, String physicalResourceId) {
+<span class="fc" id="L110">        Organization organization = this.organizations.describeOrganization(</span>
+            new DescribeOrganizationRequest()
+        )
+<span class="fc" id="L113">            .getOrganization();</span>
+
+        // avoid removing unknown data
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (!organization.getId().equals(physicalResourceId)) {</span>
+<span class="fc" id="L117">            this.logger.error(</span>
+                OrganizationManager.DRIFT_LOG_MESSAGE_PATTERN,
+<span class="fc" id="L119">                organization.getId(),</span>
+                physicalResourceId
+            );
+<span class="fc" id="L122">            throw new IllegalStateException(</span>
+<span class="fc" id="L123">                String.format(</span>
+                    &quot;Can not delete Organization - ID %s doesn't match CloudFormation-provided resource ID %s.&quot;,
+<span class="fc" id="L125">                    organization.getId(),</span>
+                    physicalResourceId
+                )
+            );
+        }
+
+<span class="fc" id="L131">        this.organizations.deleteOrganization(new DeleteOrganizationRequest());</span>
+
+<span class="fc" id="L133">        this.logger.info(&quot;Organization deleted.&quot;);</span>
+
+<span class="fc" id="L135">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
