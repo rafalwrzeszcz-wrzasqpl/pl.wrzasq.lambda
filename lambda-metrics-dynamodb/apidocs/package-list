@@ -1,0 +1,3 @@
+pl.wrzasq.lambda.metrics.dynamodb
+pl.wrzasq.lambda.metrics.dynamodb.model
+pl.wrzasq.lambda.metrics.dynamodb.service
