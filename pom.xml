@@ -112,6 +112,15 @@
                         <artifactId>maven-scm-plugin</artifactId>
                         <inherited>false</inherited>
                     </plugin>
+
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <stagingProgressTimeoutMinutes>10</stagingProgressTimeoutMinutes>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
