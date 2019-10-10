@@ -59,13 +59,13 @@ resource.
 
 **IAM** password policy enforcer as **CloudFormation** custom resource.
 
-## [Lambda-CForm LogRetention](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-logretention/)
-
-**CloudFormation** custom resource handler for setting log retention for **CloudWatch** log groups.
-
 ## [Lambda-Metrics DynamoDb](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-metrics/lambda-metrics-dynamodb/)
 
 **CloudWatch** custom metrics for **DynamoDb**.
+
+## [Lambda-Macro Lambda Function](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-macro/lambda-macro-lambda-function/)
+
+**CloudFormation** macro for enhancing Lambda function deployment.
 
 # Resources
 
