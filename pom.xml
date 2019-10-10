@@ -123,6 +123,7 @@
         <module>lambda-dynamodb</module>
         <module>lambda-edgedeploy</module>
         <module>lambda-json</module>
+        <module>lambda-macro</module>
         <module>lambda-metrics</module>
     </modules>
 </project>

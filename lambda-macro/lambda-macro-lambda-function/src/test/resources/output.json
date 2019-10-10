@@ -1,0 +1,267 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+    "Description": "Template description",
+    "Parameters": {
+        "ServiceName": {
+            "Type": "String",
+            "Default": "pl.wrzasq.lambda"
+        }
+    },
+    "Resources": {
+        "SimpleResourceWithoutDependsOn": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName": "Test"
+            }
+        },
+        "SimpleResourceWithDependsOnSimple": {
+            "Type": "AWS::S3::BucketPolicy",
+            "DependsOn": "SimpleResourceWithoutDependsOn",
+            "Properties": {
+                "PolicyDocument": {},
+                "Bucket": {
+                    "Ref": "SimpleResourceWithoutDependsOn"
+                }
+            }
+        },
+        "EnhancedDefaultLambda": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Runtime": "java8",
+                "Code": {
+                    "S3Bucket": "RepositoryBucket",
+                    "S3Key": "lambda-standalone.jar"
+                },
+                "Handler": "pl.wrzasq.lambda.macro.lambda.function.Handler::handleRequest",
+                "MemorySize": 256,
+                "Description": "Test lambda.",
+                "Timeout": 300,
+                "TracingConfig": {
+                    "Mode": "Active"
+                },
+                "Role": "arn:aws:iam::role/OrganizationUnitManagerRole"
+            }
+        },
+        "EnhancedDefaultLambdaLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+                "LogGroupName": {
+                    "Fn::Sub": "/aws/lambda/${EnhancedDefaultLambda}"
+                },
+                "RetentionInDays": 7
+            }
+        },
+        "EnhancedDefaultLambdaMemoryMetricFilter": {
+            "Type": "AWS::Logs::MetricFilter",
+            "Properties": {
+                "LogGroupName": {
+                    "Ref": "EnhancedDefaultLambdaLogGroup"
+                },
+                "FilterPattern": "[label=\"REPORT\", ..., memory_label=\"Used:\", max_memory_used, unit=\"MB\", xray_label=\"XRAY\", trace_label=\"TraceId:\", traced, segment_label=\"SegmentId:\", segment]",
+                "MetricTransformations": [
+                    {
+                        "MetricValue": "$max_memory_used",
+                        "MetricNamespace": "WrzasqPl/Lambda",
+                        "MetricName": {
+                            "Fn::Sub": "${EnhancedDefaultLambda}-Memory"
+                        }
+                    }
+                ]
+            }
+        },
+        "EnhancedDefaultLambdaErrorsMetricFilter": {
+            "Type": "AWS::Logs::MetricFilter",
+            "Properties": {
+                "LogGroupName": {
+                    "Ref": "EnhancedDefaultLambdaLogGroup"
+                },
+                "FilterPattern": "ERROR -LOG_ERROR",
+                "MetricTransformations": [
+                    {
+                        "MetricValue": "1",
+                        "MetricNamespace": "WrzasqPl/Lambda",
+                        "MetricName": {
+                            "Fn::Sub": "${EnhancedDefaultLambda}-Errors"
+                        }
+                    }
+                ]
+            }
+        },
+        "EnhancedDefaultLambdaErrorsAlarm": {
+            "Type": "AWS::CloudWatch::Alarm",
+            "Properties": {
+                "Namespace": "WrzasqPl/Lambda",
+                "MetricName": {
+                    "Fn::Sub": "${EnhancedDefaultLambda}-Errors"
+                },
+                "Statistic": "Sum",
+                "ComparisonOperator": "GreaterThanThreshold",
+                "Threshold": 0,
+                "EvaluationPeriods": 1,
+                "Period": 300,
+                "TreatMissingData": "notBreaching"
+            }
+        },
+        "EnhancedDefaultLambdaWarningsMetricFilter": {
+            "Type": "AWS::Logs::MetricFilter",
+            "Properties": {
+                "LogGroupName": {
+                    "Ref": "EnhancedDefaultLambdaLogGroup"
+                },
+                "FilterPattern": "WARN",
+                "MetricTransformations": [
+                    {
+                        "MetricValue": "1",
+                        "MetricNamespace": "WrzasqPl/Lambda",
+                        "MetricName": {
+                            "Fn::Sub": "${EnhancedDefaultLambda}-Warnings"
+                        }
+                    }
+                ]
+            }
+        },
+        "EnhancedConfiguredLambda": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Runtime": "nodejs10",
+                "Code": {
+                    "S3Bucket": "RepositoryBucket",
+                    "S3Key": "lambda-standalone.zip"
+                },
+                "Handler": "index.handler",
+                "MemorySize": 256,
+                "Timeout": 300,
+                "Role": "arn:aws:iam::role/OrganizationUnitManagerRole"
+            }
+        },
+        "EnhancedConfiguredLambdaLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+                "LogGroupName": {
+                    "Fn::Sub": "/aws/lambda/${EnhancedConfiguredLambda}"
+                },
+                "RetentionInDays": 10
+            }
+        },
+        "EnhancedConfiguredLambdaMemoryMetricFilter": {
+            "Type": "AWS::Logs::MetricFilter",
+            "Properties": {
+                "LogGroupName": {
+                    "Ref": "EnhancedConfiguredLambdaLogGroup"
+                },
+                "FilterPattern": "[label=\"REPORT\", ..., memory_label=\"Used:\", max_memory_used, unit=\"MB\", xray_label=\"XRAY\", trace_label=\"TraceId:\", traced, segment_label=\"SegmentId:\", segment]",
+                "MetricTransformations": [
+                    {
+                        "MetricValue": "$max_memory_used",
+                        "MetricNamespace": "WrzasqPl/Lambda",
+                        "MetricName": {
+                            "Fn::Sub": "${EnhancedConfiguredLambda}-Memory"
+                        }
+                    }
+                ]
+            }
+        },
+        "EnhancedConfiguredLambdaErrorsMetricFilter": {
+            "Type": "AWS::Logs::MetricFilter",
+            "Properties": {
+                "LogGroupName": {
+                    "Ref": "EnhancedConfiguredLambdaLogGroup"
+                },
+                "FilterPattern": "error",
+                "MetricTransformations": [
+                    {
+                        "MetricValue": "1",
+                        "MetricNamespace": "WrzasqPl/Lambda",
+                        "MetricName": {
+                            "Fn::Sub": "${EnhancedConfiguredLambda}-Errors"
+                        }
+                    }
+                ]
+            }
+        },
+        "EnhancedConfiguredLambdaErrorsAlarm": {
+            "Type": "AWS::CloudWatch::Alarm",
+            "Properties": {
+                "Namespace": "WrzasqPl/Lambda",
+                "MetricName": {
+                    "Fn::Sub": "${EnhancedConfiguredLambda}-Errors"
+                },
+                "Statistic": "Sum",
+                "ComparisonOperator": "GreaterThanThreshold",
+                "Threshold": 0,
+                "EvaluationPeriods": 1,
+                "Period": 300,
+                "AlarmActions": [
+                    {
+                        "Ref": "SimpleResourceWithDependsOn"
+                    }
+                ],
+                "TreatMissingData": "notBreaching"
+            }
+        },
+        "EnhancedConfiguredLambdaWarningsMetricFilter": {
+            "Type": "AWS::Logs::MetricFilter",
+            "Properties": {
+                "LogGroupName": {
+                    "Ref": "EnhancedConfiguredLambdaLogGroup"
+                },
+                "FilterPattern": "warning",
+                "MetricTransformations": [
+                    {
+                        "MetricValue": "1",
+                        "MetricNamespace": "WrzasqPl/Lambda",
+                        "MetricName": {
+                            "Fn::Sub": "${EnhancedConfiguredLambda}-Warnings"
+                        }
+                    }
+                ]
+            }
+        },
+        "SimpleResourceWithSingleDependsOn": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn": "EnhancedDefaultLambdaLogGroup",
+            "Properties": {
+                "TopicName": "First",
+                "Subscription": [
+                    {
+                        "Endpoint": {
+                            "Fn::GetAtt": [
+                                "EnhancedConfiguredLambda",
+                                "Arn"
+                            ]
+                        },
+                        "Protocol": "Lambda"
+                    }
+                ]
+            }
+        },
+        "SimpleResourceWithDependsOn": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn": [
+                "SimpleResourceWithDependsOnSimple",
+                "EnhancedConfiguredLambdaLogGroup"
+            ],
+            "Properties": {
+                "TopicName": "Second"
+            }
+        }
+    },
+    "Outputs": {
+        "BucketName": {
+            "Value": {
+                "Ref": "SimpleResourceWithoutDependsOn"
+            }
+        },
+        "FunctionArn": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "EnhancedConfiguredLambda",
+                    "Arn"
+                ]
+            },
+            "Export": {
+                "Name": "EndpointFunctionArn"
+            }
+        }
+    }
+}

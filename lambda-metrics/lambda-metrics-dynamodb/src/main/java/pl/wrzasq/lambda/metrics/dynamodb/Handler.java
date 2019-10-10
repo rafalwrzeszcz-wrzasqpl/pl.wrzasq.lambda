@@ -49,7 +49,7 @@ public class Handler {
     private CloudWatchDynamoDbMetricGenerator metricGenerator;
 
     /**
-     * Default constructure.
+     * Default constructor.
      */
     public Handler() {
         this(

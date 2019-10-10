@@ -1,0 +1,114 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Template description",
+    "Parameters": {
+        "ServiceName": {
+            "Type": "String",
+            "Default": "pl.wrzasq.lambda"
+        }
+    },
+    "Resources": {
+        "SimpleResourceWithoutDependsOn": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName": "Test"
+            }
+        },
+        "SimpleResourceWithDependsOnSimple": {
+            "Type": "AWS::S3::BucketPolicy",
+            "DependsOn": "SimpleResourceWithoutDependsOn",
+            "Properties": {
+                "PolicyDocument": {},
+                "Bucket": {
+                    "Ref": "SimpleResourceWithoutDependsOn"
+                }
+            }
+        },
+        "EnhancedDefaultLambda": {
+            "Type": "WrzasqPl::Lambda::Function",
+            "Properties": {
+                "Runtime": "java8",
+                "Code": {
+                    "S3Bucket": "RepositoryBucket",
+                    "S3Key": "lambda-standalone.jar"
+                },
+                "Handler": "pl.wrzasq.lambda.macro.lambda.function.Handler::handleRequest",
+                "MemorySize": 256,
+                "Description": "Test lambda.",
+                "Timeout": 300,
+                "TracingConfig": {
+                    "Mode": "Active"
+                },
+                "Role": "arn:aws:iam::role/OrganizationUnitManagerRole"
+            }
+        },
+        "EnhancedConfiguredLambda": {
+            "Type": "WrzasqPl::Lambda::Function",
+            "Properties": {
+                "Runtime": "nodejs10",
+                "Code": {
+                    "S3Bucket": "RepositoryBucket",
+                    "S3Key": "lambda-standalone.zip"
+                },
+                "Handler": "index.handler",
+                "MemorySize": 256,
+                "Timeout": 300,
+                "Role": "arn:aws:iam::role/OrganizationUnitManagerRole",
+                "ErrorsFilterPattern": "error",
+                "ErrorsAlarmActions": [
+                    {
+                        "Ref": "SimpleResourceWithDependsOn"
+                    }
+                ],
+                "WarningsFilterPattern": "warning",
+                "LogsRetentionInDays": 10
+            }
+        },
+        "SimpleResourceWithSingleDependsOn": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn": "EnhancedDefaultLambda",
+            "Properties": {
+                "TopicName": "First",
+                "Subscription": [
+                    {
+                        "Endpoint": {
+                            "Fn::GetAtt": [
+                                "EnhancedConfiguredLambda",
+                                "Arn"
+                            ]
+                        },
+                        "Protocol": "Lambda"
+                    }
+                ]
+            }
+        },
+        "SimpleResourceWithDependsOn": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn": [
+                "SimpleResourceWithDependsOnSimple",
+                "EnhancedConfiguredLambda"
+            ],
+            "Properties": {
+                "TopicName": "Second"
+            }
+        }
+    },
+    "Outputs": {
+        "BucketName": {
+            "Value": {
+                "Ref": "SimpleResourceWithoutDependsOn"
+            }
+        },
+        "FunctionArn": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "EnhancedConfiguredLambda",
+                    "Arn"
+                ]
+            },
+            "Export": {
+                "Name": "EndpointFunctionArn"
+            }
+        }
+    }
+}
