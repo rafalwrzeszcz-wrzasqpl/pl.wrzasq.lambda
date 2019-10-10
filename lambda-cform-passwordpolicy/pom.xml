@@ -14,19 +14,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- core project settings -->
-    <artifactId>lambda-metrics-dynamodb</artifactId>
+    <artifactId>lambda-cform-passwordpolicy</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>pl.wrzasq.lambda</groupId>
-        <artifactId>lambda-metrics</artifactId>
+        <artifactId>lambda</artifactId>
         <version>1.0.36-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
     <!-- project meta info -->
-    <name>WrzasqPl CloudWatch DynamoDb metrics</name>
-    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-metrics/lambda-metrics-dynamodb/</url>
-    <description>DynamoDb additional CloudWatch metrics.</description>
+    <name>WrzasqPl CloudFormation password policy handler</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-passwordpolicy/</url>
+    <description>Account password policy enforcement handler for CloudFormation.</description>
     <inceptionYear>2019</inceptionYear>
 
     <!-- plugins configuration -->
@@ -37,6 +37,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
                     <usedDependencies>
+                        <usedDependency>${project.groupId}:lambda-json</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor</usedDependency>
                         <usedDependency>io.symphonia:lambda-logging</usedDependency>
@@ -62,14 +63,14 @@
 
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-cloudwatch</artifactId>
+            <artifactId>aws-java-sdk-iam</artifactId>
             <version>1.11.588</version>
         </dependency>
 
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>1.11.588</version>
+            <artifactId>aws-lambda-java-core</artifactId>
+            <version>1.2.0</version>
         </dependency>
 
         <dependency>
@@ -85,9 +86,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.10.0</version>
+            <groupId>com.sunrun</groupId>
+            <artifactId>cfn-response</artifactId>
+            <version>1.2.1</version>
         </dependency>
 
         <dependency>
@@ -106,6 +107,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.26</version>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.wrzasq.commons</groupId>
+            <artifactId>commons-aws</artifactId>
+            <version>1.0.24</version>
         </dependency>
     </dependencies>
 </project>

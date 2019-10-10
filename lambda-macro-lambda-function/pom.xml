@@ -14,19 +14,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- core project settings -->
-    <artifactId>lambda-cform-organization-unit</artifactId>
+    <artifactId>lambda-macro-lambda-function</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>pl.wrzasq.lambda</groupId>
-        <artifactId>lambda-cform</artifactId>
+        <artifactId>lambda</artifactId>
         <version>1.0.36-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
     <!-- project meta info -->
-    <name>WrzasqPl CloudFormation Organizational Unit handler</name>
-    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-organization-unit/</url>
-    <description>Organizational Unit resource handler for CloudFormation.</description>
+    <name>WrzasqPl CloudFormation Lambda function macro</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-macro-lambda-function/</url>
+    <description>Macro for generating enhanced Lambda function setup.</description>
     <inceptionYear>2019</inceptionYear>
 
     <!-- plugins configuration -->
@@ -37,11 +37,9 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
                     <usedDependencies>
-                        <usedDependency>${project.groupId}:lambda-json</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk</usedDependency>
                         <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor</usedDependency>
                         <usedDependency>io.symphonia:lambda-logging</usedDependency>
-                        <usedDependency>javax.xml.bind:jaxb-api</usedDependency>
                     </usedDependencies>
                 </configuration>
             </plugin>
@@ -63,12 +61,6 @@
 
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-organizations</artifactId>
-            <version>1.11.588</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
             <version>1.2.0</version>
         </dependency>
@@ -86,9 +78,21 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sunrun</groupId>
-            <artifactId>cfn-response</artifactId>
-            <version>1.2.1</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.10.0</version>
         </dependency>
 
         <dependency>
@@ -98,21 +102,9 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.26</version>
-        </dependency>
-
-        <dependency>
-            <groupId>pl.wrzasq.commons</groupId>
-            <artifactId>commons-aws</artifactId>
-            <version>1.0.24</version>
         </dependency>
     </dependencies>
 </project>

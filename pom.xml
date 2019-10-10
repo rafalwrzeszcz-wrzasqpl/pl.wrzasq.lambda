@@ -128,11 +128,16 @@
 
     <!-- components of WrzasqPl-Lambda project -->
     <modules>
-        <module>lambda-cform</module>
+        <module>lambda-cform-account</module>
+        <module>lambda-cform-organization</module>
+        <module>lambda-cform-organization-unit</module>
+        <module>lambda-cform-passwordpolicy</module>
+        <module>lambda-cform-stackset</module>
+        <module>lambda-cform-stackset-instance</module>
         <module>lambda-dynamodb</module>
         <module>lambda-edgedeploy</module>
         <module>lambda-json</module>
-        <module>lambda-macro</module>
-        <module>lambda-metrics</module>
+        <module>lambda-macro-lambda-function</module>
+        <module>lambda-metrics-dynamodb</module>
     </modules>
 </project>

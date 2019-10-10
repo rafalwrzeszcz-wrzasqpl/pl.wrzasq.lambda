@@ -14,19 +14,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- core project settings -->
-    <artifactId>lambda-cform-passwordpolicy</artifactId>
+    <artifactId>lambda-cform-organization</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>pl.wrzasq.lambda</groupId>
-        <artifactId>lambda-cform</artifactId>
+        <artifactId>lambda</artifactId>
         <version>1.0.36-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
     <!-- project meta info -->
-    <name>WrzasqPl CloudFormation password policy handler</name>
-    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-passwordpolicy/</url>
-    <description>Account password policy enforcement handler for CloudFormation.</description>
+    <name>WrzasqPl CloudFormation Organization handler</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-organization/</url>
+    <description>Organization resource handler for CloudFormation.</description>
     <inceptionYear>2019</inceptionYear>
 
     <!-- plugins configuration -->
@@ -63,7 +63,13 @@
 
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-iam</artifactId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>1.11.588</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-organizations</artifactId>
             <version>1.11.588</version>
         </dependency>
 

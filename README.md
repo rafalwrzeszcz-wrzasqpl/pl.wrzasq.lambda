@@ -35,35 +35,35 @@ to deploy [**Lambda@Edge**](https://aws.amazon.com/lambda/edge/) functions from 
 [`AWS::CloudFront::Distribution`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html)
 resource.
 
-## [Lambda-CForm Account](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-account/)
+## [Lambda-CForm Account](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-account/)
 
 **CloudFormation** custom resource handler for organization account.
 
-## [Lambda-CForm Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-organization/)
+## [Lambda-CForm Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-organization/)
 
 **CloudFormation** custom resource handler for organization management.
 
-## [Lambda-CForm Organizational Unit](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-organization-unit/)
+## [Lambda-CForm Organizational Unit](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-organization-unit/)
 
 **CloudFormation** custom resource handler for organizational unit management.
 
-## [Lambda-CForm StackSet](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-stackset/)
+## [Lambda-CForm StackSet](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-stackset/)
 
 **CloudFormation** stack set resource implementation as **CloudFormation** custom resource.
 
-## [Lambda-CForm StackSet Instance](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-stackset-instance/)
+## [Lambda-CForm StackSet Instance](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-stackset-instance/)
 
 **CloudFormation** single stack instance resource implementation as **CloudFormation** custom resource.
 
-## [Lambda-CForm PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-passwordpolicy/)
+## [Lambda-CForm PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-passwordpolicy/)
 
 **IAM** password policy enforcer as **CloudFormation** custom resource.
 
-## [Lambda-Metrics DynamoDb](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-metrics/lambda-metrics-dynamodb/)
+## [Lambda-Metrics DynamoDb](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-metrics-dynamodb/)
 
 **CloudWatch** custom metrics for **DynamoDb**.
 
-## [Lambda-Macro Lambda Function](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-macro/lambda-macro-lambda-function/)
+## [Lambda-Macro Lambda Function](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-macro-lambda-function/)
 
 **CloudFormation** macro for enhancing Lambda function deployment.
 

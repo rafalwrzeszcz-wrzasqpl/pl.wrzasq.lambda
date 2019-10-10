@@ -14,19 +14,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- core project settings -->
-    <artifactId>lambda-cform-stackset-instance</artifactId>
+    <artifactId>lambda-cform-organization-unit</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>pl.wrzasq.lambda</groupId>
-        <artifactId>lambda-cform</artifactId>
+        <artifactId>lambda</artifactId>
         <version>1.0.36-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
     <!-- project meta info -->
-    <name>WrzasqPl CloudFormation StackSet instance handler</name>
-    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-stackset-instance/</url>
-    <description>StackSet instance resource handler for CloudFormation.</description>
+    <name>WrzasqPl CloudFormation Organizational Unit handler</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-organization-unit/</url>
+    <description>Organizational Unit resource handler for CloudFormation.</description>
     <inceptionYear>2019</inceptionYear>
 
     <!-- plugins configuration -->
@@ -63,13 +63,7 @@
 
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-cloudformation</artifactId>
-            <version>1.11.588</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-core</artifactId>
+            <artifactId>aws-java-sdk-organizations</artifactId>
             <version>1.11.588</version>
         </dependency>
 

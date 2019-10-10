@@ -18,14 +18,14 @@
     <packaging>jar</packaging>
     <parent>
         <groupId>pl.wrzasq.lambda</groupId>
-        <artifactId>lambda-cform</artifactId>
+        <artifactId>lambda</artifactId>
         <version>1.0.36-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
     <!-- project meta info -->
     <name>WrzasqPl CloudFormation Account handler</name>
-    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform/lambda-cform-account/</url>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-account/</url>
     <description>Account resource handler for CloudFormation.</description>
     <inceptionYear>2019</inceptionYear>
 
