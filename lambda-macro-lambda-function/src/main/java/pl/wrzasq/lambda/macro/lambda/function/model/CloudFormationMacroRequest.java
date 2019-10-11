@@ -11,10 +11,12 @@ import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * CloudFormation event request structure.
  */
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class CloudFormationMacroRequest {

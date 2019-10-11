@@ -112,7 +112,7 @@ Resources:
                 # put your source bucket
                 S3Bucket: "your-bucket"
                 S3Key: "lambda-macro-lambda-function-1.0.36-standalone.jar"
-            Handler: "pl.wrzasq.lambda.macro.lambda.function.Handler::handle"
+            Handler: "pl.wrzasq.lambda.macro.lambda.function.Handler::handleRequest"
             MemorySize: 256
             Description: "Custom CloudFormation macro handler."
             Timeout: 300
