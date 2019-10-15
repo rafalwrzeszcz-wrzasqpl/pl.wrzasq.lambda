@@ -9,7 +9,7 @@
     <!-- stdout output -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n%ex{full}</pattern>
+            <pattern>[%thread] %-5level %logger - %msg%n%ex{full}</pattern>
         </encoder>
     </appender>
 
