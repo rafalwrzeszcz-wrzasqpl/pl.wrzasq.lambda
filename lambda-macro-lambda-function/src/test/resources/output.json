@@ -57,7 +57,7 @@
                 "LogGroupName": {
                     "Ref": "EnhancedDefaultLambdaLogGroup"
                 },
-                "FilterPattern": "[label=\"REPORT\", ..., memory_label=\"Used:\", max_memory_used, unit=\"MB\", xray_label=\"XRAY\", trace_label=\"TraceId:\", traced, segment_label=\"SegmentId:\", segment]",
+                "FilterPattern": "[label=\"REPORT\", ..., memory_label=\"Used:\", max_memory_used, unit=\"MB\", xray_label=\"XRAY\", trace_label=\"TraceId:\", traced, segment_label=\"SegmentId:\", segment, sampled_label=\"Sampled:\", sampled_value]",
                 "MetricTransformations": [
                     {
                         "MetricValue": "$max_memory_used",
@@ -149,7 +149,7 @@
                 "LogGroupName": {
                     "Ref": "EnhancedConfiguredLambdaLogGroup"
                 },
-                "FilterPattern": "[label=\"REPORT\", ..., memory_label=\"Used:\", max_memory_used, unit=\"MB\", xray_label=\"XRAY\", trace_label=\"TraceId:\", traced, segment_label=\"SegmentId:\", segment]",
+                "FilterPattern": "[label=\"REPORT\", ..., memory_label=\"Used:\", max_memory_used, unit=\"MB\", xray_label=\"XRAY\", trace_label=\"TraceId:\", traced, segment_label=\"SegmentId:\", segment, sampled_label=\"Sampled:\", sampled_value]",
                 "MetricTransformations": [
                     {
                         "MetricValue": "$max_memory_used",

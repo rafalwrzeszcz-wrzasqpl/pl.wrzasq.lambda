@@ -189,7 +189,9 @@ public class LambdaFunctionResource {
                 + "trace_label=\"TraceId:\", "
                 + "traced, "
                 + "segment_label=\"SegmentId:\", "
-                + "segment]"
+                + "segment, "
+                + "sampled_label=\"Sampled:\", "
+                + "sampled_value]"
         );
     }
 
