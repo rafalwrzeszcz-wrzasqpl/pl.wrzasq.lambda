@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"pl.wrzasq.lambda.cform.passwordpolicy"},{"l":"pl.wrzasq.lambda.cform.passwordpolicy.service"}]
