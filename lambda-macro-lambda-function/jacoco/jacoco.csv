@@ -1,4 +1,4 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-WrzasqPl CloudFormation Lambda function macro,pl.wrzasq.lambda.macro.lambda.function.template,ProcessedTemplate,0,237,1,15,0,46,1,16,0,9
+WrzasqPl CloudFormation Lambda function macro,pl.wrzasq.lambda.macro.lambda.function.template,ProcessedTemplate,0,236,1,15,0,46,1,16,0,9
 WrzasqPl CloudFormation Lambda function macro,pl.wrzasq.lambda.macro.lambda.function.template,LambdaFunctionResource,0,335,0,6,0,60,0,21,0,18
 WrzasqPl CloudFormation Lambda function macro,pl.wrzasq.lambda.macro.lambda.function,Handler,0,20,0,0,0,6,0,2,0,2
