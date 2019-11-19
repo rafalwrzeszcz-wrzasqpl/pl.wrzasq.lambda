@@ -74,7 +74,7 @@ public class StackSetInstanceManager {
 
 <span class="fc" id="L75">        this.stackSetHandler.waitForStackSetOperation(input.getStackSetName(), operationId);</span>
 
-<span class="fc" id="L77">        StackInstance stackInstance = this.cloudFormation.describeStackInstance(</span>
+<span class="fc" id="L77">        var stackInstance = this.cloudFormation.describeStackInstance(</span>
             new DescribeStackInstanceRequest()
 <span class="fc" id="L79">                .withStackSetName(input.getStackSetName())</span>
 <span class="fc" id="L80">                .withStackInstanceAccount(input.getAccountId())</span>
@@ -96,7 +96,7 @@ public class StackSetInstanceManager {
         StackInstanceRequest input,
         String physicalResourceId
     ) {
-<span class="fc" id="L99">        StackInstanceRequest spec = StackSetInstanceManager.parsePhysicalResourceId(physicalResourceId);</span>
+<span class="fc" id="L99">        var spec = StackSetInstanceManager.parsePhysicalResourceId(physicalResourceId);</span>
 
 <span class="fc" id="L101">        this.cloudFormation.deleteStackInstances(</span>
             new DeleteStackInstancesRequest()
@@ -141,7 +141,7 @@ public class StackSetInstanceManager {
      * @return Stack set operation ID.
      */
     private String updateStackInstance(StackInstanceRequest input) {
-<span class="fc" id="L144">        StackInstance stackInstance = this.cloudFormation.describeStackInstance(</span>
+<span class="fc" id="L144">        var stackInstance = this.cloudFormation.describeStackInstance(</span>
             new DescribeStackInstanceRequest()
 <span class="fc" id="L146">                .withStackSetName(input.getStackSetName())</span>
 <span class="fc" id="L147">                .withStackInstanceAccount(input.getAccountId())</span>
@@ -191,8 +191,8 @@ public class StackSetInstanceManager {
      * @return Stack instance request specification.
      */
     private static StackInstanceRequest parsePhysicalResourceId(String physicalResourceId) {
-<span class="fc" id="L194">        String[] parts = physicalResourceId.split(&quot;:&quot;);</span>
-<span class="fc" id="L195">        StackInstanceRequest request = new StackInstanceRequest();</span>
+<span class="fc" id="L194">        var parts = physicalResourceId.split(&quot;:&quot;);</span>
+<span class="fc" id="L195">        var request = new StackInstanceRequest();</span>
 <span class="fc" id="L196">        request.setStackSetName(parts[0]);</span>
 <span class="fc" id="L197">        request.setAccountId(parts[1]);</span>
 <span class="fc" id="L198">        request.setRegion(parts[2]);</span>
@@ -214,4 +214,4 @@ public class StackSetInstanceManager {
         );
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

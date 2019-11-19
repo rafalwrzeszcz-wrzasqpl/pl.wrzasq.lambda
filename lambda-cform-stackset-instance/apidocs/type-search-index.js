@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"pl.wrzasq.lambda.cform.stackset.instance","l":"Handler"},{"p":"pl.wrzasq.lambda.cform.stackset.instance.model","l":"StackInstanceRequest"},{"p":"pl.wrzasq.lambda.cform.stackset.instance.service","l":"StackSetInstanceManager"}]
