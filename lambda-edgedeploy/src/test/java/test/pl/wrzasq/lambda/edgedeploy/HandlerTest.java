@@ -7,8 +7,6 @@
 
 package test.pl.wrzasq.lambda.edgedeploy;
 
-import java.lang.reflect.Field;
-
 import com.amazonaws.services.lambda.model.PublishVersionResult;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.sunrun.cfnresponse.CfnRequest;
@@ -45,7 +43,7 @@ public class HandlerTest {
 
     @Test
     public void handle() {
-        CfnRequest<EdgeDeployRequest> request = new CfnRequest<>();
+        var request = new CfnRequest<EdgeDeployRequest>();
         request.setRequestType("Create");
         request.setResourceProperties(new EdgeDeployRequest());
 
@@ -58,10 +56,9 @@ public class HandlerTest {
         CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> sender
     )
         throws NoSuchFieldException, IllegalAccessException {
-        Field hack = Handler.class.getDeclaredField("handler");
+        var hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
-        CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> original
-            = CustomResourceHandler.class.cast(hack.get(null));
+        var original = (CustomResourceHandler) hack.get(null);
         hack.set(null, sender);
         return original;
     }

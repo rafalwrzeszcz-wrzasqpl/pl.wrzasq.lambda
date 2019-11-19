@@ -16,8 +16,8 @@ import pl.wrzasq.lambda.macro.lambda.function.template.LambdaFunctionResource;
 public class LambdaFunctionResourceTest {
     @Test
     public void getLogGroupLogicalId() {
-        String logicalId = "TestFunction";
-        LambdaFunctionResource resource = new LambdaFunctionResource(logicalId);
+        var logicalId = "TestFunction";
+        var resource = new LambdaFunctionResource(logicalId);
         // this is just for code coverage now, we can make more detailed tests in future based on error-cases
         // it will be tested in ProcessedTemplateTest that involves full JSON files
         resource.buildDefinitions(Collections.emptyMap());

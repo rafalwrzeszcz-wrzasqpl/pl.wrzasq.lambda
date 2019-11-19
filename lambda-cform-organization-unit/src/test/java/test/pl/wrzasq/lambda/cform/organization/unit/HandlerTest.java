@@ -7,8 +7,6 @@
 
 package test.pl.wrzasq.lambda.cform.organization.unit;
 
-import java.lang.reflect.Field;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.organizations.model.OrganizationalUnit;
 import com.sunrun.cfnresponse.CfnRequest;
@@ -45,7 +43,7 @@ public class HandlerTest {
 
     @Test
     public void handle() {
-        CfnRequest<OrganizationUnitRequest> request = new CfnRequest<>();
+        var request = new CfnRequest<OrganizationUnitRequest>();
         request.setRequestType("Create");
         request.setResourceProperties(new OrganizationUnitRequest());
 
@@ -58,10 +56,9 @@ public class HandlerTest {
         CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> sender
     )
         throws NoSuchFieldException, IllegalAccessException {
-        Field hack = Handler.class.getDeclaredField("handler");
+        var hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
-        CustomResourceHandler<OrganizationUnitRequest, OrganizationalUnit> original
-            = CustomResourceHandler.class.cast(hack.get(null));
+        var original = (CustomResourceHandler) hack.get(null);
         hack.set(null, sender);
         return original;
     }

@@ -21,11 +21,11 @@ public class ProcessedTemplateTest {
 
     @Test
     public void processTemplate() throws IOException {
-        Map<String, Object> input = this.objectMapper.readValue(
+        var input = this.objectMapper.readValue(
             this.getClass().getResourceAsStream("/input.json"),
             new TypeReference<Map<String, Object>>() {}
         );
-        Map<String, Object> output = this.objectMapper.readValue(
+        var output = this.objectMapper.readValue(
             this.getClass().getResourceAsStream("/output.json"),
             new TypeReference<Map<String, Object>>() {}
         );

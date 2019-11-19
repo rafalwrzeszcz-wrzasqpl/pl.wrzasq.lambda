@@ -13,7 +13,6 @@ import com.amazonaws.services.cloudwatch.model.MetricDatum;
 import com.amazonaws.services.cloudwatch.model.PutMetricDataRequest;
 import com.amazonaws.services.cloudwatch.model.StandardUnit;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +61,7 @@ public class CloudWatchDynamoDbMetricGenerator {
     public void generateMetrics(String tableName) {
         this.logger.info("Generating metrics for table: {}.", tableName);
 
-        TableDescription table = this.dynamoDb.describeTable(tableName).getTable();
+        var table = this.dynamoDb.describeTable(tableName).getTable();
 
         this.putSingleMetric(tableName, "ItemCount", table.getItemCount(), StandardUnit.None);
         this.putSingleMetric(tableName, "TableSizeBytes", table.getTableSizeBytes(), StandardUnit.Bytes);

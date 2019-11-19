@@ -26,7 +26,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.organization.unit.model.OrganizationUnitRequest;
 import pl.wrzasq.lambda.cform.organization.unit.service.OrganizationUnitManager;
 
@@ -57,12 +56,12 @@ public class OrganizationUnitManagerTest {
 
     @Test
     public void sync() {
-        OrganizationalUnit unit = new OrganizationalUnit();
+        var unit = new OrganizationalUnit();
         unit.setId(OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 
-        OrganizationUnitManager manager = new OrganizationUnitManager(this.organizations);
+        var manager = new OrganizationUnitManager(this.organizations);
 
-        OrganizationUnitRequest input = new OrganizationUnitRequest();
+        var input = new OrganizationUnitRequest();
         input.setName(OrganizationUnitManagerTest.OU_NAME);
         input.setParentId(OrganizationUnitManagerTest.PARENT_ID_1);
 
@@ -73,7 +72,7 @@ public class OrganizationUnitManagerTest {
                     .withOrganizationalUnit(unit)
             );
 
-        CustomResourceResponse<OrganizationalUnit> result = manager.sync(input, null);
+        var result = manager.sync(input, null);
 
         Mockito
             .verify(this.organizations, Mockito.never())
@@ -96,12 +95,12 @@ public class OrganizationUnitManagerTest {
 
     @Test
     public void syncAlreadyExists() {
-        OrganizationalUnit unit = new OrganizationalUnit();
+        var unit = new OrganizationalUnit();
         unit.setId(OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 
-        OrganizationUnitManager manager = new OrganizationUnitManager(this.organizations);
+        var manager = new OrganizationUnitManager(this.organizations);
 
-        OrganizationUnitRequest input = new OrganizationUnitRequest();
+        var input = new OrganizationUnitRequest();
         input.setName(OrganizationUnitManagerTest.OU_NAME);
         input.setParentId(OrganizationUnitManagerTest.PARENT_ID_1);
 
@@ -121,7 +120,7 @@ public class OrganizationUnitManagerTest {
                     .withOrganizationalUnit(unit)
             );
 
-        CustomResourceResponse<OrganizationalUnit> result = manager.sync(
+        var result = manager.sync(
             input,
             OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID
         );
@@ -144,12 +143,12 @@ public class OrganizationUnitManagerTest {
 
     @Test
     public void syncNotExistingPhysicalId() {
-        OrganizationalUnit unit = new OrganizationalUnit();
+        var unit = new OrganizationalUnit();
         unit.setId(OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 
-        OrganizationUnitManager manager = new OrganizationUnitManager(this.organizations);
+        var manager = new OrganizationUnitManager(this.organizations);
 
-        OrganizationUnitRequest input = new OrganizationUnitRequest();
+        var input = new OrganizationUnitRequest();
         input.setName(OrganizationUnitManagerTest.OU_NAME);
         input.setParentId(OrganizationUnitManagerTest.PARENT_ID_1);
 
@@ -163,7 +162,7 @@ public class OrganizationUnitManagerTest {
                     .withOrganizationalUnit(unit)
             );
 
-        CustomResourceResponse<OrganizationalUnit> result = manager.sync(
+        var result = manager.sync(
             input,
             OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID
         );
@@ -186,12 +185,12 @@ public class OrganizationUnitManagerTest {
 
     @Test
     public void syncChangedParent() {
-        OrganizationalUnit unit = new OrganizationalUnit();
+        var unit = new OrganizationalUnit();
         unit.setId(OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 
-        OrganizationUnitManager manager = new OrganizationUnitManager(this.organizations);
+        var manager = new OrganizationUnitManager(this.organizations);
 
-        OrganizationUnitRequest input = new OrganizationUnitRequest();
+        var input = new OrganizationUnitRequest();
         input.setName(OrganizationUnitManagerTest.OU_NAME);
         input.setParentId(OrganizationUnitManagerTest.PARENT_ID_1);
 
@@ -211,7 +210,7 @@ public class OrganizationUnitManagerTest {
                     .withOrganizationalUnit(unit)
             );
 
-        CustomResourceResponse<OrganizationalUnit> result = manager.sync(
+        var result = manager.sync(
             input,
             OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID
         );
@@ -234,7 +233,7 @@ public class OrganizationUnitManagerTest {
 
     @Test
     public void delete() {
-        OrganizationUnitManager manager = new OrganizationUnitManager(this.organizations);
+        var manager = new OrganizationUnitManager(this.organizations);
 
         manager.delete(null, OrganizationUnitManagerTest.PHYSICAL_RESOURCE_ID);
 

@@ -18,20 +18,8 @@ branches:
         - "/^release-/"
 
 jdk:
-    - "openjdk8"
-    - "oraclejdk8"
-    - "oraclejdk9"
-    - "openjdk10"
     - "openjdk11"
     - "oraclejdk11"
-
-# TODO: temporary as delombok won't work here
-matrix:
-    allow_failures:
-        -
-            jdk: "openjdk11"
-        -
-            jdk: "oraclejdk11"
 
 env:
     global:
@@ -116,7 +104,7 @@ deploy:
         on:
             branch: "master"
             condition: "${TRAVIS_EVENT_TYPE} == push"
-            jdk: "oraclejdk8"
+            jdk: "oraclejdk11"
 
 cache:
     directories:

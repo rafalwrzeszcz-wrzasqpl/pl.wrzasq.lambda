@@ -27,9 +27,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.organization.model.OrganizationRequest;
-import pl.wrzasq.lambda.cform.organization.model.OrganizationResponse;
 import pl.wrzasq.lambda.cform.organization.service.OrganizationManager;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,15 +50,15 @@ public class OrganizationManagerTest {
 
     @Test
     public void sync() {
-        Organization organization = new Organization()
+        var organization = new Organization()
             .withId(OrganizationManagerTest.PHYSICAL_ID_1)
             .withArn(OrganizationManagerTest.ARN);
-        Root root = new Root()
+        var root = new Root()
             .withId(OrganizationManagerTest.ROOT_ID);
 
-        OrganizationManager manager = new OrganizationManager(this.organizations);
+        var manager = new OrganizationManager(this.organizations);
 
-        OrganizationRequest input = new OrganizationRequest();
+        var input = new OrganizationRequest();
         input.setFeatureSet(OrganizationManagerTest.FEATURE_SET);
 
         Mockito
@@ -79,7 +77,7 @@ public class OrganizationManagerTest {
                     .withRoots(root)
             );
 
-        CustomResourceResponse<OrganizationResponse> result = manager.sync(input, null);
+        var result = manager.sync(input, null);
 
         Mockito.verify(this.organizations).describeOrganization(Mockito.any(DescribeOrganizationRequest.class));
         Mockito.verify(this.organizations).createOrganization(Mockito.any(CreateOrganizationRequest.class));
@@ -113,15 +111,15 @@ public class OrganizationManagerTest {
 
     @Test
     public void syncAlreadyExists() {
-        Organization organization = new Organization()
+        var organization = new Organization()
             .withId(OrganizationManagerTest.PHYSICAL_ID_1)
             .withArn(OrganizationManagerTest.ARN);
-        Root root = new Root()
+        var root = new Root()
             .withId(OrganizationManagerTest.ROOT_ID);
 
-        OrganizationManager manager = new OrganizationManager(this.organizations);
+        var manager = new OrganizationManager(this.organizations);
 
-        OrganizationRequest input = new OrganizationRequest();
+        var input = new OrganizationRequest();
 
         Mockito
             .when(this.organizations.describeOrganization(Mockito.any(DescribeOrganizationRequest.class)))
@@ -136,7 +134,7 @@ public class OrganizationManagerTest {
                     .withRoots(root)
             );
 
-        CustomResourceResponse<OrganizationResponse> result = manager.sync(
+        var result = manager.sync(
             input,
             OrganizationManagerTest.PHYSICAL_ID_1
         );
@@ -168,15 +166,15 @@ public class OrganizationManagerTest {
 
     @Test
     public void syncAlreadyExistsOutOfSync() {
-        Organization organization = new Organization()
+        var organization = new Organization()
             .withId(OrganizationManagerTest.PHYSICAL_ID_1)
             .withArn(OrganizationManagerTest.ARN);
-        Root root = new Root()
+        var root = new Root()
             .withId(OrganizationManagerTest.ROOT_ID);
 
-        OrganizationManager manager = new OrganizationManager(this.organizations);
+        var manager = new OrganizationManager(this.organizations);
 
-        OrganizationRequest input = new OrganizationRequest();
+        var input = new OrganizationRequest();
 
         Mockito
             .when(this.organizations.describeOrganization(Mockito.any(DescribeOrganizationRequest.class)))
@@ -191,7 +189,7 @@ public class OrganizationManagerTest {
                     .withRoots(root)
             );
 
-        CustomResourceResponse<OrganizationResponse> result = manager.sync(
+        var result = manager.sync(
             input,
             OrganizationManagerTest.PHYSICAL_ID_2
         );
@@ -233,7 +231,7 @@ public class OrganizationManagerTest {
                     )
             );
 
-        OrganizationManager manager = new OrganizationManager(this.organizations);
+        var manager = new OrganizationManager(this.organizations);
 
         manager.delete(null, OrganizationManagerTest.PHYSICAL_ID_1);
 
@@ -252,7 +250,7 @@ public class OrganizationManagerTest {
                     )
             );
 
-        OrganizationManager manager = new OrganizationManager(this.organizations);
+        var manager = new OrganizationManager(this.organizations);
 
         Assertions.assertThrows(
             IllegalStateException.class,

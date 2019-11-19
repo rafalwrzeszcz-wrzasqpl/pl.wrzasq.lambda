@@ -13,7 +13,6 @@ import com.amazonaws.services.organizations.model.CreateOrganizationalUnitReques
 import com.amazonaws.services.organizations.model.DeleteOrganizationalUnitRequest;
 import com.amazonaws.services.organizations.model.ListParentsRequest;
 import com.amazonaws.services.organizations.model.OrganizationalUnit;
-import com.amazonaws.services.organizations.model.Parent;
 import com.amazonaws.services.organizations.model.UpdateOrganizationalUnitRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +53,7 @@ public class OrganizationUnitManager {
         // check if the parent ID got changed
         if (physicalResourceId != null) {
             try {
-                Parent parent = this.organizations.listParents(
+                var parent = this.organizations.listParents(
                     new ListParentsRequest()
                         .withChildId(physicalResourceId)
                 )
@@ -82,7 +81,7 @@ public class OrganizationUnitManager {
             }
         }
 
-        OrganizationalUnit unit = physicalResourceId == null
+        var unit = physicalResourceId == null
             ? this.organizations.createOrganizationalUnit(
                 new CreateOrganizationalUnitRequest()
                     .withName(input.getName())

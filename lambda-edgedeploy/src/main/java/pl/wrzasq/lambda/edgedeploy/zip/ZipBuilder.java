@@ -69,7 +69,7 @@ public class ZipBuilder {
         this.writeEntry(
             name,
             () -> {
-                byte[] buffer = new byte[ZipBuilder.BUFFER_SIZE];
+                var buffer = new byte[ZipBuilder.BUFFER_SIZE];
                 int count;
                 while ((count = stream.read(buffer)) > 0) {
                     this.zip.write(buffer, 0, count);

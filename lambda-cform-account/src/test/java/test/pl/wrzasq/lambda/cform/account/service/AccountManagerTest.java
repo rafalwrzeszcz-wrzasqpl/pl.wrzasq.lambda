@@ -39,7 +39,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.account.model.AccountRequest;
 import pl.wrzasq.lambda.cform.account.service.AccountManager;
 
@@ -94,7 +93,7 @@ public class AccountManagerTest {
 
     @Test
     public void provision() {
-        Account account = new Account();
+        var account = new Account();
 
         Mockito
             .when(this.organizations.createAccount(this.createRequest.capture()))
@@ -132,15 +131,15 @@ public class AccountManagerTest {
                     .withAccount(account)
             );
 
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
-        AccountRequest input = new AccountRequest();
+        var input = new AccountRequest();
         input.setEmail(AccountManagerTest.EMAIL_1);
         input.setAccountName(AccountManagerTest.ACCOUNT_NAME_1);
         input.setAdministratorRoleName(AccountManagerTest.ADMINISTRATOR_ROLE_NAME);
         input.setOuId(AccountManagerTest.OU_ID_2);
 
-        CustomResourceResponse<Account> result = manager.provision(input, null);
+        var result = manager.provision(input, null);
 
         Mockito
             .verify(this.organizations)
@@ -216,9 +215,9 @@ public class AccountManagerTest {
                     )
             );
 
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
-        AccountRequest input = new AccountRequest();
+        var input = new AccountRequest();
         input.setEmail(AccountManagerTest.EMAIL_1);
         input.setAccountName(AccountManagerTest.ACCOUNT_NAME_1);
         input.setAdministratorRoleName(AccountManagerTest.ADMINISTRATOR_ROLE_NAME);
@@ -232,7 +231,7 @@ public class AccountManagerTest {
 
     @Test
     public void provisionInvite() {
-        Account account = new Account();
+        var account = new Account();
 
         Mockito
             .when(this.organizations.inviteAccountToOrganization(this.inviteRequest.capture()))
@@ -274,16 +273,16 @@ public class AccountManagerTest {
                     .withAccount(account)
             );
 
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
-        AccountRequest input = new AccountRequest();
+        var input = new AccountRequest();
         input.setAccountId(AccountManagerTest.PHYSICAL_ID_1);
         input.setEmail(AccountManagerTest.EMAIL_1);
         input.setAccountName(AccountManagerTest.ACCOUNT_NAME_1);
         input.setAdministratorRoleName(AccountManagerTest.ADMINISTRATOR_ROLE_NAME);
         input.setOuId(AccountManagerTest.OU_ID_1);
 
-        CustomResourceResponse<Account> result = manager.provision(input, null);
+        var result = manager.provision(input, null);
 
         Mockito
             .verify(this.organizations, Mockito.never())
@@ -342,9 +341,9 @@ public class AccountManagerTest {
                     )
             );
 
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
-        AccountRequest input = new AccountRequest();
+        var input = new AccountRequest();
         input.setAccountId(AccountManagerTest.PHYSICAL_ID_1);
         input.setEmail(AccountManagerTest.EMAIL_1);
         input.setAccountName(AccountManagerTest.ACCOUNT_NAME_1);
@@ -360,7 +359,7 @@ public class AccountManagerTest {
 
     @Test
     public void provisionNotExistingAccount() {
-        Account account = new Account();
+        var account = new Account();
 
         Mockito
             .when(this.organizations.describeAccount(this.describeRequest.capture()))
@@ -390,15 +389,15 @@ public class AccountManagerTest {
                     )
             );
 
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
-        AccountRequest input = new AccountRequest();
+        var input = new AccountRequest();
         input.setEmail(AccountManagerTest.EMAIL_1);
         input.setAccountName(AccountManagerTest.ACCOUNT_NAME_1);
         input.setAdministratorRoleName(AccountManagerTest.ADMINISTRATOR_ROLE_NAME);
         input.setOuId(AccountManagerTest.OU_ID_1);
 
-        CustomResourceResponse<Account> result = manager.provision(input, AccountManagerTest.PHYSICAL_ID_2);
+        var result = manager.provision(input, AccountManagerTest.PHYSICAL_ID_2);
 
         Mockito
             .verify(this.organizations, Mockito.never())
@@ -449,7 +448,7 @@ public class AccountManagerTest {
 
     @Test
     public void provisionChangedName() {
-        Account account = new Account();
+        var account = new Account();
         account.setEmail(AccountManagerTest.EMAIL_1);
         account.setName(AccountManagerTest.ACCOUNT_NAME_1);
         account.setId(AccountManagerTest.PHYSICAL_ID_1);
@@ -481,15 +480,15 @@ public class AccountManagerTest {
                     )
             );
 
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
-        AccountRequest input = new AccountRequest();
+        var input = new AccountRequest();
         input.setEmail(AccountManagerTest.EMAIL_1);
         input.setAccountName(AccountManagerTest.ACCOUNT_NAME_2);
         input.setAdministratorRoleName(AccountManagerTest.ADMINISTRATOR_ROLE_NAME);
         input.setOuId(AccountManagerTest.OU_ID_1);
 
-        CustomResourceResponse<Account> result = manager.provision(input, AccountManagerTest.PHYSICAL_ID_1);
+        var result = manager.provision(input, AccountManagerTest.PHYSICAL_ID_1);
 
         Mockito
             .verify(this.organizations, Mockito.never())
@@ -543,7 +542,7 @@ public class AccountManagerTest {
 
     @Test
     public void provisionChangedEmail() {
-        Account account = new Account();
+        var account = new Account();
         account.setEmail(AccountManagerTest.EMAIL_1);
         account.setName(AccountManagerTest.ACCOUNT_NAME_1);
         account.setId(AccountManagerTest.PHYSICAL_ID_1);
@@ -575,15 +574,15 @@ public class AccountManagerTest {
                     )
             );
 
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
-        AccountRequest input = new AccountRequest();
+        var input = new AccountRequest();
         input.setEmail(AccountManagerTest.EMAIL_2);
         input.setAccountName(AccountManagerTest.ACCOUNT_NAME_1);
         input.setAdministratorRoleName(AccountManagerTest.ADMINISTRATOR_ROLE_NAME);
         input.setOuId(AccountManagerTest.OU_ID_1);
 
-        CustomResourceResponse<Account> result = manager.provision(input, AccountManagerTest.PHYSICAL_ID_1);
+        var result = manager.provision(input, AccountManagerTest.PHYSICAL_ID_1);
 
         Mockito
             .verify(this.organizations, Mockito.never())
@@ -637,7 +636,7 @@ public class AccountManagerTest {
 
     @Test
     public void provisionMove() {
-        Account account = new Account();
+        var account = new Account();
         account.setEmail(AccountManagerTest.EMAIL_1);
         account.setName(AccountManagerTest.ACCOUNT_NAME_1);
         account.setId(AccountManagerTest.PHYSICAL_ID_1);
@@ -658,15 +657,15 @@ public class AccountManagerTest {
                     )
             );
 
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
-        AccountRequest input = new AccountRequest();
+        var input = new AccountRequest();
         input.setEmail(AccountManagerTest.EMAIL_1);
         input.setAccountName(AccountManagerTest.ACCOUNT_NAME_1);
         input.setAdministratorRoleName(AccountManagerTest.ADMINISTRATOR_ROLE_NAME);
         input.setOuId(AccountManagerTest.OU_ID_2);
 
-        CustomResourceResponse<Account> result = manager.provision(input, AccountManagerTest.PHYSICAL_ID_1);
+        var result = manager.provision(input, AccountManagerTest.PHYSICAL_ID_1);
 
         Mockito
             .verify(this.organizations)
@@ -723,7 +722,7 @@ public class AccountManagerTest {
 
     @Test
     public void delete() {
-        AccountManager manager = this.createAccountManager();
+        var manager = this.createAccountManager();
 
         manager.delete(null, AccountManagerTest.PHYSICAL_ID_1);
 
@@ -737,7 +736,7 @@ public class AccountManagerTest {
     }
 
     private AccountManager createAccountManager() {
-        AccountManager manager = new AccountManager(this.organizations);
+        var manager = new AccountManager(this.organizations);
         manager.setSleepInterval(1);
         return manager;
     }

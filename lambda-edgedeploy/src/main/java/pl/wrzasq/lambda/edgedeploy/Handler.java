@@ -8,13 +8,10 @@
 package pl.wrzasq.lambda.edgedeploy;
 
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.model.PublishVersionResult;
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sunrun.cfnresponse.CfnRequest;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
 import pl.wrzasq.lambda.edgedeploy.model.EdgeDeployRequest;
@@ -33,15 +30,15 @@ public class Handler {
     private static CustomResourceHandler<EdgeDeployRequest, PublishVersionResult> handler;
 
     static {
-        ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();
-        AWSLambda lambda = AWSLambdaClientBuilder.standard()
+        var objectMapper = ObjectMapperFactory.createObjectMapper();
+        var lambda = AWSLambdaClientBuilder.standard()
             // Lambda@Edge needs to be deployed in Virginia!
             .withRegion(Regions.US_EAST_1)
             .build();
 
-        AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
+        var s3 = AmazonS3ClientBuilder.defaultClient();
 
-        LambdaEdgeManager deploy = new LambdaEdgeManager(lambda, s3, objectMapper);
+        var deploy = new LambdaEdgeManager(lambda, s3, objectMapper);
 
         Handler.handler = new CustomResourceHandler<>(deploy::create, deploy::update, deploy::delete);
     }

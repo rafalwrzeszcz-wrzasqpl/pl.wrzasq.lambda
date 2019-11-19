@@ -10,7 +10,6 @@ package test.pl.wrzasq.lambda.edgedeploy.service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -22,7 +21,6 @@ import com.amazonaws.services.lambda.model.CreateFunctionRequest;
 import com.amazonaws.services.lambda.model.CreateFunctionResult;
 import com.amazonaws.services.lambda.model.DeleteFunctionRequest;
 import com.amazonaws.services.lambda.model.PublishVersionRequest;
-import com.amazonaws.services.lambda.model.PublishVersionResult;
 import com.amazonaws.services.lambda.model.ResourceNotFoundException;
 import com.amazonaws.services.lambda.model.Runtime;
 import com.amazonaws.services.lambda.model.TracingMode;
@@ -43,7 +41,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.edgedeploy.model.EdgeDeployRequest;
 import pl.wrzasq.lambda.edgedeploy.service.LambdaEdgeManager;
 import pl.wrzasq.lambda.edgedeploy.zip.ZipBuilder;
@@ -115,18 +112,18 @@ public class LambdaEdgeManagerTest {
 
     @Test
     public void create() throws IOException {
-        LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
+        var manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
-        EdgeDeployRequest input = this.buildRequest();
+        var input = this.buildRequest();
 
-        Map<String, Object> variables = new HashMap<>();
+        var variables = new HashMap<>();
         variables.put(LambdaEdgeManagerTest.VARIABLE_1_KEY, LambdaEdgeManagerTest.VARIABLE_1_VALUE);
         variables.put(LambdaEdgeManagerTest.VARIABLE_2_KEY, LambdaEdgeManagerTest.VARIABLE_2_VALUE);
         input.setConfig(variables);
 
-        ZipBuilder zip = new ZipBuilder();
+        var zip = new ZipBuilder();
         zip.writeEntry("index.js", new ByteArrayInputStream(new byte[]{'e', 'x', 'p', 'o', 'r', 't', '{', '}'}));
-        ByteBuffer buffer = zip.dump();
+        var buffer = zip.dump();
 
         Mockito
             .when(this.s3.getObject(LambdaEdgeManagerTest.PACKAGE_BUCKET, LambdaEdgeManagerTest.PACKAGE_KEY))
@@ -139,13 +136,13 @@ public class LambdaEdgeManagerTest {
                     .withFunctionArn(LambdaEdgeManagerTest.FUNCTION_ARN)
             );
 
-        CustomResourceResponse<PublishVersionResult> response = manager.create(input, null);
+        var response = manager.create(input, null);
 
         Mockito.verify(this.lambda).createFunction(this.createRequest.capture());
         Mockito.verify(this.lambda).publishVersion(this.publishRequest.capture());
 
-        CreateFunctionRequest createRequest = this.createRequest.getValue();
-        PublishVersionRequest publishRequest = this.publishRequest.getValue();
+        var createRequest = this.createRequest.getValue();
+        var publishRequest = this.publishRequest.getValue();
 
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
@@ -189,12 +186,12 @@ public class LambdaEdgeManagerTest {
         );
 
         try (
-            ZipInputStream stream = new ZipInputStream(
+            var stream = new ZipInputStream(
                 new ByteArrayInputStream(createRequest.getCode().getZipFile().array())
             )
         ) {
-            boolean hasIndex = false;
-            boolean hasConfig = false;
+            var hasIndex = false;
+            var hasConfig = false;
 
             ZipEntry entry;
             while ((entry = stream.getNextEntry()) != null) {
@@ -202,7 +199,7 @@ public class LambdaEdgeManagerTest {
                     case "index.js":
                         hasIndex = true;
 
-                        Scanner scanner = new Scanner(stream);
+                        var scanner = new Scanner(stream);
 
                         Assertions.assertEquals(
                             "export{}",
@@ -213,7 +210,7 @@ public class LambdaEdgeManagerTest {
 
                     case "config.json":
                         hasConfig = true;
-                        Map<String, Object> config = this.objectMapper.readValue(
+                        var config = this.objectMapper.readValue(
                             stream,
                             new TypeReference<Map<String, Object>>() {}
                         );
@@ -275,9 +272,9 @@ public class LambdaEdgeManagerTest {
 
     @Test
     public void createZipIoException() throws IOException {
-        LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
+        var manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
-        EdgeDeployRequest input = this.buildRequest();
+        var input = this.buildRequest();
 
         Mockito
             .when(this.s3.getObject(LambdaEdgeManagerTest.PACKAGE_BUCKET, LambdaEdgeManagerTest.PACKAGE_KEY))
@@ -296,23 +293,23 @@ public class LambdaEdgeManagerTest {
 
     @Test
     public void update() throws IOException {
-        LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
+        var manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
-        String configFile = "data.json";
+        var configFile = "data.json";
 
-        EdgeDeployRequest input = this.buildRequest();
+        var input = this.buildRequest();
         input.setConfigFile(configFile);
         input.setConfig(new HashMap<String, Object>());
 
-        ZipBuilder zip = new ZipBuilder();
+        var zip = new ZipBuilder();
         zip.writeEntry("index.js", new ByteArrayInputStream(new byte[]{'e', 'x', 'p', 'o', 'r', 't', '{', '}'}));
-        ByteBuffer buffer = zip.dump();
+        var buffer = zip.dump();
 
         Mockito
             .when(this.s3.getObject(LambdaEdgeManagerTest.PACKAGE_BUCKET, LambdaEdgeManagerTest.PACKAGE_KEY))
             .thenReturn(this.buildS3Object(new ByteArrayInputStream(buffer.array())));
 
-        CustomResourceResponse<PublishVersionResult> response = manager.update(
+        var response = manager.update(
             input,
             LambdaEdgeManagerTest.FUNCTION_ARN
         );
@@ -321,9 +318,9 @@ public class LambdaEdgeManagerTest {
         Mockito.verify(this.lambda).updateFunctionConfiguration(this.updateConfigurationRequest.capture());
         Mockito.verify(this.lambda).publishVersion(this.publishRequest.capture());
 
-        UpdateFunctionCodeRequest updateCodeRequest = this.updateCodeRequest.getValue();
-        UpdateFunctionConfigurationRequest updateConfigurationRequest = this.updateConfigurationRequest.getValue();
-        PublishVersionRequest publishRequest = this.publishRequest.getValue();
+        var updateCodeRequest = this.updateCodeRequest.getValue();
+        var updateConfigurationRequest = this.updateConfigurationRequest.getValue();
+        var publishRequest = this.publishRequest.getValue();
 
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
@@ -367,12 +364,12 @@ public class LambdaEdgeManagerTest {
         );
 
         try (
-            ZipInputStream stream = new ZipInputStream(
+            var stream = new ZipInputStream(
                 new ByteArrayInputStream(updateCodeRequest.getZipFile().array())
             )
         ) {
-            boolean hasIndex = false;
-            boolean hasConfig = false;
+            var hasIndex = false;
+            var hasConfig = false;
 
             ZipEntry entry;
             while ((entry = stream.getNextEntry()) != null) {
@@ -416,15 +413,15 @@ public class LambdaEdgeManagerTest {
 
     @Test
     public void delete() {
-        LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
+        var manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
-        EdgeDeployRequest input = this.buildRequest();
+        var input = this.buildRequest();
 
         Mockito
             .when(this.lambda.deleteFunction(this.deleteRequest.capture()))
             .thenReturn(null);
 
-        CustomResourceResponse<PublishVersionResult> result = manager.delete(input, null);
+        var result = manager.delete(input, null);
 
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
@@ -440,15 +437,15 @@ public class LambdaEdgeManagerTest {
 
     @Test
     public void deleteNotFound() {
-        LambdaEdgeManager manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
+        var manager = new LambdaEdgeManager(this.lambda, this.s3, this.objectMapper);
 
-        EdgeDeployRequest input = this.buildRequest();
+        var input = this.buildRequest();
 
         Mockito
             .when(this.lambda.deleteFunction(this.deleteRequest.capture()))
             .thenThrow(ResourceNotFoundException.class);
 
-        CustomResourceResponse<PublishVersionResult> result = manager.delete(input, null);
+        var result = manager.delete(input, null);
 
         Assertions.assertEquals(
             LambdaEdgeManagerTest.FUNCTION_NAME,
@@ -463,7 +460,7 @@ public class LambdaEdgeManagerTest {
     }
 
     private EdgeDeployRequest buildRequest() {
-        EdgeDeployRequest request = new EdgeDeployRequest();
+        var request = new EdgeDeployRequest();
         request.setFunctionName(LambdaEdgeManagerTest.FUNCTION_NAME);
         request.setFunctionDescription(LambdaEdgeManagerTest.FUNCTION_DESCRIPTION);
         request.setRuntime(LambdaEdgeManagerTest.RUNTIME);
@@ -478,7 +475,7 @@ public class LambdaEdgeManagerTest {
     }
 
     private S3Object buildS3Object(InputStream inputStream) {
-        S3Object s3Object = new S3Object();
+        var s3Object = new S3Object();
         s3Object.setObjectContent(inputStream);
         return s3Object;
     }

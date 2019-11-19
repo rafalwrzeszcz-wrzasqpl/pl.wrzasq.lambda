@@ -7,10 +7,7 @@
 
 package test.pl.wrzasq.lambda.metrics.dynamodb.service;
 
-import java.util.List;
-
 import com.amazonaws.services.cloudwatch.AmazonCloudWatch;
-import com.amazonaws.services.cloudwatch.model.MetricDatum;
 import com.amazonaws.services.cloudwatch.model.PutMetricDataRequest;
 import com.amazonaws.services.cloudwatch.model.StandardUnit;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -39,19 +36,19 @@ public class CloudWatchDynamoDbMetricGeneratorTest {
 
     @Test
     public void generateMetrics() {
-        String tableName = "Orders";
-        String namespace = "Test/DynamoDB";
+        var tableName = "Orders";
+        var namespace = "Test/DynamoDB";
 
-        long itemCount = 10;
-        long tableSizeBytes = 256;
+        var itemCount = 10L;
+        var tableSizeBytes = 256L;
 
-        CloudWatchDynamoDbMetricGenerator metricGenerator = new CloudWatchDynamoDbMetricGenerator(
+        var metricGenerator = new CloudWatchDynamoDbMetricGenerator(
             this.dynamoDb,
             this.cloudWatch,
             namespace
         );
 
-        TableDescription table = new TableDescription()
+        var table = new TableDescription()
             .withItemCount(itemCount)
             .withTableSizeBytes(tableSizeBytes);
 
@@ -65,7 +62,7 @@ public class CloudWatchDynamoDbMetricGeneratorTest {
             .verify(this.cloudWatch, Mockito.times(2))
             .putMetricData(this.putMetricDataRequest.capture());
 
-        List<PutMetricDataRequest> requests = this.putMetricDataRequest.getAllValues();
+        var requests = this.putMetricDataRequest.getAllValues();
 
         Assertions.assertEquals(
             namespace,
@@ -78,7 +75,7 @@ public class CloudWatchDynamoDbMetricGeneratorTest {
             "CloudWatchDynamoDbMetricGenerator.generateMetrics() should put metrics in specified namespace."
         );
 
-        MetricDatum metric = requests.get(0).getMetricData().get(0);
+        var metric = requests.get(0).getMetricData().get(0);
 
         Assertions.assertEquals(
             itemCount,

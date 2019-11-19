@@ -8,7 +8,6 @@
 package pl.wrzasq.lambda.cform.organization;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.organizations.AWSOrganizations;
 import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.sunrun.cfnresponse.CfnRequest;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
@@ -28,9 +27,9 @@ public class Handler {
     private static CustomResourceHandler<OrganizationRequest, OrganizationResponse> handler;
 
     static {
-        AWSOrganizations organizations = AWSOrganizationsClientBuilder.defaultClient();
+        var organizations = AWSOrganizationsClientBuilder.defaultClient();
 
-        OrganizationManager deploy = new OrganizationManager(organizations);
+        var deploy = new OrganizationManager(organizations);
 
         Handler.handler = new CustomResourceHandler<>(deploy::sync, deploy::sync, deploy::delete);
     }

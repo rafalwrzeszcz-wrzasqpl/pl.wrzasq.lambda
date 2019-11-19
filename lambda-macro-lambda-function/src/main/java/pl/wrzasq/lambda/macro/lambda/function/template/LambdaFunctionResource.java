@@ -126,7 +126,7 @@ public class LambdaFunctionResource {
      * @return Definitions of all resources.
      */
     public Map<String, Object> buildDefinitions(Map<String, Object> properties) {
-        Map<String, Object> resources = new HashMap<>();
+        var resources = new HashMap<String, Object>();
 
         // generate all sub-resources
         this.createLogGroup(resources, properties);
@@ -149,7 +149,7 @@ public class LambdaFunctionResource {
      */
     private void createLogGroup(Map<String, Object> resources, Map<String, Object> properties) {
         // default setup
-        Map<String, Object> resourceProperties = new HashMap<>();
+        var resourceProperties = new HashMap<String, Object>();
         resourceProperties.put(
             LambdaFunctionResource.PROPERTY_LOG_GROUP_NAME,
             LambdaFunctionResource.sub(String.format("/aws/lambda/${%s}", this.logicalId))
@@ -158,7 +158,7 @@ public class LambdaFunctionResource {
         LambdaFunctionResource.popProperty(
             properties,
             LambdaFunctionResource.PROPERTY_LOGS_RETENTION_IN_DAYS,
-            (Object value) -> resourceProperties.put("RetentionInDays", value),
+            value -> resourceProperties.put("RetentionInDays", value),
             LambdaFunctionResource.DEFAULT_LOGS_RETENTION_DAYS
         );
 
@@ -205,7 +205,7 @@ public class LambdaFunctionResource {
         LambdaFunctionResource.popProperty(
             properties,
             "ErrorsFilterPattern",
-            (Object filter) -> this.createMetricFilter(
+            filter -> this.createMetricFilter(
                 resources,
                 "ErrorsMetricFilter",
                 "Errors",
@@ -223,7 +223,7 @@ public class LambdaFunctionResource {
      * @param properties Resource properties.
      */
     private void createErrorsAlarm(Map<String, Object> resources, Map<String, Object> properties) {
-        Map<String, Object> resourceProperties = new HashMap<>();
+        var resourceProperties = new HashMap<String, Object>();
         resourceProperties.put(LambdaFunctionResource.PROPERTY_NAMESPACE, LambdaFunctionResource.METRICS_NAMESPACE);
         resourceProperties.put(
             LambdaFunctionResource.PROPERTY_METRIC_NAME,
@@ -239,7 +239,7 @@ public class LambdaFunctionResource {
         LambdaFunctionResource.popProperty(
             properties,
             "ErrorsAlarmActions",
-            (Object value) -> resourceProperties.put("AlarmActions", value),
+            value -> resourceProperties.put("AlarmActions", value),
             null
         );
 
@@ -261,7 +261,7 @@ public class LambdaFunctionResource {
         LambdaFunctionResource.popProperty(
             properties,
             "WarningsFilterPattern",
-            (Object filter) -> this.createMetricFilter(
+            filter -> this.createMetricFilter(
                 resources,
                 "WarningsMetricFilter",
                 "Warnings",
@@ -288,7 +288,7 @@ public class LambdaFunctionResource {
         String metricValue,
         Object filterPattern
     ) {
-        Map<String, Object> transformation = new HashMap<>();
+        var transformation = new HashMap<>();
         transformation.put(LambdaFunctionResource.PROPERTY_METRIC_NAMESPACE, LambdaFunctionResource.METRICS_NAMESPACE);
         transformation.put(
             LambdaFunctionResource.PROPERTY_METRIC_NAME,
@@ -296,7 +296,7 @@ public class LambdaFunctionResource {
         );
         transformation.put(LambdaFunctionResource.PROPERTY_METRIC_VALUE, metricValue);
 
-        Map<String, Object> resourceProperties = new HashMap<>();
+        var resourceProperties = new HashMap<String, Object>();
         resourceProperties.put(
             LambdaFunctionResource.PROPERTY_LOG_GROUP_NAME,
             LambdaFunctionResource.ref(this.getLogGroupLogicalId())
@@ -354,7 +354,7 @@ public class LambdaFunctionResource {
         String type,
         Map<String, Object> properties
     ) {
-        Map<String, Object> resource = new HashMap<>();
+        var resource = new HashMap<>();
         resource.put("Type", String.format("AWS::%s", type));
 
         if (!properties.isEmpty()) {

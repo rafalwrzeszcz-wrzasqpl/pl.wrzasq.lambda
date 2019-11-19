@@ -12,15 +12,12 @@ import java.util.Collection;
 import com.amazonaws.services.cloudformation.AmazonCloudFormation;
 import com.amazonaws.services.cloudformation.model.Capability;
 import com.amazonaws.services.cloudformation.model.CreateStackSetRequest;
-import com.amazonaws.services.cloudformation.model.CreateStackSetResult;
 import com.amazonaws.services.cloudformation.model.DeleteStackSetRequest;
 import com.amazonaws.services.cloudformation.model.DescribeStackSetRequest;
 import com.amazonaws.services.cloudformation.model.Parameter;
-import com.amazonaws.services.cloudformation.model.StackSet;
 import com.amazonaws.services.cloudformation.model.StackSetNotFoundException;
 import com.amazonaws.services.cloudformation.model.Tag;
 import com.amazonaws.services.cloudformation.model.UpdateStackSetRequest;
-import com.amazonaws.services.cloudformation.model.UpdateStackSetResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
@@ -78,10 +75,10 @@ public class StackSetManager {
      * @return Data about published version.
      */
     public CustomResourceResponse<StackSetResponse> deployStackSet(StackSetRequest input, String physicalResourceId) {
-        StackSetResponse response = new StackSetResponse();
+        var response = new StackSetResponse();
 
         try {
-            StackSet stackSet = this.cloudFormation.describeStackSet(
+            var stackSet = this.cloudFormation.describeStackSet(
                 new DescribeStackSetRequest()
                     .withStackSetName(input.getStackSetName())
             )
@@ -118,7 +115,7 @@ public class StackSetManager {
      * @return Empty response.
      */
     public CustomResourceResponse<StackSetResponse> deleteStackSet(StackSetRequest input, String physicalResourceId) {
-        StackSet stackSet = this.cloudFormation.describeStackSet(
+        var stackSet = this.cloudFormation.describeStackSet(
             new DescribeStackSetRequest()
                 .withStackSetName(input.getStackSetName())
         )
@@ -157,7 +154,7 @@ public class StackSetManager {
      * @return Created stack set ID.
      */
     private String createStackSet(StackSetRequest input) {
-        CreateStackSetResult result = this.cloudFormation.createStackSet(
+        var result = this.cloudFormation.createStackSet(
             new CreateStackSetRequest()
                 .withStackSetName(input.getStackSetName())
                 .withTemplateURL(input.getTemplateUrl())
@@ -180,7 +177,7 @@ public class StackSetManager {
      * @param input Stack set specification.
      */
     private void updateStackSet(StackSetRequest input) {
-        UpdateStackSetResult result = this.cloudFormation.updateStackSet(
+        var result = this.cloudFormation.updateStackSet(
             new UpdateStackSetRequest()
                 .withStackSetName(input.getStackSetName())
                 .withTemplateURL(input.getTemplateUrl())
@@ -206,7 +203,7 @@ public class StackSetManager {
     private static Collection<Parameter> buildSdkParameters(StackSetRequest input) {
         return StackUtils.buildSdkList(
             input.getParameters(),
-            (String key, String value) ->
+            (key, value) ->
                 new Parameter()
                     .withParameterKey(key)
                     .withParameterValue(value)
@@ -222,7 +219,7 @@ public class StackSetManager {
     private static Collection<Tag> buildSdkTags(StackSetRequest input) {
         return StackUtils.buildSdkList(
             input.getTags(),
-            (String key, String value) ->
+            (key, value) ->
                 new Tag()
                     .withKey(key)
                     .withValue(value)

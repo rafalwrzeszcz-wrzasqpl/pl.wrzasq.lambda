@@ -7,7 +7,6 @@
 
 package pl.wrzasq.lambda.cform.stackset.instance;
 
-import com.amazonaws.services.cloudformation.AmazonCloudFormation;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationClientBuilder;
 import com.amazonaws.services.cloudformation.model.StackInstance;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -29,11 +28,11 @@ public class Handler {
     private static CustomResourceHandler<StackInstanceRequest, StackInstance> handler;
 
     static {
-        AmazonCloudFormation cloudFormation = AmazonCloudFormationClientBuilder.defaultClient();
+        var cloudFormation = AmazonCloudFormationClientBuilder.defaultClient();
 
-        StackSetHandler stackSetHandler = new StackSetHandler(cloudFormation);
+        var stackSetHandler = new StackSetHandler(cloudFormation);
 
-        StackSetInstanceManager deploy = new StackSetInstanceManager(cloudFormation, stackSetHandler);
+        var deploy = new StackSetInstanceManager(cloudFormation, stackSetHandler);
 
         Handler.handler = new CustomResourceHandler<>(
             deploy::deployStackInstance,

@@ -7,8 +7,6 @@
 
 package test.pl.wrzasq.lambda.cform.stackset.instance;
 
-import java.lang.reflect.Field;
-
 import com.amazonaws.services.cloudformation.model.StackInstance;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.sunrun.cfnresponse.CfnRequest;
@@ -45,7 +43,7 @@ public class HandlerTest {
 
     @Test
     public void handle() {
-        CfnRequest<StackInstanceRequest> request = new CfnRequest<>();
+        var request = new CfnRequest<StackInstanceRequest>();
         request.setRequestType("Create");
         request.setResourceProperties(new StackInstanceRequest());
 
@@ -58,10 +56,9 @@ public class HandlerTest {
         CustomResourceHandler<StackInstanceRequest, StackInstance> sender
     )
         throws NoSuchFieldException, IllegalAccessException {
-        Field hack = Handler.class.getDeclaredField("handler");
+        var hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
-        CustomResourceHandler<StackInstanceRequest, StackInstance> original
-            = CustomResourceHandler.class.cast(hack.get(null));
+        var original = (CustomResourceHandler) hack.get(null);
         hack.set(null, sender);
         return original;
     }

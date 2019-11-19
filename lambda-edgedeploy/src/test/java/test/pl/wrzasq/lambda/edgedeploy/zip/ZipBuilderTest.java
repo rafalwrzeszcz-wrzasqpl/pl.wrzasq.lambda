@@ -9,9 +9,7 @@ package test.pl.wrzasq.lambda.edgedeploy.zip;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Scanner;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.junit.jupiter.api.Assertions;
@@ -21,14 +19,14 @@ import pl.wrzasq.lambda.edgedeploy.zip.ZipBuilder;
 public class ZipBuilderTest {
     @Test
     public void writeEntryFromBytes() throws IOException {
-        ZipBuilder zip = new ZipBuilder();
+        var zip = new ZipBuilder();
         zip.writeEntry("test.txt", new byte[]{'t', 'e', 's', 't'});
-        ByteBuffer buffer = zip.dump();
+        var buffer = zip.dump();
 
-        ZipInputStream stream = new ZipInputStream(new ByteArrayInputStream(buffer.array()));
-        ZipEntry entry = stream.getNextEntry();
+        var stream = new ZipInputStream(new ByteArrayInputStream(buffer.array()));
+        var entry = stream.getNextEntry();
 
-        Scanner scanner = new Scanner(stream);
+        var scanner = new Scanner(stream);
 
         Assertions.assertEquals(
             "test.txt",
@@ -44,14 +42,14 @@ public class ZipBuilderTest {
 
     @Test
     public void writeEntryFromStream() throws IOException {
-        ZipBuilder zip = new ZipBuilder();
+        var zip = new ZipBuilder();
         zip.writeEntry("test.txt", new ByteArrayInputStream(new byte[]{'t', 'e', 's', 't'}));
-        ByteBuffer buffer = zip.dump();
+        var buffer = zip.dump();
 
-        ZipInputStream stream = new ZipInputStream(new ByteArrayInputStream(buffer.array()));
-        ZipEntry entry = stream.getNextEntry();
+        var stream = new ZipInputStream(new ByteArrayInputStream(buffer.array()));
+        var entry = stream.getNextEntry();
 
-        Scanner scanner = new Scanner(stream);
+        var scanner = new Scanner(stream);
 
         Assertions.assertEquals(
             "test.txt",
@@ -67,17 +65,17 @@ public class ZipBuilderTest {
 
     @Test
     public void copyFrom() throws IOException {
-        ZipBuilder zip = new ZipBuilder();
+        var zip = new ZipBuilder();
         zip.writeEntry("test.txt", new ByteArrayInputStream(new byte[]{'t', 'e', 's', 't'}));
-        ByteBuffer buffer = zip.dump();
+        var buffer = zip.dump();
 
-        ZipBuilder destination = new ZipBuilder();
+        var destination = new ZipBuilder();
         destination.copyFrom(new ZipInputStream(new ByteArrayInputStream(buffer.array())));
 
-        ZipInputStream stream = new ZipInputStream(new ByteArrayInputStream(buffer.array()));
-        ZipEntry entry = stream.getNextEntry();
+        var stream = new ZipInputStream(new ByteArrayInputStream(buffer.array()));
+        var entry = stream.getNextEntry();
 
-        Scanner scanner = new Scanner(stream);
+        var scanner = new Scanner(stream);
 
         Assertions.assertEquals(
             "test.txt",

@@ -7,8 +7,6 @@
 
 package test.pl.wrzasq.lambda.cform.stackset;
 
-import java.lang.reflect.Field;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.sunrun.cfnresponse.CfnRequest;
 import org.junit.jupiter.api.AfterEach;
@@ -45,7 +43,7 @@ public class HandlerTest {
 
     @Test
     public void handle() {
-        CfnRequest<StackSetRequest> request = new CfnRequest<>();
+        var request = new CfnRequest<StackSetRequest>();
         request.setRequestType("Create");
         request.setResourceProperties(new StackSetRequest());
 
@@ -58,10 +56,9 @@ public class HandlerTest {
         CustomResourceHandler<StackSetRequest, StackSetResponse> sender
     )
         throws NoSuchFieldException, IllegalAccessException {
-        Field hack = Handler.class.getDeclaredField("handler");
+        var hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
-        CustomResourceHandler<StackSetRequest, StackSetResponse> original
-            = CustomResourceHandler.class.cast(hack.get(null));
+        var original = (CustomResourceHandler) hack.get(null);
         hack.set(null, sender);
         return original;
     }

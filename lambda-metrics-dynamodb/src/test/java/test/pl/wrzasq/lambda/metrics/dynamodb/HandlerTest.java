@@ -41,14 +41,14 @@ public class HandlerTest {
         // for code coverage
         new Handler();
 
-        String tableName = "test";
+        var tableName = "test";
 
-        Handler handler = new Handler(
+        var handler = new Handler(
             this.objectMapper,
             this.metricGenerator
         );
 
-        TableMetricRequest request = new TableMetricRequest();
+        var request = new TableMetricRequest();
         request.setTableName(tableName);
 
         Mockito
@@ -64,7 +64,7 @@ public class HandlerTest {
 
     @Test
     public void handleCloseOnError() throws IOException {
-        Handler handler = new Handler(
+        var handler = new Handler(
             this.objectMapper,
             this.metricGenerator
         );

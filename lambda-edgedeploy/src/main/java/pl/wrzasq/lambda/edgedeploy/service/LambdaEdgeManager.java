@@ -13,7 +13,6 @@ import java.util.zip.ZipInputStream;
 
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.model.CreateFunctionRequest;
-import com.amazonaws.services.lambda.model.CreateFunctionResult;
 import com.amazonaws.services.lambda.model.DeleteFunctionRequest;
 import com.amazonaws.services.lambda.model.FunctionCode;
 import com.amazonaws.services.lambda.model.PublishVersionRequest;
@@ -75,7 +74,7 @@ public class LambdaEdgeManager {
      * @return Data about published version.
      */
     public CustomResourceResponse<PublishVersionResult> create(EdgeDeployRequest input, String physicalResourceId) {
-        CreateFunctionResult result = this.lambda.createFunction(
+        var result = this.lambda.createFunction(
             new CreateFunctionRequest()
                 .withFunctionName(input.getFunctionName())
                 .withDescription(input.getFunctionDescription())
@@ -179,9 +178,9 @@ public class LambdaEdgeManager {
      * @return ZIP file buffer.
      */
     private ByteBuffer buildZipFile(EdgeDeployRequest input) {
-        ZipBuilder zip = new ZipBuilder();
+        var zip = new ZipBuilder();
         try (
-            ZipInputStream archive = new ZipInputStream(
+            var archive = new ZipInputStream(
                 this.s3.getObject(input.getPackageBucket(), input.getPackageKey()).getObjectContent()
             )
         ) {

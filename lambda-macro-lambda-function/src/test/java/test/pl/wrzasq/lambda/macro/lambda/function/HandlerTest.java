@@ -7,7 +7,6 @@
 
 package test.pl.wrzasq.lambda.macro.lambda.function;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -34,13 +33,13 @@ public class HandlerTest {
     @Test
     public void handle() throws NoSuchFieldException, IllegalAccessException {
         // for code coverage
-        Handler handler = new Handler();
-        Field hack = Handler.class.getDeclaredField("templateFactory");
+        var handler = new Handler();
+        var hack = Handler.class.getDeclaredField("templateFactory");
         hack.setAccessible(true);
         hack.set(handler, templateFactory);
 
-        Map<String, Object> source = new HashMap<>();
-        Map<String, Object> result = new HashMap<>();
+        var source = new HashMap<String, Object>();
+        var result = new HashMap<String, Object>();
 
         Mockito
             .when(this.templateFactory.apply(source))
@@ -52,7 +51,7 @@ public class HandlerTest {
 
         String requestId = "abc";
 
-        CloudFormationMacroResponse output = handler.handleRequest(
+        var output = handler.handleRequest(
             new CloudFormationMacroRequest(requestId, source),
             null
         );

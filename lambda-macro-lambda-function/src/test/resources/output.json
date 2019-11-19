@@ -27,7 +27,7 @@
         "EnhancedDefaultLambda": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
-                "Runtime": "java8",
+                "Runtime": "java11",
                 "Code": {
                     "S3Bucket": "RepositoryBucket",
                     "S3Key": "lambda-standalone.jar"

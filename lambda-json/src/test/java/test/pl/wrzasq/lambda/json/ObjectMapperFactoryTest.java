@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.wrzasq.lambda.json.ObjectMapperFactory;
@@ -19,11 +18,11 @@ import pl.wrzasq.lambda.json.ObjectMapperFactory;
 public class ObjectMapperFactoryTest {
     @Test
     public void handleJava8TimeApiSerialization() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();
+        var objectMapper = ObjectMapperFactory.createObjectMapper();
 
-        LocalDate date = LocalDate.of(2011, Month.JANUARY, 30);
+        var date = LocalDate.of(2011, Month.JANUARY, 30);
 
-        String json = objectMapper.writeValueAsString(date);
+        var json = objectMapper.writeValueAsString(date);
 
         Assertions.assertEquals(
             "\"2011-01-30\"",
@@ -34,9 +33,9 @@ public class ObjectMapperFactoryTest {
 
     @Test
     public void handleJava8TimeApiDeserialization() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();
+        var objectMapper = ObjectMapperFactory.createObjectMapper();
 
-        LocalDate date = objectMapper.readValue("\"2015-07-02\"", LocalDate.class);
+        var date = objectMapper.readValue("\"2015-07-02\"", LocalDate.class);
 
         Assertions.assertEquals(
             2015,
@@ -57,9 +56,9 @@ public class ObjectMapperFactoryTest {
 
     @Test
     public void handleUnknownProperties() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperFactory.createObjectMapper();
+        var objectMapper = ObjectMapperFactory.createObjectMapper();
 
-        ObjectMapperFactory pojo = objectMapper.readValue("{\"nonExisting\":12}", ObjectMapperFactory.class);
+        var pojo = objectMapper.readValue("{\"nonExisting\":12}", ObjectMapperFactory.class);
 
         // if there is no exception everything is fine
     }

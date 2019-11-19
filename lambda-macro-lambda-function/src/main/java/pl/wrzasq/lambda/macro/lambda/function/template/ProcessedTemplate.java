@@ -71,13 +71,13 @@ public class ProcessedTemplate {
      * @return Template state after processing.
      */
     private Map<String, Object> createResources(Map<String, Object> input) {
-        Map<String, Object> output = new HashMap<>(input);
+        var output = new HashMap<>(input);
 
         // re-create resources section
-        Map<String, Object> section = ProcessedTemplate.asMap(input.get(ProcessedTemplate.SECTION_RESOURCES));
-        Map<String, Object> resources = new HashMap<>();
-        for (Map.Entry<String, Object> entry : section.entrySet()) {
-            ResourcesDefinition definition = ProcessedTemplate.objectMapper.convertValue(
+        var section = ProcessedTemplate.asMap(input.get(ProcessedTemplate.SECTION_RESOURCES));
+        var resources = new HashMap<>();
+        for (var entry : section.entrySet()) {
+            var definition = ProcessedTemplate.objectMapper.convertValue(
                 entry.getValue(),
                 ResourcesDefinition.class
             );
@@ -105,7 +105,7 @@ public class ProcessedTemplate {
     private Map<String, Object> createResource(String key, Map<String, Object> properties) {
         ProcessedTemplate.logger.info("Creating resources for {}.", key);
 
-        LambdaFunctionResource resource = new LambdaFunctionResource(key);
+        var resource = new LambdaFunctionResource(key);
         this.resources.put(key, resource);
         return resource.buildDefinitions(properties);
     }
@@ -117,9 +117,9 @@ public class ProcessedTemplate {
      * @return Template state after processing.
      */
     private Map<String, Object> replaceReferences(Map<String, Object> input) {
-        Map<String, Object> output = new HashMap<>(input);
+        var output = new HashMap<>(input);
 
-        Map<String, Object> section = ProcessedTemplate.asMap(input.get(ProcessedTemplate.SECTION_RESOURCES));
+        var section = ProcessedTemplate.asMap(input.get(ProcessedTemplate.SECTION_RESOURCES));
         section = this.replaceDependencies(section);
 
         output.put(ProcessedTemplate.SECTION_RESOURCES, this.replaceDependencies(section));
@@ -134,14 +134,14 @@ public class ProcessedTemplate {
      * @return New clause value.
      */
     private Map<String, Object> replaceDependencies(Map<String, Object> resources) {
-        Map<String, Object> output = new HashMap<>();
+        var output = new HashMap<String, Object>();
 
-        for (Map.Entry<String, Object> resource : resources.entrySet()) {
-            String logicalId = resource.getKey();
-            Map<String, Object> config = ProcessedTemplate.asMap(resource.getValue());
+        for (var resource : resources.entrySet()) {
+            var logicalId = resource.getKey();
+            var config = ProcessedTemplate.asMap(resource.getValue());
 
             if (config.containsKey(ProcessedTemplate.CLAUSE_DEPENDS_ON)) {
-                Object dependsOn = config.get(ProcessedTemplate.CLAUSE_DEPENDS_ON);
+                var dependsOn = config.get(ProcessedTemplate.CLAUSE_DEPENDS_ON);
                 config.put(ProcessedTemplate.CLAUSE_DEPENDS_ON, this.replaceDependenciesIn(dependsOn));
             }
 
@@ -191,10 +191,10 @@ public class ProcessedTemplate {
      * @return Typed map.
      */
     private static Map<String, Object> asMap(Object value) {
-        Map<String, Object> output = new HashMap<>();
+        var output = new HashMap<String, Object>();
 
         if (value instanceof Map) {
-            for (Map.Entry<?, ?> entry : ((Map<?, ?>) value).entrySet()) {
+            for (var entry : ((Map<?, ?>) value).entrySet()) {
                 output.put(entry.getKey().toString(), entry.getValue());
             }
         }

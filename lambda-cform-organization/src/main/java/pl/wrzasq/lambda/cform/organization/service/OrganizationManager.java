@@ -14,7 +14,6 @@ import com.amazonaws.services.organizations.model.DeleteOrganizationRequest;
 import com.amazonaws.services.organizations.model.DescribeOrganizationRequest;
 import com.amazonaws.services.organizations.model.ListRootsRequest;
 import com.amazonaws.services.organizations.model.Organization;
-import com.amazonaws.services.organizations.model.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
@@ -89,7 +88,7 @@ public class OrganizationManager {
             this.logger.info("Created new organization, ARN {}.", organization.getArn());
         }
 
-        Root root = this.organizations.listRoots(new ListRootsRequest()).getRoots().get(0);
+        var root = this.organizations.listRoots(new ListRootsRequest()).getRoots().get(0);
 
         OrganizationResponse organizationResponse = new OrganizationResponse();
         organizationResponse.setId(organization.getId());
@@ -107,7 +106,7 @@ public class OrganizationManager {
      * @return Empty response.
      */
     public CustomResourceResponse<OrganizationResponse> delete(OrganizationRequest input, String physicalResourceId) {
-        Organization organization = this.organizations.describeOrganization(
+        var organization = this.organizations.describeOrganization(
             new DescribeOrganizationRequest()
         )
             .getOrganization();

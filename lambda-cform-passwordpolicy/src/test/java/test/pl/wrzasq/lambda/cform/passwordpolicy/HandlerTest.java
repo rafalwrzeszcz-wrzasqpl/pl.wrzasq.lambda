@@ -7,8 +7,6 @@
 
 package test.pl.wrzasq.lambda.cform.passwordpolicy;
 
-import java.lang.reflect.Field;
-
 import com.amazonaws.services.identitymanagement.model.UpdateAccountPasswordPolicyRequest;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.sunrun.cfnresponse.CfnRequest;
@@ -45,7 +43,7 @@ public class HandlerTest {
 
     @Test
     public void handle() {
-        CfnRequest<UpdateAccountPasswordPolicyRequest> request = new CfnRequest<>();
+        var request = new CfnRequest<UpdateAccountPasswordPolicyRequest>();
         request.setRequestType("Create");
         request.setResourceProperties(new UpdateAccountPasswordPolicyRequest());
 
@@ -58,10 +56,9 @@ public class HandlerTest {
         CustomResourceHandler<UpdateAccountPasswordPolicyRequest, UpdateAccountPasswordPolicyRequest> sender
     )
         throws NoSuchFieldException, IllegalAccessException {
-        Field hack = Handler.class.getDeclaredField("handler");
+        var hack = Handler.class.getDeclaredField("handler");
         hack.setAccessible(true);
-        CustomResourceHandler<UpdateAccountPasswordPolicyRequest, UpdateAccountPasswordPolicyRequest> original
-            = CustomResourceHandler.class.cast(hack.get(null));
+        var original = (CustomResourceHandler) hack.get(null);
         hack.set(null, sender);
         return original;
     }

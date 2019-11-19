@@ -31,10 +31,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.commons.aws.cloudformation.StackSetHandler;
 import pl.wrzasq.lambda.cform.stackset.model.StackSetRequest;
-import pl.wrzasq.lambda.cform.stackset.model.StackSetResponse;
 import pl.wrzasq.lambda.cform.stackset.service.StackSetManager;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,13 +93,13 @@ public class StackSetManagerTest {
 
     @Test
     public void deployStackSet() {
-        StackSet stackSet = new StackSet()
+        var stackSet = new StackSet()
             .withStackSetName(StackSetManagerTest.STACK_SET_NAME)
             .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
             .withStackSetARN(StackSetManagerTest.STACK_SET_ARN);
-        String operationId = "foobar";
+        var operationId = "foobar";
 
-        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
+        var manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -116,7 +114,7 @@ public class StackSetManagerTest {
                     .withOperationId(operationId)
             );
 
-        CustomResourceResponse<StackSetResponse> result = manager.deployStackSet(
+        var result = manager.deployStackSet(
             StackSetManagerTest.createStackSetRequest(),
             StackSetManagerTest.STACK_SET_ID_1
         );
@@ -151,7 +149,7 @@ public class StackSetManagerTest {
             "StackSetManager.deployStackSet() should request information of stack set with specified name."
         );
 
-        UpdateStackSetRequest request = this.updateRequest.getValue();
+        var request = this.updateRequest.getValue();
         Assertions.assertEquals(
             StackSetManagerTest.STACK_SET_NAME,
             request.getStackSetName(),
@@ -220,14 +218,14 @@ public class StackSetManagerTest {
 
     @Test
     public void deployStackSetOutOfSync() {
-        String physicalResourceId = "another-id";
-        StackSet stackSet = new StackSet()
+        var physicalResourceId = "another-id";
+        var stackSet = new StackSet()
             .withStackSetName(StackSetManagerTest.STACK_SET_NAME)
             .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
             .withStackSetARN(StackSetManagerTest.STACK_SET_ARN);
-        String operationId = "foobar";
+        var operationId = "foobar";
 
-        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
+        var manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -242,7 +240,7 @@ public class StackSetManagerTest {
                     .withOperationId(operationId)
             );
 
-        CustomResourceResponse<StackSetResponse> result = manager.deployStackSet(
+        var result = manager.deployStackSet(
             StackSetManagerTest.createStackSetRequest(),
             physicalResourceId
         );
@@ -264,7 +262,7 @@ public class StackSetManagerTest {
 
     @Test
     public void deployStackSetNotExists() {
-        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
+        var manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -276,7 +274,7 @@ public class StackSetManagerTest {
                     .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
             );
 
-        CustomResourceResponse<StackSetResponse> result = manager.deployStackSet(
+        var result = manager.deployStackSet(
             StackSetManagerTest.createStackSetRequest(),
             null
         );
@@ -305,7 +303,7 @@ public class StackSetManagerTest {
             "StackSetManager.deployStackSet() should request information of stack set with specified name."
         );
 
-        CreateStackSetRequest request = this.createRequest.getValue();
+        var request = this.createRequest.getValue();
         Assertions.assertEquals(
             StackSetManagerTest.STACK_SET_NAME,
             request.getStackSetName(),
@@ -374,7 +372,7 @@ public class StackSetManagerTest {
 
     @Test
     public void deployStackSetNullParameters() {
-        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
+        var manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -386,13 +384,13 @@ public class StackSetManagerTest {
                     .withStackSetId(StackSetManagerTest.STACK_SET_ID_1)
             );
 
-        StackSetRequest input = StackSetManagerTest.createStackSetRequest();
+        var input = StackSetManagerTest.createStackSetRequest();
         input.setParameters(null);
         input.setTags(null);
 
         manager.deployStackSet(input, null);
 
-        CreateStackSetRequest request = this.createRequest.getValue();
+        var request = this.createRequest.getValue();
         Assertions.assertTrue(
             request.getParameters().isEmpty(),
             "StackSetManager.deployStackSet() should set empty mapping if no parameters were given."
@@ -405,7 +403,7 @@ public class StackSetManagerTest {
 
     @Test
     public void deleteStackSet() {
-        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
+        var manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -420,7 +418,7 @@ public class StackSetManagerTest {
             .when(this.cloudFormation.deleteStackSet(this.deleteRequest.capture()))
             .thenReturn(new DeleteStackSetResult());
 
-        StackSetRequest input = new StackSetRequest();
+        var input = new StackSetRequest();
         input.setStackSetName(StackSetManagerTest.STACK_SET_NAME);
         manager.deleteStackSet(input, StackSetManagerTest.STACK_SET_ID_1);
 
@@ -435,7 +433,7 @@ public class StackSetManagerTest {
 
     @Test
     public void deleteStackSetOutOfSync() {
-        StackSetManager manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
+        var manager = new StackSetManager(this.cloudFormation, this.stackSetHandler);
 
         Mockito
             .when(this.cloudFormation.describeStackSet(this.describeRequest.capture()))
@@ -447,7 +445,7 @@ public class StackSetManagerTest {
                     )
             );
 
-        StackSetRequest input = new StackSetRequest();
+        var input = new StackSetRequest();
         input.setStackSetName(StackSetManagerTest.STACK_SET_NAME);
 
         Assertions.assertThrows(
@@ -459,7 +457,7 @@ public class StackSetManagerTest {
     }
 
     private static StackSetRequest createStackSetRequest() {
-        StackSetRequest input = new StackSetRequest();
+        var input = new StackSetRequest();
         input.setStackSetName(StackSetManagerTest.STACK_SET_NAME);
         input.setDescription(StackSetManagerTest.STACK_SET_DESCRIPTION);
         input.setTemplateUrl(StackSetManagerTest.STACK_SET_TEMPLATE_URL);

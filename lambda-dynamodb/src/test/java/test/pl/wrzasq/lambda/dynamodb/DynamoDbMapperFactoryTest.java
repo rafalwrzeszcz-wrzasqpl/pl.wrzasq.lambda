@@ -7,8 +7,6 @@
 
 package test.pl.wrzasq.lambda.dynamodb;
 
-import java.lang.reflect.Field;
-
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -49,13 +47,13 @@ public class DynamoDbMapperFactoryTest {
         // just for code coverage
         new DynamoDbMapperFactory();
         DynamoDbMapperFactory.createEncryptionDynamoDbMapper(DynamoDbMapperFactoryTest.TABLE_NAME, "arn:aws:kms:foo");
-        DynamoDBMapper mapper = DynamoDbMapperFactory.createDynamoDbMapper(DynamoDbMapperFactoryTest.TABLE_NAME);
+        var mapper = DynamoDbMapperFactory.createDynamoDbMapper(DynamoDbMapperFactoryTest.TABLE_NAME);
 
-        Field hack = DynamoDBMapper.class.getDeclaredField("db");
+        var hack = DynamoDBMapper.class.getDeclaredField("db");
         hack.setAccessible(true);
         hack.set(mapper, this.dynamoDb);
 
-        Document model = new Document();
+        var model = new Document();
         model.setName("test");
 
         mapper.save(model);

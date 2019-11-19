@@ -29,7 +29,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.commons.aws.cloudformation.StackSetHandler;
 import pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest;
 import pl.wrzasq.lambda.cform.stackset.instance.service.StackSetInstanceManager;
@@ -80,9 +79,9 @@ public class StackSetInstanceManagerTest {
 
     @Test
     public void deployStackInstance() {
-        StackInstance stackInstance = new StackInstance();
+        var stackInstance = new StackInstance();
 
-        StackSetInstanceManager manager = this.createStackSetInstanceManager();
+        var manager = this.createStackSetInstanceManager();
 
         Mockito
             .when(this.cloudFormation.describeStackInstance(this.describeRequest.capture()))
@@ -98,7 +97,7 @@ public class StackSetInstanceManagerTest {
                     .withOperationId(StackSetInstanceManagerTest.OPERATION_ID)
             );
 
-        CustomResourceResponse<StackInstance> result = manager.deployStackInstance(
+        var result = manager.deployStackInstance(
             StackSetInstanceManagerTest.createStackInstanceRequest(),
             null
         );
@@ -144,7 +143,7 @@ public class StackSetInstanceManagerTest {
             "StackSetInstanceManager.deployStackInstance() should request stack details in specified region."
         );
 
-        CreateStackInstancesRequest request = this.createRequest.getValue();
+        var request = this.createRequest.getValue();
         Assertions.assertEquals(
             StackSetInstanceManagerTest.STACK_SET_NAME,
             request.getStackSetName(),
@@ -190,9 +189,9 @@ public class StackSetInstanceManagerTest {
 
     @Test
     public void deployStackInstanceUpdate() {
-        StackInstance stackInstance = new StackInstance();
+        var stackInstance = new StackInstance();
 
-        StackSetInstanceManager manager = this.createStackSetInstanceManager();
+        var manager = this.createStackSetInstanceManager();
 
         Mockito
             .when(this.cloudFormation.describeStackInstance(this.describeRequest.capture()))
@@ -207,7 +206,7 @@ public class StackSetInstanceManagerTest {
                     .withOperationId(StackSetInstanceManagerTest.OPERATION_ID)
             );
 
-        CustomResourceResponse<StackInstance> result = manager.deployStackInstance(
+        var result = manager.deployStackInstance(
             StackSetInstanceManagerTest.createStackInstanceRequest(),
             null
         );
@@ -253,7 +252,7 @@ public class StackSetInstanceManagerTest {
             "StackSetInstanceManager.deployStackInstance() should request stack details in specified region."
         );
 
-        UpdateStackInstancesRequest request = this.updateRequest.getValue();
+        var request = this.updateRequest.getValue();
         Assertions.assertEquals(
             StackSetInstanceManagerTest.STACK_SET_NAME,
             request.getStackSetName(),
@@ -299,9 +298,9 @@ public class StackSetInstanceManagerTest {
 
     @Test
     public void deployStackSetInstanceNullParameters() {
-        StackInstance stackInstance = new StackInstance();
+        var stackInstance = new StackInstance();
 
-        StackSetInstanceManager manager = this.createStackSetInstanceManager();
+        var manager = this.createStackSetInstanceManager();
 
         Mockito
             .when(this.cloudFormation.describeStackInstance(this.describeRequest.capture()))
@@ -317,12 +316,12 @@ public class StackSetInstanceManagerTest {
                     .withOperationId(StackSetInstanceManagerTest.OPERATION_ID)
             );
 
-        StackInstanceRequest input = StackSetInstanceManagerTest.createStackInstanceRequest();
+        var input = StackSetInstanceManagerTest.createStackInstanceRequest();
         input.setParameterOverrides(null);
 
         manager.deployStackInstance(input, null);
 
-        CreateStackInstancesRequest request = this.createRequest.getValue();
+        var request = this.createRequest.getValue();
         Assertions.assertTrue(
             request.getParameterOverrides().isEmpty(),
             "StackSetInstanceManager.deployStackInstance() should set empty mapping if no parameters were given."
@@ -331,7 +330,7 @@ public class StackSetInstanceManagerTest {
 
     @Test
     public void deleteStackInstance() {
-        StackSetInstanceManager manager = this.createStackSetInstanceManager();
+        var manager = this.createStackSetInstanceManager();
 
         manager.deleteStackInstance(null, StackSetInstanceManagerTest.PHYSICAL_ID);
 
@@ -355,7 +354,7 @@ public class StackSetInstanceManagerTest {
     }
 
     private static StackInstanceRequest createStackInstanceRequest() {
-        StackInstanceRequest request = new StackInstanceRequest();
+        var request = new StackInstanceRequest();
         request.setStackSetName(StackSetInstanceManagerTest.STACK_SET_NAME);
         request.setAccountId(StackSetInstanceManagerTest.ACCOUNT_ID);
         request.setRegion(StackSetInstanceManagerTest.REGION);

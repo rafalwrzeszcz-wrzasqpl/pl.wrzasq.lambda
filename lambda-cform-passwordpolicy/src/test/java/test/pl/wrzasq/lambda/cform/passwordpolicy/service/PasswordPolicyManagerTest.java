@@ -17,7 +17,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
 import pl.wrzasq.lambda.cform.passwordpolicy.service.PasswordPolicyManager;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,11 +29,9 @@ public class PasswordPolicyManagerTest {
 
     @Test
     public void setPolicy() {
-        PasswordPolicyManager manager = new PasswordPolicyManager(this.iam);
-
-        UpdateAccountPasswordPolicyRequest input = new UpdateAccountPasswordPolicyRequest();
-
-        CustomResourceResponse<UpdateAccountPasswordPolicyRequest> result = manager.setPolicy(input, null);
+        var manager = new PasswordPolicyManager(this.iam);
+        var input = new UpdateAccountPasswordPolicyRequest();
+        var result = manager.setPolicy(input, null);
 
         Mockito.verify(this.iam).updateAccountPasswordPolicy(input);
 
@@ -47,13 +44,11 @@ public class PasswordPolicyManagerTest {
 
     @Test
     public void setPolicyUpdate() {
-        String physicalResourceId = "another-id";
+        var physicalResourceId = "another-id";
+        var manager = new PasswordPolicyManager(this.iam);
+        var input = new UpdateAccountPasswordPolicyRequest();
 
-        PasswordPolicyManager manager = new PasswordPolicyManager(this.iam);
-
-        UpdateAccountPasswordPolicyRequest input = new UpdateAccountPasswordPolicyRequest();
-
-        CustomResourceResponse<UpdateAccountPasswordPolicyRequest> result = manager.setPolicy(
+        var result = manager.setPolicy(
             input,
             physicalResourceId
         );
@@ -69,7 +64,7 @@ public class PasswordPolicyManagerTest {
 
     @Test
     public void delete() {
-        PasswordPolicyManager manager = new PasswordPolicyManager(this.iam);
+        var manager = new PasswordPolicyManager(this.iam);
 
         manager.delete(null, null);
 

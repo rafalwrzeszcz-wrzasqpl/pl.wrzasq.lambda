@@ -8,7 +8,6 @@
 package pl.wrzasq.lambda.cform.account;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.organizations.AWSOrganizations;
 import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.amazonaws.services.organizations.model.Account;
 import com.sunrun.cfnresponse.CfnRequest;
@@ -28,9 +27,9 @@ public class Handler {
     private static CustomResourceHandler<AccountRequest, Account> handler;
 
     static {
-        AWSOrganizations organizations = AWSOrganizationsClientBuilder.defaultClient();
+        var organizations = AWSOrganizationsClientBuilder.defaultClient();
 
-        AccountManager deploy = new AccountManager(organizations);
+        var deploy = new AccountManager(organizations);
 
         Handler.handler = new CustomResourceHandler<>(deploy::provision, deploy::provision, deploy::delete);
     }

@@ -12,18 +12,15 @@ import com.amazonaws.services.organizations.model.Account;
 import com.amazonaws.services.organizations.model.AccountNotFoundException;
 import com.amazonaws.services.organizations.model.CreateAccountRequest;
 import com.amazonaws.services.organizations.model.CreateAccountState;
-import com.amazonaws.services.organizations.model.CreateAccountStatus;
 import com.amazonaws.services.organizations.model.DescribeAccountRequest;
 import com.amazonaws.services.organizations.model.DescribeCreateAccountStatusRequest;
 import com.amazonaws.services.organizations.model.DescribeHandshakeRequest;
-import com.amazonaws.services.organizations.model.Handshake;
 import com.amazonaws.services.organizations.model.HandshakeParty;
 import com.amazonaws.services.organizations.model.HandshakePartyType;
 import com.amazonaws.services.organizations.model.HandshakeState;
 import com.amazonaws.services.organizations.model.InviteAccountToOrganizationRequest;
 import com.amazonaws.services.organizations.model.ListParentsRequest;
 import com.amazonaws.services.organizations.model.MoveAccountRequest;
-import com.amazonaws.services.organizations.model.Parent;
 import com.amazonaws.services.organizations.model.RemoveAccountFromOrganizationRequest;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -83,7 +80,7 @@ public class AccountManager {
         }
 
         // check current location in organization structure
-        Parent parent = this.organizations.listParents(
+        var parent = this.organizations.listParents(
             new ListParentsRequest()
                 .withChildId(physicalResourceId)
         )
@@ -100,7 +97,7 @@ public class AccountManager {
             );
         }
 
-        Account account = this.organizations.describeAccount(
+        var account = this.organizations.describeAccount(
             new DescribeAccountRequest()
                 .withAccountId(physicalResourceId)
         )
@@ -152,7 +149,7 @@ public class AccountManager {
      * @return Account ID.
      */
     private String createAccount(String email, String name, String roleName) {
-        CreateAccountStatus status = this.organizations.createAccount(
+        var status = this.organizations.createAccount(
             new CreateAccountRequest()
                 .withEmail(email)
                 .withAccountName(name)
@@ -197,7 +194,7 @@ public class AccountManager {
      * @return Account ID.
      */
     private String inviteAccount(String accountId) {
-        Handshake handshake = this.organizations.inviteAccountToOrganization(
+        var handshake = this.organizations.inviteAccountToOrganization(
             new InviteAccountToOrganizationRequest()
                 .withTarget(
                     new HandshakeParty()
@@ -242,7 +239,7 @@ public class AccountManager {
      */
     private String resolveExistingAccount(String accountId, AccountRequest input) {
         try {
-            Account account = this.organizations.describeAccount(
+            var account = this.organizations.describeAccount(
                 new DescribeAccountRequest()
                     .withAccountId(accountId)
             )

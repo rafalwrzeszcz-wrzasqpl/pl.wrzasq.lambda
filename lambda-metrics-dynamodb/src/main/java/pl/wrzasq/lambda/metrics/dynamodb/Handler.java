@@ -25,7 +25,7 @@ import pl.wrzasq.lambda.metrics.dynamodb.service.CloudWatchDynamoDbMetricGenerat
  * <p>Required environment variables:</p>
  *
  * <dl>
- *     <dt><tt>METRICS_NAMESPACE</tt></dt>
+ *     <dt><code>METRICS_NAMESPACE</code></dt>
  *     <dd>Namespace to use for CloudWatch metrics.</dd>
  * </dl>
  *
@@ -70,12 +70,10 @@ public class Handler {
      * @throws IOException When JSON loading/dumping fails.
      */
     public void handle(InputStream inputStream, OutputStream outputStream) throws IOException {
-        try {
-            TableMetricRequest request = this.objectMapper.readValue(inputStream, TableMetricRequest.class);
+        try (outputStream) {
+            var request = this.objectMapper.readValue(inputStream, TableMetricRequest.class);
 
             this.metricGenerator.generateMetrics(request.getTableName());
-        } finally {
-            outputStream.close();
         }
     }
 }

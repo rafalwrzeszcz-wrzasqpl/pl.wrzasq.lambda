@@ -74,7 +74,7 @@ public class StackSetInstanceManager {
 
         this.stackSetHandler.waitForStackSetOperation(input.getStackSetName(), operationId);
 
-        StackInstance stackInstance = this.cloudFormation.describeStackInstance(
+        var stackInstance = this.cloudFormation.describeStackInstance(
             new DescribeStackInstanceRequest()
                 .withStackSetName(input.getStackSetName())
                 .withStackInstanceAccount(input.getAccountId())
@@ -96,7 +96,7 @@ public class StackSetInstanceManager {
         StackInstanceRequest input,
         String physicalResourceId
     ) {
-        StackInstanceRequest spec = StackSetInstanceManager.parsePhysicalResourceId(physicalResourceId);
+        var spec = StackSetInstanceManager.parsePhysicalResourceId(physicalResourceId);
 
         this.cloudFormation.deleteStackInstances(
             new DeleteStackInstancesRequest()
@@ -141,7 +141,7 @@ public class StackSetInstanceManager {
      * @return Stack set operation ID.
      */
     private String updateStackInstance(StackInstanceRequest input) {
-        StackInstance stackInstance = this.cloudFormation.describeStackInstance(
+        var stackInstance = this.cloudFormation.describeStackInstance(
             new DescribeStackInstanceRequest()
                 .withStackSetName(input.getStackSetName())
                 .withStackInstanceAccount(input.getAccountId())
@@ -191,8 +191,8 @@ public class StackSetInstanceManager {
      * @return Stack instance request specification.
      */
     private static StackInstanceRequest parsePhysicalResourceId(String physicalResourceId) {
-        String[] parts = physicalResourceId.split(":");
-        StackInstanceRequest request = new StackInstanceRequest();
+        var parts = physicalResourceId.split(":");
+        var request = new StackInstanceRequest();
         request.setStackSetName(parts[0]);
         request.setAccountId(parts[1]);
         request.setRegion(parts[2]);

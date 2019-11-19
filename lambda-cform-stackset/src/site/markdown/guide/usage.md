@@ -139,7 +139,7 @@ Name of created stack set. It's the same as name passed to it. But in future nam
     StackSetManager:
         Type: "AWS::Lambda::Function"
         Properties:
-            Runtime: "java8"
+            Runtime: "java11"
             Code:
                 # put your source bucket
                 S3Bucket: "your-bucket"

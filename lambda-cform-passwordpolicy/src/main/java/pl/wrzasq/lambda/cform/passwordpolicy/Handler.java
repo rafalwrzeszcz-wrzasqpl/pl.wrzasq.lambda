@@ -7,7 +7,6 @@
 
 package pl.wrzasq.lambda.cform.passwordpolicy;
 
-import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagementClientBuilder;
 import com.amazonaws.services.identitymanagement.model.UpdateAccountPasswordPolicyRequest;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -28,9 +27,9 @@ public class Handler {
         CustomResourceHandler<UpdateAccountPasswordPolicyRequest, UpdateAccountPasswordPolicyRequest> handler;
 
     static {
-        AmazonIdentityManagement iam = AmazonIdentityManagementClientBuilder.defaultClient();
+        var iam = AmazonIdentityManagementClientBuilder.defaultClient();
 
-        PasswordPolicyManager deploy = new PasswordPolicyManager(iam);
+        var deploy = new PasswordPolicyManager(iam);
 
         Handler.handler = new CustomResourceHandler<>(deploy::setPolicy, deploy::setPolicy, deploy::delete);
     }

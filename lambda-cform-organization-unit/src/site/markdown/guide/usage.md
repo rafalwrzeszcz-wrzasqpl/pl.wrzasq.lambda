@@ -83,7 +83,7 @@ object.
     OrganizationUnitManager:
         Type: "AWS::Lambda::Function"
         Properties:
-            Runtime: "java8"
+            Runtime: "java11"
             Code:
                 # put your source bucket
                 S3Bucket: "your-bucket"
