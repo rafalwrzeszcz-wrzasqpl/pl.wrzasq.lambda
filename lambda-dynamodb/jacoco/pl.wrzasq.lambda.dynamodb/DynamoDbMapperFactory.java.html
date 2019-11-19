@@ -7,21 +7,18 @@
 
 package pl.wrzasq.lambda.dynamodb;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.AttributeEncryptor;
 import com.amazonaws.services.dynamodbv2.datamodeling.AttributeTransformer;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.encryption.providers.DirectKmsMaterialProvider;
-import com.amazonaws.services.dynamodbv2.datamodeling.encryption.providers.EncryptionMaterialsProvider;
-import com.amazonaws.services.kms.AWSKMS;
 import com.amazonaws.services.kms.AWSKMSClientBuilder;
 
 /**
  * Default Jackson ObjectMapper provider.
  */
-<span class="fc" id="L24">public class DynamoDbMapperFactory {</span>
+<span class="fc" id="L21">public class DynamoDbMapperFactory {</span>
     /**
      * Creates DynamoDB mapper with encryption handling.
      *
@@ -30,11 +27,11 @@ import com.amazonaws.services.kms.AWSKMSClientBuilder;
      * @return DynamoDB mapping client.
      */
     public static DynamoDBMapper createEncryptionDynamoDbMapper(String tableName, String keyId) {
-<span class="fc" id="L33">        AWSKMS kms = AWSKMSClientBuilder.standard()</span>
-<span class="fc" id="L34">            .build();</span>
-<span class="fc" id="L35">        EncryptionMaterialsProvider encryptionMaterialsProvider = new DirectKmsMaterialProvider(kms, keyId);</span>
+<span class="fc" id="L30">        var kms = AWSKMSClientBuilder.standard()</span>
+<span class="fc" id="L31">            .build();</span>
+<span class="fc" id="L32">        var encryptionMaterialsProvider = new DirectKmsMaterialProvider(kms, keyId);</span>
 
-<span class="fc" id="L37">        return DynamoDbMapperFactory.createDynamoDbMapper(</span>
+<span class="fc" id="L34">        return DynamoDbMapperFactory.createDynamoDbMapper(</span>
             tableName,
             new AttributeEncryptor(encryptionMaterialsProvider)
         );
@@ -47,7 +44,7 @@ import com.amazonaws.services.kms.AWSKMSClientBuilder;
      * @return DynamoDB mapping client.
      */
     public static DynamoDBMapper createDynamoDbMapper(String tableName) {
-<span class="fc" id="L50">        return DynamoDbMapperFactory.createDynamoDbMapper(tableName, null);</span>
+<span class="fc" id="L47">        return DynamoDbMapperFactory.createDynamoDbMapper(tableName, null);</span>
     }
 
     /**
@@ -58,12 +55,12 @@ import com.amazonaws.services.kms.AWSKMSClientBuilder;
      * @return DynamoDB mapping client.
      */
     private static DynamoDBMapper createDynamoDbMapper(String tableName, AttributeTransformer attributeTransformer) {
-<span class="fc" id="L61">        AmazonDynamoDB dynamoDb = AmazonDynamoDBClientBuilder.standard().build();</span>
-<span class="fc" id="L62">        DynamoDBMapperConfig mapperConfig = DynamoDBMapperConfig.builder()</span>
-<span class="fc" id="L63">            .withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(tableName))</span>
-<span class="fc" id="L64">            .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.PUT)</span>
-<span class="fc" id="L65">            .build();</span>
-<span class="fc" id="L66">        return new DynamoDBMapper(dynamoDb, mapperConfig, attributeTransformer);</span>
+<span class="fc" id="L58">        var dynamoDb = AmazonDynamoDBClientBuilder.standard().build();</span>
+<span class="fc" id="L59">        var mapperConfig = DynamoDBMapperConfig.builder()</span>
+<span class="fc" id="L60">            .withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(tableName))</span>
+<span class="fc" id="L61">            .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.PUT)</span>
+<span class="fc" id="L62">            .build();</span>
+<span class="fc" id="L63">        return new DynamoDBMapper(dynamoDb, mapperConfig, attributeTransformer);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
