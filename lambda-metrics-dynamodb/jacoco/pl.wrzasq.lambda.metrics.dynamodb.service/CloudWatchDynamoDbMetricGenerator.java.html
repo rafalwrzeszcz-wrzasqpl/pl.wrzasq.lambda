@@ -13,7 +13,6 @@ import com.amazonaws.services.cloudwatch.model.MetricDatum;
 import com.amazonaws.services.cloudwatch.model.PutMetricDataRequest;
 import com.amazonaws.services.cloudwatch.model.StandardUnit;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,7 @@ public class CloudWatchDynamoDbMetricGenerator {
     /**
      * Logger.
      */
-<span class="fc" id="L27">    private Logger logger = LoggerFactory.getLogger(CloudWatchDynamoDbMetricGenerator.class);</span>
+<span class="fc" id="L26">    private Logger logger = LoggerFactory.getLogger(CloudWatchDynamoDbMetricGenerator.class);</span>
 
     /**
      * AWS DynamoDB client.
@@ -48,11 +47,11 @@ public class CloudWatchDynamoDbMetricGenerator {
      * @param cloudWatch CloudWatch client.
      * @param namespace Metrics namespace.
      */
-<span class="fc" id="L51">    public CloudWatchDynamoDbMetricGenerator(AmazonDynamoDB dynamoDb, AmazonCloudWatch cloudWatch, String namespace) {</span>
-<span class="fc" id="L52">        this.dynamoDb = dynamoDb;</span>
-<span class="fc" id="L53">        this.cloudWatch = cloudWatch;</span>
-<span class="fc" id="L54">        this.namespace = namespace;</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L50">    public CloudWatchDynamoDbMetricGenerator(AmazonDynamoDB dynamoDb, AmazonCloudWatch cloudWatch, String namespace) {</span>
+<span class="fc" id="L51">        this.dynamoDb = dynamoDb;</span>
+<span class="fc" id="L52">        this.cloudWatch = cloudWatch;</span>
+<span class="fc" id="L53">        this.namespace = namespace;</span>
+<span class="fc" id="L54">    }</span>
 
     /**
      * Table metrics generator.
@@ -60,13 +59,13 @@ public class CloudWatchDynamoDbMetricGenerator {
      * @param tableName Table name.
      */
     public void generateMetrics(String tableName) {
-<span class="fc" id="L63">        this.logger.info(&quot;Generating metrics for table: {}.&quot;, tableName);</span>
+<span class="fc" id="L62">        this.logger.info(&quot;Generating metrics for table: {}.&quot;, tableName);</span>
 
-<span class="fc" id="L65">        TableDescription table = this.dynamoDb.describeTable(tableName).getTable();</span>
+<span class="fc" id="L64">        var table = this.dynamoDb.describeTable(tableName).getTable();</span>
 
-<span class="fc" id="L67">        this.putSingleMetric(tableName, &quot;ItemCount&quot;, table.getItemCount(), StandardUnit.None);</span>
-<span class="fc" id="L68">        this.putSingleMetric(tableName, &quot;TableSizeBytes&quot;, table.getTableSizeBytes(), StandardUnit.Bytes);</span>
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L66">        this.putSingleMetric(tableName, &quot;ItemCount&quot;, table.getItemCount(), StandardUnit.None);</span>
+<span class="fc" id="L67">        this.putSingleMetric(tableName, &quot;TableSizeBytes&quot;, table.getTableSizeBytes(), StandardUnit.Bytes);</span>
+<span class="fc" id="L68">    }</span>
 
     /**
      * Saves single metric value in CloudWatch.
@@ -77,21 +76,21 @@ public class CloudWatchDynamoDbMetricGenerator {
      * @param unit Metric unit.
      */
     private void putSingleMetric(String tableName, String metricName, double value, StandardUnit unit) {
-<span class="fc" id="L80">        this.cloudWatch.putMetricData(</span>
+<span class="fc" id="L79">        this.cloudWatch.putMetricData(</span>
             new PutMetricDataRequest()
-<span class="fc" id="L82">                .withNamespace(this.namespace)</span>
-<span class="fc" id="L83">                .withMetricData(</span>
+<span class="fc" id="L81">                .withNamespace(this.namespace)</span>
+<span class="fc" id="L82">                .withMetricData(</span>
                     new MetricDatum()
-<span class="fc" id="L85">                        .withMetricName(metricName)</span>
-<span class="fc" id="L86">                        .withValue(value)</span>
-<span class="fc" id="L87">                        .withUnit(unit)</span>
-<span class="fc" id="L88">                        .withDimensions(</span>
+<span class="fc" id="L84">                        .withMetricName(metricName)</span>
+<span class="fc" id="L85">                        .withValue(value)</span>
+<span class="fc" id="L86">                        .withUnit(unit)</span>
+<span class="fc" id="L87">                        .withDimensions(</span>
                             new Dimension()
-<span class="fc" id="L90">                                .withName(&quot;TableName&quot;)</span>
-<span class="fc" id="L91">                                .withValue(tableName)</span>
+<span class="fc" id="L89">                                .withName(&quot;TableName&quot;)</span>
+<span class="fc" id="L90">                                .withValue(tableName)</span>
                         )
                 )
         );
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L94">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

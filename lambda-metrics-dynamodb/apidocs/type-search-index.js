@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"pl.wrzasq.lambda.metrics.dynamodb.service","l":"CloudWatchDynamoDbMetricGenerator"},{"p":"pl.wrzasq.lambda.metrics.dynamodb","l":"Handler"},{"p":"pl.wrzasq.lambda.metrics.dynamodb.model","l":"TableMetricRequest"}]
