@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"pl.wrzasq.lambda.json","l":"ObjectMapperFactory"}]
