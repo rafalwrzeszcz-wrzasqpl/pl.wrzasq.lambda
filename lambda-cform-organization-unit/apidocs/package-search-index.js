@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"pl.wrzasq.lambda.cform.organization.unit"},{"l":"pl.wrzasq.lambda.cform.organization.unit.model"},{"l":"pl.wrzasq.lambda.cform.organization.unit.service"}]

@@ -13,7 +13,6 @@ import com.amazonaws.services.organizations.model.CreateOrganizationalUnitReques
 import com.amazonaws.services.organizations.model.DeleteOrganizationalUnitRequest;
 import com.amazonaws.services.organizations.model.ListParentsRequest;
 import com.amazonaws.services.organizations.model.OrganizationalUnit;
-import com.amazonaws.services.organizations.model.Parent;
 import com.amazonaws.services.organizations.model.UpdateOrganizationalUnitRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ public class OrganizationUnitManager {
     /**
      * Logger.
      */
-<span class="fc" id="L30">    private Logger logger = LoggerFactory.getLogger(OrganizationUnitManager.class);</span>
+<span class="fc" id="L29">    private Logger logger = LoggerFactory.getLogger(OrganizationUnitManager.class);</span>
 
     /**
      * AWS Organizations API client.
@@ -39,9 +38,9 @@ public class OrganizationUnitManager {
      *
      * @param organizations AWS Organizations client.
      */
-<span class="fc" id="L42">    public OrganizationUnitManager(AWSOrganizations organizations) {</span>
-<span class="fc" id="L43">        this.organizations = organizations;</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L41">    public OrganizationUnitManager(AWSOrganizations organizations) {</span>
+<span class="fc" id="L42">        this.organizations = organizations;</span>
+<span class="fc" id="L43">    }</span>
 
     /**
      * Handles organization creation.
@@ -52,51 +51,51 @@ public class OrganizationUnitManager {
      */
     public CustomResourceResponse&lt;OrganizationalUnit&gt; sync(OrganizationUnitRequest input, String physicalResourceId) {
         // check if the parent ID got changed
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (physicalResourceId != null) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (physicalResourceId != null) {</span>
             try {
-<span class="fc" id="L57">                Parent parent = this.organizations.listParents(</span>
+<span class="fc" id="L56">                var parent = this.organizations.listParents(</span>
                     new ListParentsRequest()
-<span class="fc" id="L59">                        .withChildId(physicalResourceId)</span>
+<span class="fc" id="L58">                        .withChildId(physicalResourceId)</span>
                 )
-<span class="fc" id="L61">                    .getParents()</span>
-<span class="fc" id="L62">                    .get(0);</span>
+<span class="fc" id="L60">                    .getParents()</span>
+<span class="fc" id="L61">                    .get(0);</span>
 
                 // organizational unit can only be renamed, change of parent will require creation of new unit
-<span class="fc bfc" id="L65" title="All 2 branches covered.">                if (!input.getParentId().equals(parent.getId())) {</span>
-<span class="fc" id="L66">                    this.logger.info(</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">                if (!input.getParentId().equals(parent.getId())) {</span>
+<span class="fc" id="L65">                    this.logger.info(</span>
                         &quot;Organizational Unit with ID {} was requested to be placed in a different parent.&quot;
                             + &quot; This will cause it to be re-created.&quot;
                             + &quot; Old parent ID: {}, new parent ID: {}.&quot;,
                         physicalResourceId,
-<span class="fc" id="L71">                        parent.getId(),</span>
-<span class="fc" id="L72">                        input.getParentId()</span>
+<span class="fc" id="L70">                        parent.getId(),</span>
+<span class="fc" id="L71">                        input.getParentId()</span>
                     );
 
-<span class="fc" id="L75">                    physicalResourceId = null;</span>
+<span class="fc" id="L74">                    physicalResourceId = null;</span>
                 }
-<span class="fc" id="L77">            } catch (ChildNotFoundException error) {</span>
+<span class="fc" id="L76">            } catch (ChildNotFoundException error) {</span>
                 // it's fine, we will just create new one
-<span class="fc" id="L79">                this.logger.warn(&quot;Organizational Unit with ID {} not found, creating new one.&quot;, physicalResourceId);</span>
+<span class="fc" id="L78">                this.logger.warn(&quot;Organizational Unit with ID {} not found, creating new one.&quot;, physicalResourceId);</span>
 
-<span class="fc" id="L81">                physicalResourceId = null;</span>
-<span class="fc" id="L82">            }</span>
+<span class="fc" id="L80">                physicalResourceId = null;</span>
+<span class="fc" id="L81">            }</span>
         }
 
-<span class="fc bfc" id="L85" title="All 2 branches covered.">        OrganizationalUnit unit = physicalResourceId == null</span>
-<span class="fc" id="L86">            ? this.organizations.createOrganizationalUnit(</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        var unit = physicalResourceId == null</span>
+<span class="fc" id="L85">            ? this.organizations.createOrganizationalUnit(</span>
                 new CreateOrganizationalUnitRequest()
-<span class="fc" id="L88">                    .withName(input.getName())</span>
-<span class="fc" id="L89">                    .withParentId(input.getParentId())</span>
+<span class="fc" id="L87">                    .withName(input.getName())</span>
+<span class="fc" id="L88">                    .withParentId(input.getParentId())</span>
             )
-<span class="fc" id="L91">                .getOrganizationalUnit()</span>
-<span class="fc" id="L92">            : this.organizations.updateOrganizationalUnit(</span>
+<span class="fc" id="L90">                .getOrganizationalUnit()</span>
+<span class="fc" id="L91">            : this.organizations.updateOrganizationalUnit(</span>
                 new UpdateOrganizationalUnitRequest()
-<span class="fc" id="L94">                    .withOrganizationalUnitId(physicalResourceId)</span>
-<span class="fc" id="L95">                    .withName(input.getName())</span>
+<span class="fc" id="L93">                    .withOrganizationalUnitId(physicalResourceId)</span>
+<span class="fc" id="L94">                    .withName(input.getName())</span>
             )
-<span class="fc" id="L97">                .getOrganizationalUnit();</span>
+<span class="fc" id="L96">                .getOrganizationalUnit();</span>
 
-<span class="fc" id="L99">        return new CustomResourceResponse&lt;&gt;(unit, unit.getId());</span>
+<span class="fc" id="L98">        return new CustomResourceResponse&lt;&gt;(unit, unit.getId());</span>
     }
 
     /**
@@ -107,14 +106,14 @@ public class OrganizationUnitManager {
      * @return Empty response.
      */
     public CustomResourceResponse&lt;OrganizationalUnit&gt; delete(OrganizationUnitRequest input, String physicalResourceId) {
-<span class="fc" id="L110">        this.organizations.deleteOrganizationalUnit(</span>
+<span class="fc" id="L109">        this.organizations.deleteOrganizationalUnit(</span>
             new DeleteOrganizationalUnitRequest()
-<span class="fc" id="L112">                .withOrganizationalUnitId(physicalResourceId)</span>
+<span class="fc" id="L111">                .withOrganizationalUnitId(physicalResourceId)</span>
         );
 
-<span class="fc" id="L115">        this.logger.info(&quot;Organizational unit {} deleted.&quot;, physicalResourceId);</span>
+<span class="fc" id="L114">        this.logger.info(&quot;Organizational unit {} deleted.&quot;, physicalResourceId);</span>
 
-<span class="fc" id="L117">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
+<span class="fc" id="L116">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
