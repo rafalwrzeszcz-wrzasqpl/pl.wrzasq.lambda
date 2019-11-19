@@ -14,7 +14,6 @@ import com.amazonaws.services.organizations.model.DeleteOrganizationRequest;
 import com.amazonaws.services.organizations.model.DescribeOrganizationRequest;
 import com.amazonaws.services.organizations.model.ListRootsRequest;
 import com.amazonaws.services.organizations.model.Organization;
-import com.amazonaws.services.organizations.model.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
@@ -34,7 +33,7 @@ public class OrganizationManager {
     /**
      * Logger.
      */
-<span class="fc" id="L37">    private Logger logger = LoggerFactory.getLogger(OrganizationManager.class);</span>
+<span class="fc" id="L36">    private Logger logger = LoggerFactory.getLogger(OrganizationManager.class);</span>
 
     /**
      * AWS Organizations API client.
@@ -46,9 +45,9 @@ public class OrganizationManager {
      *
      * @param organizations AWS Organizations client.
      */
-<span class="fc" id="L49">    public OrganizationManager(AWSOrganizations organizations) {</span>
-<span class="fc" id="L50">        this.organizations = organizations;</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L48">    public OrganizationManager(AWSOrganizations organizations) {</span>
+<span class="fc" id="L49">        this.organizations = organizations;</span>
+<span class="fc" id="L50">    }</span>
 
     /**
      * Handles organization creation.
@@ -60,43 +59,43 @@ public class OrganizationManager {
     public CustomResourceResponse&lt;OrganizationResponse&gt; sync(OrganizationRequest input, String physicalResourceId) {
         Organization organization;
         try {
-<span class="fc" id="L63">            organization = this.organizations.describeOrganization(</span>
+<span class="fc" id="L62">            organization = this.organizations.describeOrganization(</span>
                 new DescribeOrganizationRequest()
             )
-<span class="fc" id="L66">                .getOrganization();</span>
+<span class="fc" id="L65">                .getOrganization();</span>
 
             // don't do anything here - in worst case it will fail in Delete call in UPDATE_COMPLETE_CLEANUP phase
             // it will not hurt us (even if fails, as it's post-update phase) and allows to simplify logic of this
             // method to avoid handling all combinations, which could lead to unhandled edge cases
-<span class="fc bfc" id="L71" title="All 2 branches covered.">            if (!organization.getId().equals(physicalResourceId)) {</span>
-<span class="fc" id="L72">                this.logger.warn(</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if (!organization.getId().equals(physicalResourceId)) {</span>
+<span class="fc" id="L71">                this.logger.warn(</span>
                     OrganizationManager.DRIFT_LOG_MESSAGE_PATTERN,
-<span class="fc" id="L74">                    organization.getId(),</span>
+<span class="fc" id="L73">                    organization.getId(),</span>
                     physicalResourceId
                 );
             }
 
-<span class="fc" id="L79">            this.logger.info(&quot;Organization already exists (ARN {}).&quot;, organization.getArn());</span>
-<span class="fc" id="L80">        } catch (SdkBaseException error) {</span>
-<span class="fc" id="L81">            this.logger.info(&quot;Exception occurred during organization data fetching, probably doesn't exist.&quot;, error);</span>
+<span class="fc" id="L78">            this.logger.info(&quot;Organization already exists (ARN {}).&quot;, organization.getArn());</span>
+<span class="fc" id="L79">        } catch (SdkBaseException error) {</span>
+<span class="fc" id="L80">            this.logger.info(&quot;Exception occurred during organization data fetching, probably doesn't exist.&quot;, error);</span>
 
-<span class="fc" id="L83">            organization = this.organizations.createOrganization(</span>
+<span class="fc" id="L82">            organization = this.organizations.createOrganization(</span>
                 new CreateOrganizationRequest()
-<span class="fc" id="L85">                    .withFeatureSet(input.getFeatureSet())</span>
+<span class="fc" id="L84">                    .withFeatureSet(input.getFeatureSet())</span>
             )
-<span class="fc" id="L87">                .getOrganization();</span>
+<span class="fc" id="L86">                .getOrganization();</span>
 
-<span class="fc" id="L89">            this.logger.info(&quot;Created new organization, ARN {}.&quot;, organization.getArn());</span>
-<span class="fc" id="L90">        }</span>
+<span class="fc" id="L88">            this.logger.info(&quot;Created new organization, ARN {}.&quot;, organization.getArn());</span>
+<span class="fc" id="L89">        }</span>
 
-<span class="fc" id="L92">        Root root = this.organizations.listRoots(new ListRootsRequest()).getRoots().get(0);</span>
+<span class="fc" id="L91">        var root = this.organizations.listRoots(new ListRootsRequest()).getRoots().get(0);</span>
 
-<span class="fc" id="L94">        OrganizationResponse organizationResponse = new OrganizationResponse();</span>
-<span class="fc" id="L95">        organizationResponse.setId(organization.getId());</span>
-<span class="fc" id="L96">        organizationResponse.setArn(organization.getArn());</span>
-<span class="fc" id="L97">        organizationResponse.setRootId(root.getId());</span>
+<span class="fc" id="L93">        OrganizationResponse organizationResponse = new OrganizationResponse();</span>
+<span class="fc" id="L94">        organizationResponse.setId(organization.getId());</span>
+<span class="fc" id="L95">        organizationResponse.setArn(organization.getArn());</span>
+<span class="fc" id="L96">        organizationResponse.setRootId(root.getId());</span>
 
-<span class="fc" id="L99">        return new CustomResourceResponse&lt;&gt;(organizationResponse, organization.getId());</span>
+<span class="fc" id="L98">        return new CustomResourceResponse&lt;&gt;(organizationResponse, organization.getId());</span>
     }
 
     /**
@@ -107,32 +106,32 @@ public class OrganizationManager {
      * @return Empty response.
      */
     public CustomResourceResponse&lt;OrganizationResponse&gt; delete(OrganizationRequest input, String physicalResourceId) {
-<span class="fc" id="L110">        Organization organization = this.organizations.describeOrganization(</span>
+<span class="fc" id="L109">        var organization = this.organizations.describeOrganization(</span>
             new DescribeOrganizationRequest()
         )
-<span class="fc" id="L113">            .getOrganization();</span>
+<span class="fc" id="L112">            .getOrganization();</span>
 
         // avoid removing unknown data
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (!organization.getId().equals(physicalResourceId)) {</span>
-<span class="fc" id="L117">            this.logger.error(</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!organization.getId().equals(physicalResourceId)) {</span>
+<span class="fc" id="L116">            this.logger.error(</span>
                 OrganizationManager.DRIFT_LOG_MESSAGE_PATTERN,
-<span class="fc" id="L119">                organization.getId(),</span>
+<span class="fc" id="L118">                organization.getId(),</span>
                 physicalResourceId
             );
-<span class="fc" id="L122">            throw new IllegalStateException(</span>
-<span class="fc" id="L123">                String.format(</span>
+<span class="fc" id="L121">            throw new IllegalStateException(</span>
+<span class="fc" id="L122">                String.format(</span>
                     &quot;Can not delete Organization - ID %s doesn't match CloudFormation-provided resource ID %s.&quot;,
-<span class="fc" id="L125">                    organization.getId(),</span>
+<span class="fc" id="L124">                    organization.getId(),</span>
                     physicalResourceId
                 )
             );
         }
 
-<span class="fc" id="L131">        this.organizations.deleteOrganization(new DeleteOrganizationRequest());</span>
+<span class="fc" id="L130">        this.organizations.deleteOrganization(new DeleteOrganizationRequest());</span>
 
-<span class="fc" id="L133">        this.logger.info(&quot;Organization deleted.&quot;);</span>
+<span class="fc" id="L132">        this.logger.info(&quot;Organization deleted.&quot;);</span>
 
-<span class="fc" id="L135">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
+<span class="fc" id="L134">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

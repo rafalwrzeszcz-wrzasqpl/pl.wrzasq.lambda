@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"pl.wrzasq.lambda.cform.organization","l":"Handler"},{"p":"pl.wrzasq.lambda.cform.organization.service","l":"OrganizationManager"},{"p":"pl.wrzasq.lambda.cform.organization.model","l":"OrganizationRequest"},{"p":"pl.wrzasq.lambda.cform.organization.model","l":"OrganizationResponse"}]
