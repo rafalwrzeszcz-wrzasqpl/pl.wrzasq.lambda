@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"pl.wrzasq.lambda.edgedeploy"},{"l":"pl.wrzasq.lambda.edgedeploy.model"},{"l":"pl.wrzasq.lambda.edgedeploy.service"},{"l":"pl.wrzasq.lambda.edgedeploy.zip"}]

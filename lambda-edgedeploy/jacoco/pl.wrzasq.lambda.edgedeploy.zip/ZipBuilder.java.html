@@ -69,7 +69,7 @@ import java.util.zip.ZipOutputStream;
 <span class="fc" id="L69">        this.writeEntry(</span>
             name,
             () -&gt; {
-<span class="fc" id="L72">                byte[] buffer = new byte[ZipBuilder.BUFFER_SIZE];</span>
+<span class="fc" id="L72">                var buffer = new byte[ZipBuilder.BUFFER_SIZE];</span>
                 int count;
 <span class="fc bfc" id="L74" title="All 2 branches covered.">                while ((count = stream.read(buffer)) &gt; 0) {</span>
 <span class="fc" id="L75">                    this.zip.write(buffer, 0, count);</span>
@@ -120,4 +120,4 @@ import java.util.zip.ZipOutputStream;
 <span class="fc" id="L120">        return ByteBuffer.wrap(this.output.toByteArray());</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
