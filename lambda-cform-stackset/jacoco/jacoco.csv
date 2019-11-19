@@ -1,3 +1,3 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-WrzasqPl CloudFormation StackSet handler,pl.wrzasq.lambda.cform.stackset,Handler,0,41,0,0,0,8,0,3,0,3
+WrzasqPl CloudFormation StackSet handler,pl.wrzasq.lambda.cform.stackset,Handler,0,41,0,0,0,11,0,3,0,3
 WrzasqPl CloudFormation StackSet handler,pl.wrzasq.lambda.cform.stackset.service,StackSetManager,0,252,0,4,0,67,0,12,0,10
