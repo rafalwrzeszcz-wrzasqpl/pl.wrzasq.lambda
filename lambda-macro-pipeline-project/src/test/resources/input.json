@@ -1,0 +1,106 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Template description",
+    "Parameters": {
+        "ServiceName": {
+            "Type": "String",
+            "Default": "pl.wrzasq.lambda"
+        }
+    },
+    "Resources": {
+        "SimpleResourceWithoutDependsOn": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName": "Test"
+            }
+        },
+        "SimpleResourceWithDependsOnSimple": {
+            "Type": "AWS::S3::BucketPolicy",
+            "DependsOn": "SimpleResourceWithoutDependsOn",
+            "Properties": {
+                "PolicyDocument": {},
+                "Bucket": {
+                    "Ref": "SimpleResourceWithoutDependsOn"
+                }
+            }
+        },
+        "DefaultPipelineProject": {
+            "Type": "WrzasqPl::Pipeline::Project",
+            "Properties": {
+                "ServiceRole": "arn:aws:iam::role/OrganizationUnitManagerRole"
+            }
+        },
+        "ConfiguredPipelineProject": {
+            "Type": "WrzasqPl::Pipeline::Project",
+            "Properties": {
+                "Environment": {
+                    "ComputeType": "BUILD_GENERAL1_MEDIUM",
+                    "EnvironmentVariables": [
+                        {
+                            "Name": "ComponentId",
+                            "Value": {
+                                "Ref": "ServiceName"
+                            }
+                        }
+                    ]
+                },
+                "Source": {
+                    "Type": "S3"
+                },
+                "Variables": {
+                    "RepositoryBucket": {
+                        "Ref": "SimpleResourceWithoutDependsOn"
+                    }
+                },
+                "ServiceRole": "arn:aws:iam::role/OrganizationUnitManagerRole",
+                "LogsRetentionInDays": 10
+            }
+        },
+        "SimpleResourceWithSingleDependsOn": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn": "DefaultPipelineProject",
+            "Properties": {
+                "TopicName": "First",
+                "Subscription": [
+                    {
+                        "Endpoint": {
+                            "Fn::GetAtt": [
+                                "ConfiguredPipelineProject",
+                                "Arn"
+                            ]
+                        },
+                        "Protocol": "Lambda"
+                    }
+                ]
+            }
+        },
+        "SimpleResourceWithDependsOn": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn": [
+                "SimpleResourceWithDependsOnSimple",
+                "ConfiguredPipelineProject"
+            ],
+            "Properties": {
+                "TopicName": "Second"
+            }
+        }
+    },
+    "Outputs": {
+        "BucketName": {
+            "Value": {
+                "Ref": "SimpleResourceWithoutDependsOn"
+            }
+        },
+        "BuildProjectArn": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "ConfiguredPipelineProject",
+                    "Arn"
+                ]
+            },
+            "Export": {
+                "Name": "BuildProjectArn"
+            }
+        }
+    }
+}

@@ -3,7 +3,7 @@
 # This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2019 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <configuration scan="true">
     <!-- stdout output -->
@@ -13,17 +13,8 @@
         </encoder>
     </appender>
 
-    <!-- our logger instances -->
-    <logger name="com.amazonaws">
+    <root>
         <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
-    </logger>
-    <logger name="com.sunrun.cfnresponse">
-        <level value="INFO"/>
-        <appender-ref ref="CONSOLE"/>
-    </logger>
-    <logger name="pl.wrzasq">
-        <level value="INFO"/>
-        <appender-ref ref="CONSOLE"/>
-    </logger>
+    </root>
 </configuration>

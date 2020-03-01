@@ -1,0 +1,138 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+    "Description": "Template description",
+    "Parameters": {
+        "ServiceName": {
+            "Type": "String",
+            "Default": "pl.wrzasq.lambda"
+        }
+    },
+    "Resources": {
+        "SimpleResourceWithoutDependsOn": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName": "Test"
+            }
+        },
+        "SimpleResourceWithDependsOnSimple": {
+            "Type": "AWS::S3::BucketPolicy",
+            "DependsOn": "SimpleResourceWithoutDependsOn",
+            "Properties": {
+                "PolicyDocument": {},
+                "Bucket": {
+                    "Ref": "SimpleResourceWithoutDependsOn"
+                }
+            }
+        },
+        "DefaultPipelineProject": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "Environment": {
+                    "Type": "LINUX_CONTAINER",
+                    "ComputeType": "BUILD_GENERAL1_SMALL"
+                },
+                "Artifacts": {
+                    "Type": "CODEPIPELINE"
+                },
+                "Source": {
+                    "Type": "CODEPIPELINE"
+                },
+                "ServiceRole": "arn:aws:iam::role/OrganizationUnitManagerRole"
+            }
+        },
+        "DefaultPipelineProjectLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+                "LogGroupName": {
+                    "Fn::Sub": "/aws/codebuild/${DefaultPipelineProject}"
+                },
+                "RetentionInDays": 14
+            }
+        },
+        "ConfiguredPipelineProject": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "Environment": {
+                    "Type": "LINUX_CONTAINER",
+                    "ComputeType": "BUILD_GENERAL1_MEDIUM",
+                    "EnvironmentVariables": [
+                        {
+                            "Name": "ComponentId",
+                            "Value": {
+                                "Ref": "ServiceName"
+                            }
+                        },
+                        {
+                            "Name": "RepositoryBucket",
+                            "Value": {
+                                "Ref": "SimpleResourceWithoutDependsOn"
+                            }
+                        }
+                    ]
+                },
+                "Artifacts": {
+                    "Type": "CODEPIPELINE"
+                },
+                "Source": {
+                    "Type": "S3"
+                },
+                "ServiceRole": "arn:aws:iam::role/OrganizationUnitManagerRole"
+            }
+        },
+        "ConfiguredPipelineProjectLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+                "LogGroupName": {
+                    "Fn::Sub": "/aws/codebuild/${ConfiguredPipelineProject}"
+                },
+                "RetentionInDays": 10
+            }
+        },
+        "SimpleResourceWithSingleDependsOn": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn": "DefaultPipelineProjectLogGroup",
+            "Properties": {
+                "TopicName": "First",
+                "Subscription": [
+                    {
+                        "Endpoint": {
+                            "Fn::GetAtt": [
+                                "ConfiguredPipelineProject",
+                                "Arn"
+                            ]
+                        },
+                        "Protocol": "Lambda"
+                    }
+                ]
+            }
+        },
+        "SimpleResourceWithDependsOn": {
+            "Type": "AWS::SNS::Topic",
+            "DependsOn": [
+                "SimpleResourceWithDependsOnSimple",
+                "ConfiguredPipelineProjectLogGroup"
+            ],
+            "Properties": {
+                "TopicName": "Second"
+            }
+        }
+    },
+    "Outputs": {
+        "BucketName": {
+            "Value": {
+                "Ref": "SimpleResourceWithoutDependsOn"
+            }
+        },
+        "BuildProjectArn": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "ConfiguredPipelineProject",
+                    "Arn"
+                ]
+            },
+            "Export": {
+                "Name": "BuildProjectArn"
+            }
+        }
+    }
+}

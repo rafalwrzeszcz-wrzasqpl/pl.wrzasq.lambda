@@ -3,7 +3,7 @@
 # This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2019 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <configuration scan="true">
     <!-- stdout output -->
