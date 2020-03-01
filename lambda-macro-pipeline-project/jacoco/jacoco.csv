@@ -1,0 +1,4 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+WrzasqPl CodePipeline-CodeBuild automation macro,pl.wrzasq.lambda.macro.pipeline.project.template,PipelineProjectResource,4,247,2,6,0,45,3,19,1,17
+WrzasqPl CodePipeline-CodeBuild automation macro,pl.wrzasq.lambda.macro.pipeline.project.template,ProcessedTemplate,0,236,1,15,0,46,1,16,0,9
+WrzasqPl CodePipeline-CodeBuild automation macro,pl.wrzasq.lambda.macro.pipeline.project,Handler,0,20,0,0,0,6,0,2,0,2
