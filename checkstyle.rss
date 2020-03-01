@@ -23,10 +23,10 @@ under the License.
     <link>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda</link>
     <description>WrzasqPl Lambda - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2018 - 2019 Rafał Wrzeszcz - Wrzasq.pl</copyright>
+    <copyright>&#169;2018 - 2020 Rafał Wrzeszcz - Wrzasq.pl</copyright>
     <item>
-      <title>File: 34,
-             Errors: 556,
+      <title>File: 40,
+             Errors: 674,
              Warnings: 0,
              Infos: 0
       </title>
@@ -56,6 +56,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.template.PipelineProjectResource.java">pl/wrzasq/lambda/macro/pipeline/project/template/PipelineProjectResource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
                 </td>
               </tr>
                           <tr>
@@ -228,6 +242,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.model.CloudFormationMacroResponse.java">pl/wrzasq/lambda/macro/pipeline/project/model/CloudFormationMacroResponse.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  35
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.stackset.instance.model.StackInstanceRequest.java">pl/wrzasq/lambda/cform/stackset/instance/model/StackInstanceRequest.java</a>
                 </td>
                 <td>
@@ -294,6 +322,34 @@ under the License.
                 </td>
                 <td>
                   33
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.Handler.java">pl/wrzasq/lambda/macro/pipeline/project/Handler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.template.ResourcesDefinition.java">pl/wrzasq/lambda/macro/pipeline/project/template/ResourcesDefinition.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  25
                 </td>
               </tr>
                           <tr>
@@ -462,6 +518,34 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.template.ProcessedTemplate.java">pl/wrzasq/lambda/macro/pipeline/project/template/ProcessedTemplate.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.model.CloudFormationMacroRequest.java">pl/wrzasq/lambda/macro/pipeline/project/model/CloudFormationMacroRequest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
                 </td>
               </tr>
                           <tr>
