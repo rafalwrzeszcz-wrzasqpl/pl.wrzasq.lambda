@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2019 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
 # Using in CloudFormation
@@ -26,13 +26,15 @@ resource handler execution);
 
 # Definition
 
-Type: `WrzasqPl::Lambda::Function`.
+Type: `WrzasqPl::Lambda::Function` or `WrzasqPl::Serverless::Function`.
 
 ## Properties
 
 All of the properties are transparently forwarder to
 [AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)
-resource. Additionally following properties are available to customize extra resources:
+(or
+[AWS::Serverless::Function](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html)
+respectively) resource. Additionally following properties are available to customize extra resources:
 
 ## `LogsRetentionInDays` - number
 

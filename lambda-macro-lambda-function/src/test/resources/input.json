@@ -43,7 +43,7 @@
             }
         },
         "EnhancedConfiguredLambda": {
-            "Type": "WrzasqPl::Lambda::Function",
+            "Type": "WrzasqPl::Serverless::Function",
             "Properties": {
                 "Runtime": "nodejs10",
                 "Code": {

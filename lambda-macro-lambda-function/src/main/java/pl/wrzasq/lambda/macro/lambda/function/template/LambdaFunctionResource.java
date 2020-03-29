@@ -22,7 +22,12 @@ public class LambdaFunctionResource {
     /**
      * Resource type identifier.
      */
-    public static final String RESOURCE_TYPE = "WrzasqPl::Lambda::Function";
+    public static final String LAMBDA_RESOURCE_TYPE = "WrzasqPl::Lambda::Function";
+
+    /**
+     * Serverless resource type identifier.
+     */
+    public static final String SERVERLESS_RESOURCE_TYPE = "WrzasqPl::Serverless::Function";
 
     /**
      * Metrics namespace.
@@ -118,6 +123,11 @@ public class LambdaFunctionResource {
      * Resource name.
      */
     private String logicalId;
+
+    /**
+     * Resource mode (`Lambda` or `Serverless`).
+     */
+    private String mode;
 
     /**
      * Builds definition of physical resources.
@@ -326,7 +336,7 @@ public class LambdaFunctionResource {
         this.generateResource(
             resources,
             "",
-            "Lambda::Function",
+            String.format("%s::Function", this.mode),
             properties
         );
     }

@@ -121,7 +121,7 @@
             }
         },
         "EnhancedConfiguredLambda": {
-            "Type": "AWS::Lambda::Function",
+            "Type": "AWS::Serverless::Function",
             "Properties": {
                 "Runtime": "nodejs10",
                 "Code": {

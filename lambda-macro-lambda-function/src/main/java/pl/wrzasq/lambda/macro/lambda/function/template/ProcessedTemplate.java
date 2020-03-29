@@ -74,9 +74,13 @@ public class ProcessedTemplate implements TemplateDefinition {
                 entry.getValue(),
                 ResourcesDefinition.class
             );
-            if (definition.getType().equals(LambdaFunctionResource.RESOURCE_TYPE)) {
+            if (definition.getType().equals(LambdaFunctionResource.LAMBDA_RESOURCE_TYPE)) {
                 resources.putAll(
-                    this.createResource(entry.getKey(), definition.getProperties())
+                    this.createResource(entry.getKey(), definition.getProperties(), "Lambda")
+                );
+            } else if (definition.getType().equals(LambdaFunctionResource.SERVERLESS_RESOURCE_TYPE)) {
+                resources.putAll(
+                    this.createResource(entry.getKey(), definition.getProperties(), "Serverless")
                 );
             } else {
                 resources.put(entry.getKey(), section.get(entry.getKey()));
@@ -93,12 +97,13 @@ public class ProcessedTemplate implements TemplateDefinition {
      *
      * @param key Resource logical ID.
      * @param properties Resource initial properties.
+     * @param mode Resource mode (`Lambda` or `Serverless`).
      * @return Physical resources definitions.
      */
-    private Map<String, Object> createResource(String key, Map<String, Object> properties) {
+    private Map<String, Object> createResource(String key, Map<String, Object> properties, String mode) {
         ProcessedTemplate.logger.info("Creating resources for {}.", key);
 
-        var resource = new LambdaFunctionResource(key);
+        var resource = new LambdaFunctionResource(key, mode);
         this.resources.put(key, resource);
         return resource.buildDefinitions(properties);
     }
