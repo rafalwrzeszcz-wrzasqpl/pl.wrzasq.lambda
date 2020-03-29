@@ -2,10 +2,10 @@
  * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2019 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package test.pl.wrzasq.lambda.macro.lambda.function;
+package test.pl.wrzasq.lambda.macro.pipeline.multistagecd;
 
 import java.util.HashMap;
 
@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.wrzasq.commons.aws.cloudformation.macro.CloudFormationMacroRequest;
 import pl.wrzasq.commons.aws.cloudformation.macro.CloudFormationMacroResponse;
 import pl.wrzasq.commons.aws.cloudformation.macro.MacroHandler;
-import pl.wrzasq.lambda.macro.lambda.function.Handler;
+import pl.wrzasq.lambda.macro.pipeline.multistagecd.Handler;
 
 @ExtendWith(MockitoExtension.class)
 public class HandlerTest {

@@ -7,13 +7,11 @@
 
 package pl.wrzasq.lambda.macro.pipeline.project;
 
-import java.util.Map;
-import java.util.function.Function;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import pl.wrzasq.lambda.macro.pipeline.project.model.CloudFormationMacroRequest;
-import pl.wrzasq.lambda.macro.pipeline.project.model.CloudFormationMacroResponse;
+import pl.wrzasq.commons.aws.cloudformation.macro.CloudFormationMacroRequest;
+import pl.wrzasq.commons.aws.cloudformation.macro.CloudFormationMacroResponse;
+import pl.wrzasq.commons.aws.cloudformation.macro.MacroHandler;
 import pl.wrzasq.lambda.macro.pipeline.project.template.ProcessedTemplate;
 
 /**
@@ -23,15 +21,15 @@ import pl.wrzasq.lambda.macro.pipeline.project.template.ProcessedTemplate;
  */
 public class Handler implements RequestHandler<CloudFormationMacroRequest, CloudFormationMacroResponse> {
     /**
-     * CloudFormation template provider.
+     * CloudFormation macro handler.
      */
-    private Function<Map<String, Object>, ProcessedTemplate> templateFactory;
+    private MacroHandler macroHandler;
 
     /**
      * Default constructor.
      */
     public Handler() {
-        this.templateFactory = ProcessedTemplate::new;
+        this.macroHandler = new MacroHandler(ProcessedTemplate::new);
     }
 
     /**
@@ -39,10 +37,6 @@ public class Handler implements RequestHandler<CloudFormationMacroRequest, Cloud
      */
     @Override
     public CloudFormationMacroResponse handleRequest(CloudFormationMacroRequest event, Context context) {
-        return new CloudFormationMacroResponse(
-            event.getRequestId(),
-            CloudFormationMacroResponse.STATUS_SUCCESS,
-            this.templateFactory.apply(event.getFragment()).getTemplate()
-        );
+        return this.macroHandler.handleRequest(event);
     }
 }

@@ -2,22 +2,22 @@
  * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2019 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package pl.wrzasq.lambda.macro.lambda.function;
+package pl.wrzasq.lambda.macro.pipeline.multistagecd;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import pl.wrzasq.commons.aws.cloudformation.macro.CloudFormationMacroRequest;
 import pl.wrzasq.commons.aws.cloudformation.macro.CloudFormationMacroResponse;
 import pl.wrzasq.commons.aws.cloudformation.macro.MacroHandler;
-import pl.wrzasq.lambda.macro.lambda.function.template.ProcessedTemplate;
+import pl.wrzasq.lambda.macro.pipeline.multistagecd.template.ProcessedTemplate;
 
 /**
  * CloudFormation macro handler.
  *
- * <p>Recommended memory: 256MB.</p>
+ * <p>Recommended memory: 384MB.</p>
  */
 public class Handler implements RequestHandler<CloudFormationMacroRequest, CloudFormationMacroResponse> {
     /**

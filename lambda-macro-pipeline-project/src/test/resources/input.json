@@ -7,6 +7,9 @@
             "Default": "pl.wrzasq.lambda"
         }
     },
+    "Conditions": {
+        "HasDefaultProject": {}
+    },
     "Resources": {
         "SimpleResourceWithoutDependsOn": {
             "Type": "AWS::S3::Bucket",
@@ -26,6 +29,7 @@
         },
         "DefaultPipelineProject": {
             "Type": "WrzasqPl::Pipeline::Project",
+            "Condition": "HasDefaultProject",
             "Properties": {
                 "ServiceRole": "arn:aws:iam::role/OrganizationUnitManagerRole"
             }

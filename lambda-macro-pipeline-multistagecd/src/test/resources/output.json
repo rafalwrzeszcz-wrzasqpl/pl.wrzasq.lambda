@@ -1,0 +1,429 @@
+{
+    "Parameters": {
+        "HasCheckoutStep": {
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "HasNextStage": {
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "HasApproval": {
+            "Type": "String",
+            "Default": "true",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        }
+    },
+    "Conditions": {
+        "HasCheckoutStep": {
+            "Fn::Equals": [
+                {
+                    "Ref": "HasCheckoutStep"
+                },
+                "true"
+            ]
+        },
+        "HasNextStage": {
+            "Fn::Equals": [
+                {
+                    "Ref": "HasNextStage"
+                },
+                "true"
+            ]
+        },
+        "HasApproval": {
+            "Fn::And": [
+                {
+                    "Condition": "HasNextStage"
+                },
+                {
+                    "Fn::Equals": [
+                        {
+                            "Ref": "HasApproval"
+                        },
+                        "true"
+                    ]
+                }
+            ]
+        }
+    },
+    "Resources": {
+        "BuildProject": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "Environment": {
+                    "Type": "LINUX_CONTAINER",
+                    "ComputeType": "BUILD_GENERAL1_SMALL",
+                    "Image": "aws/codebuild/java:openjdk-11"
+                }
+            }
+        },
+        "DeployPipeline": {
+            "Type": "AWS::CodePipeline::Pipeline",
+            "Properties": {
+                "RestartExecutionOnUpdate": true,
+                "Stages": [
+                    {
+                        "Name": "Source",
+                        "Actions": {
+                            "Fn::If": [
+                                "HasCheckoutStep",
+                                [
+                                    {
+                                        "Name": "checkout",
+                                        "ActionTypeId": {
+                                            "Category": "Source",
+                                            "Owner": "ThirdParty",
+                                            "Provider": "GitHub",
+                                            "Version": "1"
+                                        },
+                                        "Configuration": {
+                                            "Owner": "yourorganization",
+                                            "Repo": "reponame",
+                                            "Branch": {
+                                                "Ref": "master"
+                                            },
+                                            "OAuthToken": "{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}",
+                                            "PollForSourceChanges": false
+                                        },
+                                        "OutputArtifacts": [
+                                            {
+                                                "Name": "checkout"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                [
+                                    {
+                                        "Name": "templates",
+                                        "ActionTypeId": {
+                                            "Category": "Source",
+                                            "Owner": "AWS",
+                                            "Provider": "S3",
+                                            "Version": "1"
+                                        },
+                                        "Configuration": {
+                                            "S3Bucket": {
+                                                "Fn::ImportValue": "wrzasq:ArtifactsBucket:Name"
+                                            },
+                                            "S3ObjectKey": "upload/templates.zip"
+                                        },
+                                        "OutputArtifacts": [
+                                            {
+                                                "Name": "templates"
+                                            }
+                                        ],
+                                        "RunOrder": 1
+                                    },
+                                    {
+                                        "Name": "build",
+                                        "ActionTypeId": {
+                                            "Category": "Source",
+                                            "Owner": "AWS",
+                                            "Provider": "S3",
+                                            "Version": "1"
+                                        },
+                                        "Configuration": {
+                                            "S3Bucket": {
+                                                "Fn::ImportValue": "wrzasq:ArtifactsBucket:Name"
+                                            },
+                                            "S3ObjectKey": "upload/build.zip"
+                                        },
+                                        "OutputArtifacts": [
+                                            {
+                                                "Name": "build"
+                                            }
+                                        ],
+                                        "RunOrder": 2
+                                    }
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Fn::If": [
+                            "HasCheckoutStep",
+                            {
+                                "Name": "Build",
+                                "Actions": [
+                                    {
+                                        "Name": "Build",
+                                        "ActionTypeId": {
+                                            "Category": "Build",
+                                            "Owner": "AWS",
+                                            "Provider": "CodeBuild",
+                                            "Version": "1"
+                                        },
+                                        "Configuration": {
+                                            "ProjectName": {
+                                                "Ref": "BuildProject"
+                                            },
+                                            "EnvironmentVariables": "[{\"name\": \"VERSION_STRING\",\"value\": \"#{codepipeline.PipelineExecutionId}\"}]"
+                                        },
+                                        "InputArtifacts": [
+                                            {
+                                                "Name": "checkout"
+                                            }
+                                        ],
+                                        "OutputArtifacts": [
+                                            {
+                                                "Name": "build"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "Ref": "AWS::NoValue"
+                            }
+                        ]
+                    },
+                    {
+                        "Name": "Deploy",
+                        "Actions": [
+                            {
+                                "Name": "Database",
+                                "ActionTypeId": {
+                                    "Category": "Deploy",
+                                    "Owner": "AWS",
+                                    "Provider": "CloudFormation",
+                                    "Version": "1"
+                                },
+                                "Configuration": {
+                                    "ActionMode": "CREATE_UPDATE",
+                                    "StackName": {
+                                        "Fn::Sub": "${ServiceName}-db"
+                                    },
+                                    "RoleArn": {
+                                        "Fn::ImportValue": "infra:DeployRole:Arn"
+                                    },
+                                    "Capabilities": "CAPABILITY_NAMED_IAM",
+                                    "TemplatePath": "build::cloudformation/db.yaml",
+                                    "TemplateConfiguration": {
+                                        "Fn::Sub": "templates::cloudformation/config-${EnvironmentName}.json"
+                                    },
+                                    "OutputFileName": "out.json"
+                                },
+                                "InputArtifacts": [
+                                    {
+                                        "Name": "build"
+                                    }
+                                ],
+                                "OutputArtifacts": [
+                                    {
+                                        "Name": "database"
+                                    }
+                                ]
+                            },
+                            {
+                                "Name": "EventsListenerLambda",
+                                "ActionTypeId": {
+                                    "Category": "Deploy",
+                                    "Owner": "AWS",
+                                    "Provider": "CloudFormation",
+                                    "Version": "1"
+                                },
+                                "Configuration": {
+                                    "ActionMode": "CREATE_UPDATE",
+                                    "StackName": "events-recorder",
+                                    "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                                    "TemplatePath": "templates::cloudformation/events-listener.yaml",
+                                    "TemplateConfiguration": "templates::cloudformation/config-dev.json",
+                                    "OutputFileName": "out.json",
+                                    "ParameterOverrides": "{\"EventsTableName\": { \"Fn::GetParam\": [\"database\", \"out.json\", \"EventsTableName\"] }, \"EventsTableArn\": { \"Fn::GetParam\": [\"database\", \"out.json\", \"EventsTableArn\"] }}"
+                                },
+                                "InputArtifacts": [
+                                    {
+                                        "Name": "database"
+                                    },
+                                    {
+                                        "Name": "templates"
+                                    }
+                                ],
+                                "OutputArtifacts": [
+                                    {
+                                        "Name": "events-listener"
+                                    }
+                                ],
+                                "RunOrder": 2
+                            },
+                            {
+                                "Name": "AuthorizerLambda",
+                                "ActionTypeId": {
+                                    "Category": "Deploy",
+                                    "Owner": "AWS",
+                                    "Provider": "CloudFormation",
+                                    "Version": "1"
+                                },
+                                "Configuration": {
+                                    "ActionMode": "CREATE_UPDATE",
+                                    "StackName": "authorizer",
+                                    "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                                    "TemplatePath": "templates::cloudformation/authorizer.yaml",
+                                    "OutputFileName": "out.json"
+                                },
+                                "InputArtifacts": [
+                                    {
+                                        "Name": "templates"
+                                    }
+                                ],
+                                "OutputArtifacts": [
+                                    {
+                                        "Name": "authorizer"
+                                    }
+                                ]
+                            },
+                            {
+                                "Name": "API",
+                                "ActionTypeId": {
+                                    "Category": "Deploy",
+                                    "Owner": "AWS",
+                                    "Provider": "CloudFormation",
+                                    "Version": "1"
+                                },
+                                "Configuration": {
+                                    "ActionMode": "CREATE_UPDATE",
+                                    "StackName": "api",
+                                    "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                                    "TemplatePath": "templates::cloudformation/api.yaml",
+                                    "ParameterOverrides": "{\"AuthorizerLambda\": { \"Fn::GetParam\": [\"authorizer\", \"out.json\", \"LambdaArn\"] }, \"EventsListenerLambda\": { \"Fn::GetParam\": [\"events-listener\", \"out.json\", \"LambdaArn\"] }}"
+                                },
+                                "InputArtifacts": [
+                                    {
+                                        "Name": "authorizer"
+                                    },
+                                    {
+                                        "Name": "events-listener"
+                                    },
+                                    {
+                                        "Name": "templates"
+                                    }
+                                ],
+                                "RunOrder": 3
+                            }
+                        ]
+                    },
+                    {
+                        "Fn::If": [
+                            "HasApproval",
+                            {
+                                "Name": "Review",
+                                "Actions": [
+                                    {
+                                        "Name": "Approval",
+                                        "ActionTypeId": {
+                                            "Category": "Approval",
+                                            "Owner": "AWS",
+                                            "Provider": "Manual",
+                                            "Version": "1"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "Ref": "AWS::NoValue"
+                            }
+                        ]
+                    },
+                    {
+                        "Fn::If": [
+                            "HasNextStage",
+                            {
+                                "Name": "Promote",
+                                "Actions": [
+                                    {
+                                        "Name": "build",
+                                        "ActionTypeId": {
+                                            "Category": "Deploy",
+                                            "Owner": "AWS",
+                                            "Provider": "S3",
+                                            "Version": "1"
+                                        },
+                                        "Configuration": {
+                                            "BucketName": {
+                                                "Ref": "NextStageBucketName"
+                                            },
+                                            "ObjectKey": "upload/build.zip",
+                                            "Extract": false,
+                                            "CannedACL": "bucket-owner-full-control"
+                                        },
+                                        "InputArtifacts": [
+                                            {
+                                                "Name": "build"
+                                            }
+                                        ],
+                                        "RunOrder": 1
+                                    },
+                                    {
+                                        "Name": "templates",
+                                        "ActionTypeId": {
+                                            "Category": "Deploy",
+                                            "Owner": "AWS",
+                                            "Provider": "S3",
+                                            "Version": "1"
+                                        },
+                                        "Configuration": {
+                                            "BucketName": "s3-next-account-bucket",
+                                            "ObjectKey": "upload/templates.zip",
+                                            "Extract": false,
+                                            "CannedACL": "bucket-owner-full-control"
+                                        },
+                                        "InputArtifacts": [
+                                            {
+                                                "Name": "templates"
+                                            }
+                                        ],
+                                        "RunOrder": 2
+                                    }
+                                ]
+                            },
+                            {
+                                "Ref": "AWS::NoValue"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "DeployPipelineWebhook": {
+            "Type": "AWS::CodePipeline::Webhook",
+            "Condition": "HasCheckoutStep",
+            "Properties": {
+                "Authentication": "GITHUB_HMAC",
+                "AuthenticationConfiguration": {
+                    "SecretToken": {
+                        "Ref": "GitHubSecret"
+                    }
+                },
+                "TargetPipeline": {
+                    "Ref": "DeployPipeline"
+                },
+                "TargetPipelineVersion": {
+                    "Fn::GetAtt": [
+                        "DeployPipeline",
+                        "Version"
+                    ]
+                },
+                "TargetAction": "checkout",
+                "Filters": [
+                    {
+                        "JsonPath": "$.ref",
+                        "MatchEquals": "refs/heads/{Branch}"
+                    }
+                ],
+                "RegisterWithThirdParty": true
+            }
+        }
+    }
+}

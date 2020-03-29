@@ -129,6 +129,7 @@
         <module>lambda-edgedeploy</module>
         <module>lambda-json</module>
         <module>lambda-macro-lambda-function</module>
+        <module>lambda-macro-pipeline-multistagecd</module>
         <module>lambda-macro-pipeline-project</module>
         <module>lambda-metrics-dynamodb</module>
     </modules>

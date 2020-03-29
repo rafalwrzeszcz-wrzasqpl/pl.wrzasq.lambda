@@ -1,0 +1,191 @@
+{
+    "Parameters": {
+        "HasCheckoutStep": {
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "HasNextStage": {
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "HasApproval": {
+            "Type": "String",
+            "Default": "true",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        }
+    },
+    "Resources": {
+        "BuildProject": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "Environment": {
+                    "Type": "LINUX_CONTAINER",
+                    "ComputeType": "BUILD_GENERAL1_SMALL",
+                    "Image": "aws/codebuild/java:openjdk-11"
+                }
+            }
+        }
+    },
+    "Pipeline": {
+        "config": {
+            "resourceName": "DeployPipeline",
+            "requiresManualApprovalParameterName": "HasApproval",
+            "requiresManualApprovalConditionName": "HasApproval",
+            "webhookAuthenticationType": "GITHUB_HMAC",
+            "webhookSecretToken": {
+                "Ref": "GitHubSecret"
+            }
+        },
+        "properties": {
+            "RestartExecutionOnUpdate": true
+        },
+        "sources": {
+            "checkout": {
+                "ActionTypeId": {
+                    "Category": "Source",
+                    "Owner": "ThirdParty",
+                    "Provider": "GitHub",
+                    "Version": "1"
+                },
+                "Configuration": {
+                    "Owner": "yourorganization",
+                    "Repo": "reponame",
+                    "Branch": {
+                        "Ref": "master"
+                    },
+                    "OAuthToken": "{{resolve:secretsmanager:GitHub:SecretString:OAuthToken}}",
+                    "PollForSourceChanges": false
+                }
+            }
+        },
+        "stages": [
+            {
+                "Name": "Build",
+                "Condition": "HasCheckoutStep",
+                "Actions": [
+                    {
+                        "Name": "Build",
+                        "ActionTypeId": {
+                            "Category": "Build",
+                            "Owner": "AWS",
+                            "Provider": "CodeBuild",
+                            "Version": "1"
+                        },
+                        "Configuration": {
+                            "ProjectName": {
+                                "Ref": "BuildProject"
+                            },
+                            "EnvironmentVariables": "[{\"name\": \"VERSION_STRING\",\"value\": \"#{codepipeline.PipelineExecutionId}\"}]"
+                        },
+                        "InputArtifacts": [
+                            "checkout"
+                        ],
+                        "OutputArtifacts": [
+                            "build"
+                        ]
+                    }
+                ]
+            },
+            {
+                "Name": "Deploy",
+                "Actions": [
+                    {
+                        "Name": "Database",
+                        "Configuration": {
+                            "ActionMode": "CREATE_UPDATE",
+                            "StackName": {
+                                "Fn::Sub": "${ServiceName}-db"
+                            },
+                            "RoleArn": {
+                                "Fn::ImportValue": "infra:DeployRole:Arn"
+                            },
+                            "Capabilities": "CAPABILITY_NAMED_IAM",
+                            "TemplatePath": "build::cloudformation/db.yaml",
+                            "TemplateConfiguration": {
+                                "Fn::Sub": "templates::cloudformation/config-${EnvironmentName}.json"
+                            },
+                            "OutputFileName": "out.json"
+                        },
+                        "OutputArtifacts": [
+                            "database"
+                        ]
+                    },
+                    {
+                        "Name": "EventsListenerLambda",
+                        "Configuration": {
+                            "ActionMode": "CREATE_UPDATE",
+                            "StackName": "events-recorder",
+                            "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                            "TemplatePath": "templates::cloudformation/events-listener.yaml",
+                            "TemplateConfiguration": "templates::cloudformation/config-dev.json",
+                            "OutputFileName": "out.json",
+                            "ParameterOverrides": "{\"EventsTableName\": { \"Fn::GetParam\": [\"database\", \"out.json\", \"EventsTableName\"] }, \"EventsTableArn\": { \"Fn::GetParam\": [\"database\", \"out.json\", \"EventsTableArn\"] }}"
+                        },
+                        "InputArtifacts": [
+                            "database"
+                        ],
+                        "OutputArtifacts": [
+                            "events-listener"
+                        ]
+                    },
+                    {
+                        "Name": "AuthorizerLambda",
+                        "Configuration": {
+                            "ActionMode": "CREATE_UPDATE",
+                            "StackName": "authorizer",
+                            "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                            "TemplatePath": "templates::cloudformation/authorizer.yaml",
+                            "OutputFileName": "out.json"
+                        },
+                        "OutputArtifacts": [
+                            "authorizer"
+                        ]
+                    },
+                    {
+                        "Name": "API",
+                        "Configuration": {
+                            "ActionMode": "CREATE_UPDATE",
+                            "StackName": "api",
+                            "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                            "TemplatePath": "templates::cloudformation/api.yaml",
+                            "ParameterOverrides": "{\"AuthorizerLambda\": { \"Fn::GetParam\": [\"authorizer\", \"out.json\", \"LambdaArn\"] }, \"EventsListenerLambda\": { \"Fn::GetParam\": [\"events-listener\", \"out.json\", \"LambdaArn\"] }}"
+                        },
+                        "InputArtifacts": [
+                            "authorizer",
+                            "events-listener"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "artifacts": {
+            "build": {
+                "sourceBucketName": {
+                    "Fn::ImportValue": "wrzasq:ArtifactsBucket:Name"
+                },
+                "nextBucketName": {
+                    "Ref": "NextStageBucketName"
+                },
+                "objectKey": "upload/build.zip"
+            },
+            "templates": {
+                "sourceBucketName": {
+                    "Fn::ImportValue": "wrzasq:ArtifactsBucket:Name"
+                },
+                "nextBucketName": "s3-next-account-bucket",
+                "objectKey": "upload/templates.zip"
+            }
+        }
+    }
+}

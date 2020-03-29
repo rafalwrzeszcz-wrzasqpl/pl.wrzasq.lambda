@@ -17,7 +17,7 @@ public class PipelineProjectResourceTest {
     @Test
     public void getLogGroupLogicalId() {
         var logicalId = "TestProject";
-        var resource = new PipelineProjectResource(logicalId);
+        var resource = new PipelineProjectResource(logicalId, null);
         // this is just for code coverage now, we can make more detailed tests in future based on error-cases
         // it will be tested in ProcessedTemplateTest that involves full JSON files
         resource.buildDefinitions(new HashMap<>());

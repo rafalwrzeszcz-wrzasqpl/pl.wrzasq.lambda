@@ -7,6 +7,9 @@
             "Default": "pl.wrzasq.lambda"
         }
     },
+    "Conditions": {
+        "HasDefaultProject": {}
+    },
     "Resources": {
         "SimpleResourceWithoutDependsOn": {
             "Type": "AWS::S3::Bucket",
@@ -26,6 +29,7 @@
         },
         "DefaultPipelineProject": {
             "Type": "AWS::CodeBuild::Project",
+            "Condition": "HasDefaultProject",
             "Properties": {
                 "Environment": {
                     "Type": "LINUX_CONTAINER",
@@ -42,6 +46,7 @@
         },
         "DefaultPipelineProjectLogGroup": {
             "Type": "AWS::Logs::LogGroup",
+            "Condition": "HasDefaultProject",
             "Properties": {
                 "LogGroupName": {
                     "Fn::Sub": "/aws/codebuild/${DefaultPipelineProject}"

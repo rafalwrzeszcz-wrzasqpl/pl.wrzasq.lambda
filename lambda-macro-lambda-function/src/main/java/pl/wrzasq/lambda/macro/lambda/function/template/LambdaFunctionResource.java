@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2019 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.lambda.macro.lambda.function.template;
@@ -10,9 +10,9 @@ package pl.wrzasq.lambda.macro.lambda.function.template;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import lombok.AllArgsConstructor;
+import pl.wrzasq.commons.aws.cloudformation.macro.TemplateUtils;
 
 /**
  * Model for handled resource.
@@ -40,7 +40,7 @@ public class LambdaFunctionResource {
     private static final Number DEFAULT_ALERT_PERIOD = 300;
 
     /**
-     * Value used for counting metrics (each metric record is single occurange).
+     * Value used for counting metrics (each metric record is single occurrence).
      */
     private static final String COUNTER_METRIC_VALUE = "1";
 
@@ -152,10 +152,10 @@ public class LambdaFunctionResource {
         var resourceProperties = new HashMap<String, Object>();
         resourceProperties.put(
             LambdaFunctionResource.PROPERTY_LOG_GROUP_NAME,
-            LambdaFunctionResource.sub(String.format("/aws/lambda/${%s}", this.logicalId))
+            TemplateUtils.sub(String.format("/aws/lambda/${%s}", this.logicalId))
         );
 
-        LambdaFunctionResource.popProperty(
+        TemplateUtils.popProperty(
             properties,
             LambdaFunctionResource.PROPERTY_LOGS_RETENTION_IN_DAYS,
             value -> resourceProperties.put("RetentionInDays", value),
@@ -202,7 +202,7 @@ public class LambdaFunctionResource {
      * @param properties Resource properties.
      */
     private void createErrorsMetricFilter(Map<String, Object> resources, Map<String, Object> properties) {
-        LambdaFunctionResource.popProperty(
+        TemplateUtils.popProperty(
             properties,
             "ErrorsFilterPattern",
             filter -> this.createMetricFilter(
@@ -227,7 +227,7 @@ public class LambdaFunctionResource {
         resourceProperties.put(LambdaFunctionResource.PROPERTY_NAMESPACE, LambdaFunctionResource.METRICS_NAMESPACE);
         resourceProperties.put(
             LambdaFunctionResource.PROPERTY_METRIC_NAME,
-            LambdaFunctionResource.sub(String.format("${%s}-Errors", this.logicalId))
+            TemplateUtils.sub(String.format("${%s}-Errors", this.logicalId))
         );
         resourceProperties.put(LambdaFunctionResource.PROPERTY_STATISTIC, "Sum");
         resourceProperties.put(LambdaFunctionResource.PROPERTY_COMPARISON_OPERATOR, "GreaterThanThreshold");
@@ -236,7 +236,7 @@ public class LambdaFunctionResource {
         resourceProperties.put(LambdaFunctionResource.PROPERTY_PERIOD, LambdaFunctionResource.DEFAULT_ALERT_PERIOD);
         resourceProperties.put(LambdaFunctionResource.PROPERTY_TREAT_MISSING_DATA, "notBreaching");
 
-        LambdaFunctionResource.popProperty(
+        TemplateUtils.popProperty(
             properties,
             "ErrorsAlarmActions",
             value -> resourceProperties.put("AlarmActions", value),
@@ -258,7 +258,7 @@ public class LambdaFunctionResource {
      * @param properties Resource properties.
      */
     private void createWarningsMetricFilter(Map<String, Object> resources, Map<String, Object> properties) {
-        LambdaFunctionResource.popProperty(
+        TemplateUtils.popProperty(
             properties,
             "WarningsFilterPattern",
             filter -> this.createMetricFilter(
@@ -292,14 +292,14 @@ public class LambdaFunctionResource {
         transformation.put(LambdaFunctionResource.PROPERTY_METRIC_NAMESPACE, LambdaFunctionResource.METRICS_NAMESPACE);
         transformation.put(
             LambdaFunctionResource.PROPERTY_METRIC_NAME,
-            LambdaFunctionResource.sub(String.format("${%s}-%s", this.logicalId, metricNameSuffix))
+            TemplateUtils.sub(String.format("${%s}-%s", this.logicalId, metricNameSuffix))
         );
         transformation.put(LambdaFunctionResource.PROPERTY_METRIC_VALUE, metricValue);
 
         var resourceProperties = new HashMap<String, Object>();
         resourceProperties.put(
             LambdaFunctionResource.PROPERTY_LOG_GROUP_NAME,
-            LambdaFunctionResource.ref(this.getLogGroupLogicalId())
+            TemplateUtils.ref(this.getLogGroupLogicalId())
         );
         resourceProperties.put(
             LambdaFunctionResource.PROPERTY_METRIC_TRANSFORMATIONS,
@@ -354,58 +354,9 @@ public class LambdaFunctionResource {
         String type,
         Map<String, Object> properties
     ) {
-        var resource = new HashMap<>();
-        resource.put("Type", String.format("AWS::%s", type));
-
-        if (!properties.isEmpty()) {
-            resource.put("Properties", properties);
-        }
-
         resources.put(
             String.format("%s%s", this.logicalId, suffix),
-            resource
+            TemplateUtils.generateResource(type, properties, null)
         );
-    }
-
-    /**
-     * Handles optional property by removing it from generic properties pool.
-     *
-     * @param properties Main properties container.
-     * @param key Property key.
-     * @param then Property action.
-     * @param defaultValue Default property value.
-     */
-    private static void popProperty(
-        Map<String, Object> properties,
-        String key,
-        Consumer<Object> then,
-        Object defaultValue
-    ) {
-        if (properties.containsKey(key)) {
-            then.accept(properties.get(key));
-            properties.remove(key);
-        } else if (defaultValue != null) {
-            then.accept(defaultValue);
-        }
-    }
-
-    /**
-     * Returns !Ref reference call.
-     *
-     * @param reference Referred object ID.
-     * @return !Ref call.
-     */
-    private static Object ref(String reference) {
-        return Collections.singletonMap("Ref", reference);
-    }
-
-    /**
-     * Returns !Sub reference call.
-     *
-     * @param params Call parameters.
-     * @return !Sub call.
-     */
-    private static Object sub(Object params) {
-        return Collections.singletonMap("Fn::Sub", params);
     }
 }

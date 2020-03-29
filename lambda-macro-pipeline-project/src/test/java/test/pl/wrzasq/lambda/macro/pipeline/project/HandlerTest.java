@@ -8,8 +8,6 @@
 package test.pl.wrzasq.lambda.macro.pipeline.project;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,59 +15,43 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.wrzasq.commons.aws.cloudformation.macro.CloudFormationMacroRequest;
+import pl.wrzasq.commons.aws.cloudformation.macro.CloudFormationMacroResponse;
+import pl.wrzasq.commons.aws.cloudformation.macro.MacroHandler;
 import pl.wrzasq.lambda.macro.pipeline.project.Handler;
-import pl.wrzasq.lambda.macro.pipeline.project.model.CloudFormationMacroRequest;
-import pl.wrzasq.lambda.macro.pipeline.project.model.CloudFormationMacroResponse;
-import pl.wrzasq.lambda.macro.pipeline.project.template.ProcessedTemplate;
 
 @ExtendWith(MockitoExtension.class)
 public class HandlerTest {
     @Mock
-    private ProcessedTemplate template;
-
-    @Mock
-    private Function<Map<String, Object>, ProcessedTemplate> templateFactory;
+    private MacroHandler macroHandler;
 
     @Test
     public void handle() throws NoSuchFieldException, IllegalAccessException {
         // for code coverage
         var handler = new Handler();
-        var hack = Handler.class.getDeclaredField("templateFactory");
+        var hack = Handler.class.getDeclaredField("macroHandler");
         hack.setAccessible(true);
-        hack.set(handler, templateFactory);
+        hack.set(handler, macroHandler);
 
+        var requestId = "abc";
         var source = new HashMap<String, Object>();
-        var result = new HashMap<String, Object>();
+
+        var request = new CloudFormationMacroRequest(requestId, source);
+        var result = new CloudFormationMacroResponse(requestId, CloudFormationMacroResponse.STATUS_SUCCESS, null);
 
         Mockito
-            .when(this.templateFactory.apply(source))
-            .thenReturn(template);
-
-        Mockito
-            .when(this.template.getTemplate())
+            .when(this.macroHandler.handleRequest(request))
             .thenReturn(result);
-
-        String requestId = "abc";
 
         var output = handler.handleRequest(
             new CloudFormationMacroRequest(requestId, source),
             null
         );
 
-        Assertions.assertEquals(
-            requestId,
-            output.getRequestId(),
-            "Handler.handleRequest() should return response for same request ID."
-        );
-        Assertions.assertEquals(
-            CloudFormationMacroResponse.STATUS_SUCCESS,
-            output.getStatus(),
-            "Handler.handleRequest() should set successful status of response."
-        );
         Assertions.assertSame(
             result,
-            output.getFragment(),
-            "Handler.handleRequest() should use processor to modify template structure."
+            output,
+            "Handler.handleRequest() should return response with processed template."
         );
     }
 }

@@ -16,22 +16,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.wrzasq.commons.aws.cloudformation.macro.ResourcesDefinition;
+import pl.wrzasq.commons.aws.cloudformation.macro.TemplateDefinition;
+import pl.wrzasq.commons.aws.cloudformation.macro.TemplateUtils;
 import pl.wrzasq.lambda.json.ObjectMapperFactory;
 
 /**
  * Contains template structure with handled resources references.
  */
-public class ProcessedTemplate {
-    /**
-     * Resources section key.
-     */
-    private static final String SECTION_RESOURCES = "Resources";
-
-    /**
-     * DependsOn clause key.
-     */
-    private static final String CLAUSE_DEPENDS_ON = "DependsOn";
-
+public class ProcessedTemplate implements TemplateDefinition {
     /**
      * Values converter.
      */
@@ -74,7 +67,7 @@ public class ProcessedTemplate {
         var output = new HashMap<>(input);
 
         // re-create resources section
-        var section = ProcessedTemplate.asMap(input.get(ProcessedTemplate.SECTION_RESOURCES));
+        var section = TemplateUtils.asMap(input.get(TemplateUtils.SECTION_RESOURCES));
         var resources = new HashMap<>();
         for (var entry : section.entrySet()) {
             var definition = ProcessedTemplate.objectMapper.convertValue(
@@ -83,14 +76,14 @@ public class ProcessedTemplate {
             );
             if (definition.getType().equals(PipelineProjectResource.RESOURCE_TYPE)) {
                 resources.putAll(
-                    this.createResource(entry.getKey(), definition.getProperties())
+                    this.createResource(entry.getKey(), definition.getProperties(), definition.getCondition())
                 );
             } else {
                 resources.put(entry.getKey(), section.get(entry.getKey()));
             }
         }
 
-        output.put(ProcessedTemplate.SECTION_RESOURCES, resources);
+        output.put(TemplateUtils.SECTION_RESOURCES, resources);
 
         return output;
     }
@@ -100,12 +93,13 @@ public class ProcessedTemplate {
      *
      * @param key Resource logical ID.
      * @param properties Resource initial properties.
+     * @param condition Resource creation condition.
      * @return Physical resources definitions.
      */
-    private Map<String, Object> createResource(String key, Map<String, Object> properties) {
+    private Map<String, Object> createResource(String key, Map<String, Object> properties, String condition) {
         ProcessedTemplate.logger.info("Creating resources for {}.", key);
 
-        var resource = new PipelineProjectResource(key);
+        var resource = new PipelineProjectResource(key, condition);
         this.resources.put(key, resource);
         return resource.buildDefinitions(properties);
     }
@@ -119,10 +113,10 @@ public class ProcessedTemplate {
     private Map<String, Object> replaceReferences(Map<String, Object> input) {
         var output = new HashMap<>(input);
 
-        var section = ProcessedTemplate.asMap(input.get(ProcessedTemplate.SECTION_RESOURCES));
+        var section = TemplateUtils.asMap(input.get(TemplateUtils.SECTION_RESOURCES));
         section = this.replaceDependencies(section);
 
-        output.put(ProcessedTemplate.SECTION_RESOURCES, this.replaceDependencies(section));
+        output.put(TemplateUtils.SECTION_RESOURCES, this.replaceDependencies(section));
 
         return output;
     }
@@ -138,11 +132,11 @@ public class ProcessedTemplate {
 
         for (var resource : resources.entrySet()) {
             var logicalId = resource.getKey();
-            var config = ProcessedTemplate.asMap(resource.getValue());
+            var config = TemplateUtils.asMap(resource.getValue());
 
-            if (config.containsKey(ProcessedTemplate.CLAUSE_DEPENDS_ON)) {
-                var dependsOn = config.get(ProcessedTemplate.CLAUSE_DEPENDS_ON);
-                config.put(ProcessedTemplate.CLAUSE_DEPENDS_ON, this.replaceDependenciesIn(dependsOn));
+            if (config.containsKey(TemplateUtils.PROPERTY_KEY_DEPENDSON)) {
+                var dependsOn = config.get(TemplateUtils.PROPERTY_KEY_DEPENDSON);
+                config.put(TemplateUtils.PROPERTY_KEY_DEPENDSON, this.replaceDependenciesIn(dependsOn));
             }
 
             output.put(logicalId, config);
@@ -182,23 +176,5 @@ public class ProcessedTemplate {
         return this.resources.containsKey(dependency)
             ? this.resources.get(dependency).getLogGroupLogicalId()
             : dependency;
-    }
-
-    /**
-     * Safely converts value to a typed map.
-     *
-     * @param value Input object.
-     * @return Typed map.
-     */
-    public static Map<String, Object> asMap(Object value) {
-        var output = new HashMap<String, Object>();
-
-        if (value instanceof Map) {
-            for (var entry : ((Map<?, ?>) value).entrySet()) {
-                output.put(entry.getKey().toString(), entry.getValue());
-            }
-        }
-
-        return output;
     }
 }

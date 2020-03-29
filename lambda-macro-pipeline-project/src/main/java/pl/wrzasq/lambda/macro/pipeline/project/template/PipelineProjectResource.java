@@ -8,13 +8,12 @@
 package pl.wrzasq.lambda.macro.pipeline.project.template;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import lombok.AllArgsConstructor;
+import pl.wrzasq.commons.aws.cloudformation.macro.TemplateUtils;
 
 /**
  * Model for handled resource.
@@ -77,6 +76,11 @@ public class PipelineProjectResource {
     private String logicalId;
 
     /**
+     * Creation condition.
+     */
+    private String condition;
+
+    /**
      * Builds definition of physical resources.
      *
      * @param properties Properties for our custom resource.
@@ -105,10 +109,10 @@ public class PipelineProjectResource {
         var resourceProperties = new HashMap<String, Object>();
         resourceProperties.put(
             PipelineProjectResource.PROPERTY_LOG_GROUP_NAME,
-            PipelineProjectResource.sub(String.format("/aws/codebuild/${%s}", this.logicalId))
+            TemplateUtils.sub(String.format("/aws/codebuild/${%s}", this.logicalId))
         );
 
-        PipelineProjectResource.popProperty(
+        TemplateUtils.popProperty(
             properties,
             PipelineProjectResource.PROPERTY_LOGS_RETENTION_IN_DAYS,
             value -> resourceProperties.put("RetentionInDays", value),
@@ -140,7 +144,7 @@ public class PipelineProjectResource {
             key -> PipelineProjectResource.generateArtifactsDelegation()
         );
 
-        var environment = ProcessedTemplate.asMap(
+        var environment = TemplateUtils.asMap(
             properties.computeIfAbsent(
                 PipelineProjectResource.PROPERTY_ENVIRONMENT,
                 key -> new HashMap<>()
@@ -155,7 +159,7 @@ public class PipelineProjectResource {
         environment.putIfAbsent(PipelineProjectResource.PROPERTY_KEY_TYPE, "LINUX_CONTAINER");
         environment.putIfAbsent(PipelineProjectResource.PROPERTY_KEY_COMPUTE_TYPE, "BUILD_GENERAL1_SMALL");
 
-        PipelineProjectResource.popProperty(
+        TemplateUtils.popProperty(
             properties,
             "Variables",
             value -> environment.put(
@@ -202,16 +206,9 @@ public class PipelineProjectResource {
         String type,
         Map<String, Object> properties
     ) {
-        var resource = new HashMap<>();
-        resource.put(PipelineProjectResource.PROPERTY_KEY_TYPE, String.format("AWS::%s", type));
-
-        if (!properties.isEmpty()) {
-            resource.put("Properties", properties);
-        }
-
         resources.put(
             String.format("%s%s", this.logicalId, suffix),
-            resource
+            TemplateUtils.generateResource(type, properties, this.condition)
         );
     }
 
@@ -224,38 +221,6 @@ public class PipelineProjectResource {
         var setup = new HashMap<String, Object>();
         setup.put(PipelineProjectResource.PROPERTY_KEY_TYPE, "CODEPIPELINE");
         return setup;
-    }
-
-    /**
-     * Handles optional property by removing it from generic properties pool.
-     *
-     * @param properties Main properties container.
-     * @param key Property key.
-     * @param then Property action.
-     * @param defaultValue Default property value.
-     */
-    private static void popProperty(
-        Map<String, Object> properties,
-        String key,
-        Consumer<Object> then,
-        Object defaultValue
-    ) {
-        if (properties.containsKey(key)) {
-            then.accept(properties.get(key));
-            properties.remove(key);
-        } else if (defaultValue != null) {
-            then.accept(defaultValue);
-        }
-    }
-
-    /**
-     * Returns !Sub reference call.
-     *
-     * @param params Call parameters.
-     * @return !Sub call.
-     */
-    private static Object sub(Object params) {
-        return Collections.singletonMap("Fn::Sub", params);
     }
 
     /**
@@ -272,7 +237,7 @@ public class PipelineProjectResource {
             list.addAll((List<?>) container);
         }
 
-        ProcessedTemplate.asMap(map)
+        TemplateUtils.asMap(map)
             .forEach((key, value) -> list.add(PipelineProjectResource.buildEnvironmentVariable(key, value)));
 
         return list;
