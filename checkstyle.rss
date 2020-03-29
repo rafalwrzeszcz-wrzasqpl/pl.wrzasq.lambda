@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2018 - 2020 Rafał Wrzeszcz - Wrzasq.pl</copyright>
     <item>
-      <title>File: 40,
-             Errors: 674,
+      <title>File: 43,
+             Errors: 874,
              Warnings: 0,
              Infos: 0
       </title>
@@ -60,6 +60,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.model.PipelineStage.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/model/PipelineStage.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  34
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.template.PipelineProjectResource.java">pl/wrzasq/lambda/macro/pipeline/project/template/PipelineProjectResource.java</a>
                 </td>
                 <td>
@@ -69,7 +83,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  23
+                  25
                 </td>
               </tr>
                           <tr>
@@ -195,7 +209,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  36
+                  39
                 </td>
               </tr>
                           <tr>
@@ -214,20 +228,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.lambda.function.model.CloudFormationMacroResponse.java">pl/wrzasq/lambda/macro/lambda/function/model/CloudFormationMacroResponse.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  35
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.edgedeploy.service.LambdaEdgeManager.java">pl/wrzasq/lambda/edgedeploy/service/LambdaEdgeManager.java</a>
                 </td>
                 <td>
@@ -238,20 +238,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.model.CloudFormationMacroResponse.java">pl/wrzasq/lambda/macro/pipeline/project/model/CloudFormationMacroResponse.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  35
                 </td>
               </tr>
                           <tr>
@@ -270,6 +256,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.model.PipelineDefinition.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/model/PipelineDefinition.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  51
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.stackset.instance.service.StackSetInstanceManager.java">pl/wrzasq/lambda/cform/stackset/instance/service/StackSetInstanceManager.java</a>
                 </td>
                 <td>
@@ -280,20 +280,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.lambda.function.template.ResourcesDefinition.java">pl/wrzasq/lambda/macro/lambda/function/template/ResourcesDefinition.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  25
                 </td>
               </tr>
                           <tr>
@@ -326,7 +312,21 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.Handler.java">pl/wrzasq/lambda/macro/pipeline/project/Handler.java</a>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.model.PipelineAction.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/model/PipelineAction.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  60
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.Handler.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/Handler.java</a>
                 </td>
                 <td>
                   0
@@ -340,7 +340,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.template.ResourcesDefinition.java">pl/wrzasq/lambda/macro/pipeline/project/template/ResourcesDefinition.java</a>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.Handler.java">pl/wrzasq/lambda/macro/pipeline/project/Handler.java</a>
                 </td>
                 <td>
                   0
@@ -349,7 +349,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  25
+                  0
                 </td>
               </tr>
                           <tr>
@@ -383,20 +383,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.stackset.model.StackSetResponse.java">pl/wrzasq/lambda/cform/stackset/model/StackSetResponse.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  24
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.lambda.function.model.CloudFormationMacroRequest.java">pl/wrzasq/lambda/macro/lambda/function/model/CloudFormationMacroRequest.java</a>
                 </td>
                 <td>
                   0
@@ -489,7 +475,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  11
+                  9
                 </td>
               </tr>
                           <tr>
@@ -504,6 +490,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.model.codepipeline.ActionTypeId.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/model/codepipeline/ActionTypeId.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  49
                 </td>
               </tr>
                           <tr>
@@ -531,12 +531,12 @@ under the License.
                   0
                 </td>
                 <td>
-                  11
+                  10
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.project.model.CloudFormationMacroRequest.java">pl/wrzasq/lambda/macro/pipeline/project/model/CloudFormationMacroRequest.java</a>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.template.CodePipelineUtils.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/template/CodePipelineUtils.java</a>
                 </td>
                 <td>
                   0
@@ -545,7 +545,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  24
+                  0
                 </td>
               </tr>
                           <tr>
@@ -564,6 +564,34 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.model.PipelineConfiguraiton.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/model/PipelineConfiguraiton.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  99
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.model.PipelineArtifact.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/model/PipelineArtifact.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  35
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.organization.service.OrganizationManager.java">pl/wrzasq/lambda/cform/organization/service/OrganizationManager.java</a>
                 </td>
                 <td>
@@ -574,6 +602,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.template.ProcessedTemplate.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/template/ProcessedTemplate.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  38
                 </td>
               </tr>
                           <tr>
