@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"pl.wrzasq.lambda.macro.lambda.function"},{"l":"pl.wrzasq.lambda.macro.lambda.function.model"},{"l":"pl.wrzasq.lambda.macro.lambda.function.template"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"pl.wrzasq.lambda.macro.lambda.function"},{"l":"pl.wrzasq.lambda.macro.lambda.function.template"}]
