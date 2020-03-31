@@ -5,8 +5,6 @@
 # @copyright 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
-TODO
-
 # Using in CloudFormation
 
 By using this macro handler, it's easy to create a **CodeBuild** project pre-configured for use in **CodePipeline**:

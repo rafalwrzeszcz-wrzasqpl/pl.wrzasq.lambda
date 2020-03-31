@@ -119,8 +119,6 @@ push artifacts into next stage and source is defined in next stage pipeline).
 
 # Example
 
-# TODO
-
 ```yaml
 Transform:
     - "WrzasqPlMultistagePipeline"
