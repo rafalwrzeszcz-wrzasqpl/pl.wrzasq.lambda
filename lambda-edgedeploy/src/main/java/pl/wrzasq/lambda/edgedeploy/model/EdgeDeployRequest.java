@@ -37,9 +37,9 @@ public class EdgeDeployRequest {
     private String roleArn;
 
     /**
-     * Runtime for running the Lambda (note that Lambda@Edge can only handle Node.js).
+     * Runtime for running the Lambda (note that Lambda@Edge has reduced set of supported runtimes).
      */
-    private Runtime runtime = Runtime.Nodejs810;
+    private Runtime runtime = Runtime.Nodejs12X;
 
     /**
      * Lambda entry point.

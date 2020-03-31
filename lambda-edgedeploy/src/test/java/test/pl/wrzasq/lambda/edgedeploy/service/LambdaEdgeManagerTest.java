@@ -52,7 +52,7 @@ public class LambdaEdgeManagerTest {
 
     private static final String FUNCTION_DESCRIPTION = "Test function.";
 
-    private static final Runtime RUNTIME = Runtime.Nodejs810;
+    private static final Runtime RUNTIME = Runtime.Nodejs12X;
 
     private static final String HANDLER = "index.handler";
 
