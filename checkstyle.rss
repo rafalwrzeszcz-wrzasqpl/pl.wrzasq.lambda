@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2018 - 2020 Rafał Wrzeszcz - Wrzasq.pl</copyright>
     <item>
-      <title>File: 43,
-             Errors: 874,
+      <title>File: 46,
+             Errors: 898,
              Warnings: 0,
              Infos: 0
       </title>
@@ -438,6 +438,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.devicefarm.project.service.DeviceFarmProjectManager.java">pl/wrzasq/lambda/cform/devicefarm/project/service/DeviceFarmProjectManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.dynamodb.DynamoDbMapperFactory.java">pl/wrzasq/lambda/dynamodb/DynamoDbMapperFactory.java</a>
                 </td>
                 <td>
@@ -536,6 +550,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.devicefarm.project.Handler.java">pl/wrzasq/lambda/cform/devicefarm/project/Handler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.macro.pipeline.multistagecd.template.CodePipelineUtils.java">pl/wrzasq/lambda/macro/pipeline/multistagecd/template/CodePipelineUtils.java</a>
                 </td>
                 <td>
@@ -546,6 +574,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/checkstyle.html#pl.wrzasq.lambda.cform.devicefarm.project.model.DeviceFarmProjectRequest.java">pl/wrzasq/lambda/cform/devicefarm/project/model/DeviceFarmProjectRequest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
                 </td>
               </tr>
                           <tr>
