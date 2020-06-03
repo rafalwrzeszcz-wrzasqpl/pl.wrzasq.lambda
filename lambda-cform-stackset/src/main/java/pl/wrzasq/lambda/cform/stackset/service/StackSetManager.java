@@ -182,7 +182,7 @@ public class StackSetManager {
         // operation ID seed
         var attempt = 0;
         var hash = String.format(
-            "hash:%d",
+            "hash-%d",
             List.of(
                 input.getTemplateUrl(),
                 input.getDescription(),
@@ -202,7 +202,7 @@ public class StackSetManager {
                 var result = this.cloudFormation.updateStackSet(
                     new UpdateStackSetRequest()
                         .withStackSetName(input.getStackSetName())
-                        .withOperationId(String.format("%s:%d", hash, attempt))
+                        .withOperationId(String.format("%s-%d", hash, attempt))
                         .withTemplateURL(input.getTemplateUrl())
                         .withDescription(input.getDescription())
                         .withAdministrationRoleARN(input.getAdministrationRoleArn())
