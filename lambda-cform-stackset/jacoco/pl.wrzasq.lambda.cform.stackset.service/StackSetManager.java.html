@@ -182,7 +182,7 @@ public class StackSetManager {
         // operation ID seed
 <span class="fc" id="L183">        var attempt = 0;</span>
 <span class="fc" id="L184">        var hash = String.format(</span>
-            &quot;hash:%d&quot;,
+            &quot;hash-%d&quot;,
 <span class="fc" id="L186">            List.of(</span>
 <span class="fc" id="L187">                input.getTemplateUrl(),</span>
 <span class="fc" id="L188">                input.getDescription(),</span>
@@ -202,7 +202,7 @@ public class StackSetManager {
 <span class="fc" id="L202">                var result = this.cloudFormation.updateStackSet(</span>
                     new UpdateStackSetRequest()
 <span class="fc" id="L204">                        .withStackSetName(input.getStackSetName())</span>
-<span class="fc" id="L205">                        .withOperationId(String.format(&quot;%s:%d&quot;, hash, attempt))</span>
+<span class="fc" id="L205">                        .withOperationId(String.format(&quot;%s-%d&quot;, hash, attempt))</span>
 <span class="fc" id="L206">                        .withTemplateURL(input.getTemplateUrl())</span>
 <span class="fc" id="L207">                        .withDescription(input.getDescription())</span>
 <span class="fc" id="L208">                        .withAdministrationRoleARN(input.getAdministrationRoleArn())</span>

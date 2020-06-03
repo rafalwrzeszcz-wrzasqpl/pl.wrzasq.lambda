@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>         <em class="jxr_comment">// operation ID seed</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">var</strong> attempt = 0;
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>         <strong class="jxr_keyword">var</strong> hash = String.format(
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>             <span class="jxr_string">"hash:%d"</span>,
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>             <span class="jxr_string">"hash-%d"</span>,
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>             List.of(
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>                 input.getTemplateUrl(),
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>                 input.getDescription(),
@@ -210,7 +210,7 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>                 <strong class="jxr_keyword">var</strong> result = <strong class="jxr_keyword">this</strong>.cloudFormation.updateStackSet(
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>                     <strong class="jxr_keyword">new</strong> UpdateStackSetRequest()
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>                         .withStackSetName(input.getStackSetName())
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>                         .withOperationId(String.format(<span class="jxr_string">"%s:%d"</span>, hash, attempt))
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>                         .withOperationId(String.format(<span class="jxr_string">"%s-%d"</span>, hash, attempt))
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>                         .withTemplateURL(input.getTemplateUrl())
 <a class="jxr_linenumber" name="L207" href="#L207">207</a>                         .withDescription(input.getDescription())
 <a class="jxr_linenumber" name="L208" href="#L208">208</a>                         .withAdministrationRoleARN(input.getAdministrationRoleArn())
