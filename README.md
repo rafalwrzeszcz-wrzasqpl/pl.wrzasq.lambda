@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
 # WrzasqPl-Lambda
@@ -37,6 +37,10 @@ resource.
 ## [Lambda-CForm Account](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-account/)
 
 **CloudFormation** custom resource handler for organization account.
+
+## [Lambda-CForm DeviceFarm Project](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-devicefarm-project/)
+
+**CloudFormation** custom resource handler for **DeviceFarm** **Selenium** project.
 
 ## [Lambda-CForm Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-organization/)
 

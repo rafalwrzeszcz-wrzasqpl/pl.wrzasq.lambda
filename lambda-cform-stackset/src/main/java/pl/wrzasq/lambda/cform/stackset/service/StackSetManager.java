@@ -8,12 +8,14 @@
 package pl.wrzasq.lambda.cform.stackset.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.amazonaws.services.cloudformation.AmazonCloudFormation;
 import com.amazonaws.services.cloudformation.model.Capability;
 import com.amazonaws.services.cloudformation.model.CreateStackSetRequest;
 import com.amazonaws.services.cloudformation.model.DeleteStackSetRequest;
 import com.amazonaws.services.cloudformation.model.DescribeStackSetRequest;
+import com.amazonaws.services.cloudformation.model.OperationIdAlreadyExistsException;
 import com.amazonaws.services.cloudformation.model.Parameter;
 import com.amazonaws.services.cloudformation.model.StackSetNotFoundException;
 import com.amazonaws.services.cloudformation.model.Tag;
@@ -177,21 +179,48 @@ public class StackSetManager {
      * @param input Stack set specification.
      */
     private void updateStackSet(StackSetRequest input) {
-        var result = this.cloudFormation.updateStackSet(
-            new UpdateStackSetRequest()
-                .withStackSetName(input.getStackSetName())
-                .withTemplateURL(input.getTemplateUrl())
-                .withDescription(input.getDescription())
-                .withAdministrationRoleARN(input.getAdministrationRoleArn())
-                .withExecutionRoleName(input.getExecutionRoleName())
-                .withCapabilities(input.getCapabilities().toArray(StackSetManager.CAPABILITY_CAST))
-                .withParameters(StackSetManager.buildSdkParameters(input))
-                .withTags(StackSetManager.buildSdkTags(input))
+        // operation ID seed
+        var attempt = 0;
+        var hash = String.format(
+            "hash:%d",
+            List.of(
+                input.getTemplateUrl(),
+                input.getDescription(),
+                input.getAdministrationRoleArn(),
+                input.getExecutionRoleName(),
+                input.getCapabilities(),
+                input.getParameters(),
+                input.getTags()
+            )
+                .hashCode()
         );
 
-        this.stackSetHandler.waitForStackSetOperation(input.getStackSetName(), result.getOperationId());
+        do {
+            try {
+                // if the operation ID will match latest one it will be immediate success, but the ID could have been
+                // used in past already - in such case we need to make sure to make new ID
+                var result = this.cloudFormation.updateStackSet(
+                    new UpdateStackSetRequest()
+                        .withStackSetName(input.getStackSetName())
+                        .withOperationId(String.format("%s:%d", hash, attempt))
+                        .withTemplateURL(input.getTemplateUrl())
+                        .withDescription(input.getDescription())
+                        .withAdministrationRoleARN(input.getAdministrationRoleArn())
+                        .withExecutionRoleName(input.getExecutionRoleName())
+                        .withCapabilities(input.getCapabilities().toArray(StackSetManager.CAPABILITY_CAST))
+                        .withParameters(StackSetManager.buildSdkParameters(input))
+                        .withTags(StackSetManager.buildSdkTags(input))
+                );
 
-        this.logger.info("Updated stack set (operation ID: {}).", result.getOperationId());
+                this.stackSetHandler.waitForStackSetOperation(input.getStackSetName(), result.getOperationId());
+
+                this.logger.info("Updated stack set (operation ID: {}).", result.getOperationId());
+                return;
+            } catch (OperationIdAlreadyExistsException error) {
+                this.logger.info("ID already used, trying next attempt.");
+                ++attempt;
+            }
+        } while (true);
     }
 
     /**

@@ -19,6 +19,7 @@ import com.amazonaws.services.cloudformation.model.DeleteStackSetRequest;
 import com.amazonaws.services.cloudformation.model.DeleteStackSetResult;
 import com.amazonaws.services.cloudformation.model.DescribeStackSetRequest;
 import com.amazonaws.services.cloudformation.model.DescribeStackSetResult;
+import com.amazonaws.services.cloudformation.model.OperationIdAlreadyExistsException;
 import com.amazonaws.services.cloudformation.model.StackSet;
 import com.amazonaws.services.cloudformation.model.StackSetNotFoundException;
 import com.amazonaws.services.cloudformation.model.UpdateStackSetRequest;
@@ -109,6 +110,7 @@ public class StackSetManagerTest {
             );
         Mockito
             .when(this.cloudFormation.updateStackSet(this.updateRequest.capture()))
+            .thenThrow(OperationIdAlreadyExistsException.class)
             .thenReturn(
                 new UpdateStackSetResult()
                     .withOperationId(operationId)
