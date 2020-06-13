@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.macro.TemplateDefinition;
 import pl.wrzasq.commons.aws.cloudformation.macro.TemplateUtils;
-import pl.wrzasq.lambda.json.ObjectMapperFactory;
+import pl.wrzasq.commons.json.ObjectMapperFactory;
 import pl.wrzasq.lambda.macro.pipeline.multistagecd.model.PipelineAction;
 import pl.wrzasq.lambda.macro.pipeline.multistagecd.model.PipelineArtifact;
 import pl.wrzasq.lambda.macro.pipeline.multistagecd.model.PipelineConfiguraiton;

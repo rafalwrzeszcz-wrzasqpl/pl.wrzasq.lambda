@@ -21,7 +21,7 @@
     <parent>
         <groupId>pl.wrzasq.parent</groupId>
         <artifactId>parent-opensource</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.8</version>
     </parent>
 
     <!-- project meta info -->
@@ -126,9 +126,7 @@
         <module>lambda-cform-passwordpolicy</module>
         <module>lambda-cform-stackset</module>
         <module>lambda-cform-stackset-instance</module>
-        <module>lambda-dynamodb</module>
         <module>lambda-edgedeploy</module>
-        <module>lambda-json</module>
         <module>lambda-macro-lambda-function</module>
         <module>lambda-macro-pipeline-multistagecd</module>
         <module>lambda-macro-pipeline-project</module>

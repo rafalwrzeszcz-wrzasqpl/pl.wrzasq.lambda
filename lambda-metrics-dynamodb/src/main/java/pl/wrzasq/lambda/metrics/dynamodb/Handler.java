@@ -15,7 +15,7 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import pl.wrzasq.lambda.json.ObjectMapperFactory;
+import pl.wrzasq.commons.json.ObjectMapperFactory;
 import pl.wrzasq.lambda.metrics.dynamodb.model.TableMetricRequest;
 import pl.wrzasq.lambda.metrics.dynamodb.service.CloudWatchDynamoDbMetricGenerator;
 

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2018 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.lambda.edgedeploy.service;
@@ -41,10 +41,10 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.wrzasq.commons.json.ObjectMapperFactory;
 import pl.wrzasq.lambda.edgedeploy.model.EdgeDeployRequest;
 import pl.wrzasq.lambda.edgedeploy.service.LambdaEdgeManager;
 import pl.wrzasq.lambda.edgedeploy.zip.ZipBuilder;
-import pl.wrzasq.lambda.json.ObjectMapperFactory;
 
 @ExtendWith(MockitoExtension.class)
 public class LambdaEdgeManagerTest {

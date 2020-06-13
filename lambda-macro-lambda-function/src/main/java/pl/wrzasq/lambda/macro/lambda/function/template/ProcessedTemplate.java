@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import pl.wrzasq.commons.aws.cloudformation.macro.ResourcesDefinition;
 import pl.wrzasq.commons.aws.cloudformation.macro.TemplateDefinition;
 import pl.wrzasq.commons.aws.cloudformation.macro.TemplateUtils;
-import pl.wrzasq.lambda.json.ObjectMapperFactory;
+import pl.wrzasq.commons.json.ObjectMapperFactory;
 
 /**
  * Contains template structure with handled resources references.
