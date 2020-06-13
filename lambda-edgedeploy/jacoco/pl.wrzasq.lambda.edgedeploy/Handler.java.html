@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.lambda.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2018 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.lambda.edgedeploy;
@@ -14,9 +14,9 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.sunrun.cfnresponse.CfnRequest;
 import pl.wrzasq.commons.aws.cloudformation.CustomResourceHandler;
+import pl.wrzasq.commons.json.ObjectMapperFactory;
 import pl.wrzasq.lambda.edgedeploy.model.EdgeDeployRequest;
 import pl.wrzasq.lambda.edgedeploy.service.LambdaEdgeManager;
-import pl.wrzasq.lambda.json.ObjectMapperFactory;
 
 /**
  * CloudFormation request handler.
