@@ -79,7 +79,7 @@ public class HandlerTest {
             "Handler.handle() should expose exception."
         );
 
-        Mockito.verifyZeroInteractions(this.metricGenerator);
+        Mockito.verifyNoInteractions(this.metricGenerator);
         Mockito.verify(this.outputStream).close();
     }
 }
