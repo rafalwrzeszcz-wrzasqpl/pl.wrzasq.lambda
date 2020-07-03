@@ -13,19 +13,31 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.wrzasq.lambda.macro.pipeline.multistagecd.model.codepipeline.ActionTypeId;
 
 /**
  * Pipeline action definition.
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PipelineAction {
     /**
      * Action name.
      */
     @JsonProperty("Name")
     private String name;
+
+    /**
+     * Target region.
+     */
+    @JsonProperty("Region")
+    private String region;
 
     /**
      * Action type identifier.
@@ -37,18 +49,21 @@ public class PipelineAction {
      * Action configuration.
      */
     @JsonProperty("Configuration")
+    @Builder.Default
     private Map<String, Object> configuration = new HashMap<>();
 
     /**
      * Input artifacts IDs.
      */
     @JsonProperty("InputArtifacts")
+    @Builder.Default
     private List<String> inputs = new ArrayList<>();
 
     /**
      * Output artifacts IDs.
      */
     @JsonProperty("OutputArtifacts")
+    @Builder.Default
     private List<String> outputs = new ArrayList<>();
 
     /**

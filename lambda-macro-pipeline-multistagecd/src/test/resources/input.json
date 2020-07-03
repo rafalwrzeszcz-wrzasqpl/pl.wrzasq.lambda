@@ -154,6 +154,7 @@
                     },
                     {
                         "Name": "API",
+                        "Region": "eu-east-1",
                         "Configuration": {
                             "ActionMode": "CREATE_UPDATE",
                             "StackName": "api",

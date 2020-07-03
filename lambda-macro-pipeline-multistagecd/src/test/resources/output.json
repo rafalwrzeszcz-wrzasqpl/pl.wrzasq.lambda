@@ -286,6 +286,7 @@
                             },
                             {
                                 "Name": "API",
+                                "Region": "eu-east-1",
                                 "ActionTypeId": {
                                     "Category": "Deploy",
                                     "Owner": "AWS",

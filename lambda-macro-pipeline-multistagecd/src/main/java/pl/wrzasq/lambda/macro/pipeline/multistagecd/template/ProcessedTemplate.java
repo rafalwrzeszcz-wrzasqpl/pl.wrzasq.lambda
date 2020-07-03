@@ -9,6 +9,7 @@ package pl.wrzasq.lambda.macro.pipeline.multistagecd.template;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -231,14 +232,12 @@ public class ProcessedTemplate implements TemplateDefinition {
         // keeping order to avoid structure changes in CloudFormation
         for (var id : new TreeSet<>(sources.keySet())) {
             steps.add(
-                ProcessedTemplate.populateActionDefinition(
+                ProcessedTemplate.buildActionDefinition(
                     sources.get(id),
-                    id,
-                    null,
-                    Collections.emptyMap(),
-                    Collections.emptyList(),
-                    Collections.singletonList(id),
-                    null
+                    PipelineAction.builder()
+                        .name(id)
+                        .outputs(Collections.singletonList(id))
+                        .build()
                 )
             );
         }
@@ -256,6 +255,8 @@ public class ProcessedTemplate implements TemplateDefinition {
         var steps = new ArrayList<>(artifacts.size());
         var runOrder = 0;
 
+        var type = ActionTypeId.s3Source();
+
         /*
         having sources in reverse direction than in promote step, makes us sure that each next stage pipeline is
         launched only when all previous stage artifacts are properly uploaded
@@ -263,20 +264,19 @@ public class ProcessedTemplate implements TemplateDefinition {
         for (var id : new TreeSet<>(artifacts.keySet()).descendingSet()) {
             var artifact = artifacts.get(id);
 
-            var type = ActionTypeId.s3Source();
-
             var actionConfig = new HashMap<String, Object>();
             actionConfig.put("S3Bucket", artifact.getSourceBucketName());
             actionConfig.put("S3ObjectKey", artifact.getObjectKey());
 
             steps.add(
                 ProcessedTemplate.buildActionDefinition(
-                    id,
-                    type,
-                    actionConfig,
-                    Collections.emptyList(),
-                    Collections.singletonList(id),
-                    ++runOrder
+                    PipelineAction.builder()
+                        .name(id)
+                        .type(type)
+                        .configuration(actionConfig)
+                        .outputs(Collections.singletonList(id))
+                        .runOrder(++runOrder)
+                        .build()
                 )
             );
         }
@@ -313,12 +313,10 @@ public class ProcessedTemplate implements TemplateDefinition {
                 "Review",
                 Collections.singletonList(
                     ProcessedTemplate.buildActionDefinition(
-                        "Approval",
-                        ActionTypeId.manualApproval(),
-                        Collections.emptyMap(),
-                        Collections.emptyList(),
-                        Collections.emptyList(),
-                        null
+                        PipelineAction.builder()
+                            .name("Approval")
+                            .type(ActionTypeId.manualApproval())
+                            .build()
                     )
                 )
             ),
@@ -351,12 +349,13 @@ public class ProcessedTemplate implements TemplateDefinition {
 
             steps.add(
                 ProcessedTemplate.buildActionDefinition(
-                    id,
-                    type,
-                    actionConfig,
-                    Collections.singletonList(id),
-                    Collections.emptyList(),
-                    ++runOrder
+                    PipelineAction.builder()
+                        .name(id)
+                        .type(type)
+                        .configuration(actionConfig)
+                        .inputs(Collections.singletonList(id))
+                        .runOrder(++runOrder)
+                        .build()
                 )
             );
         }
@@ -382,7 +381,7 @@ public class ProcessedTemplate implements TemplateDefinition {
 
         return CodePipelineUtils.buildStage(
             stage.getName(),
-            actions.stream().map(this::buildAction).collect(Collectors.toList())
+            actions.stream().map(ProcessedTemplate::buildActionDefinition).collect(Collectors.toList())
         );
     }
 
@@ -450,23 +449,6 @@ public class ProcessedTemplate implements TemplateDefinition {
     }
 
     /**
-     * Builds pipeline stage action definition structure.
-     *
-     * @param action Stage setup.
-     * @return CodePipeline action definition.
-     */
-    private Map<String, Object> buildAction(PipelineAction action) {
-        return ProcessedTemplate.buildActionDefinition(
-            action.getName(),
-            action.getType(),
-            action.getConfiguration(),
-            action.getInputs(),
-            action.getOutputs(),
-            action.getRunOrder()
-        );
-    }
-
-    /**
      * Builds list of all used input artifacts.
      *
      * @param action Action definition.
@@ -492,82 +474,54 @@ public class ProcessedTemplate implements TemplateDefinition {
     }
 
     /**
-     * Builds pipeline action definition structure.
+     * Populates pipeline action definition structure.
      *
-     * @param actionName Action name.
-     * @param type Action type.
-     * @param configuration Custom options.
-     * @param inputs Input artifacts list.
-     * @param outputs Output artifacts list.
-     * @param runOrder Execution order.
+     * @param action Action configuration.
      * @return CodePipeline stage definition.
      */
-    private static Map<String, Object> buildActionDefinition(
-        String actionName,
-        ActionTypeId type,
-        Map<String, Object> configuration,
-        List<String> inputs,
-        List<String> outputs,
-        Integer runOrder
-    ) {
-        return ProcessedTemplate.populateActionDefinition(
-            new HashMap<>(),
-            actionName,
-            type,
-            configuration,
-            inputs,
-            outputs,
-            runOrder
-        );
+    private static Map<String, Object> buildActionDefinition(PipelineAction action) {
+        return ProcessedTemplate.buildActionDefinition(new HashMap<>(), action);
     }
 
     /**
      * Populates pipeline action definition structure.
      *
+     * @param data Initial definition.
      * @param action Action configuration.
-     * @param actionName Action name.
-     * @param type Action type.
-     * @param configuration Custom options.
-     * @param inputs Input artifacts list.
-     * @param outputs Output artifacts list.
-     * @param runOrder Execution order.
      * @return CodePipeline stage definition.
      */
-    private static Map<String, Object> populateActionDefinition(
-        Map<String, Object> action,
-        String actionName,
-        ActionTypeId type,
-        Map<String, Object> configuration,
-        List<String> inputs,
-        List<String> outputs,
-        Integer runOrder
-    ) {
-        action.put("Name", actionName);
-        action.compute(
+    private static Map<String, Object> buildActionDefinition(Map<String, Object> data, PipelineAction action) {
+        data.put("Name", action.getName());
+        data.compute(
             "ActionTypeId",
-            (String key, Object old) -> CodePipelineUtils.convertActionTypeId(type != null ? type : old)
+            (String key, Object old) -> CodePipelineUtils.convertActionTypeId(
+                action.getType() != null ? action.getType() : old
+            )
         );
 
-        if (!configuration.isEmpty()) {
-            action.put("Configuration", configuration);
+        if (action.getRegion() != null) {
+            data.put("Region", action.getRegion());
         }
-        if (!inputs.isEmpty()) {
-            action.put(
+        if (!action.getConfiguration().isEmpty()) {
+            data.put("Configuration", action.getConfiguration());
+        }
+        if (!action.getInputs().isEmpty()) {
+            data.put(
                 "InputArtifacts",
-                inputs.stream().distinct().map(CodePipelineUtils::buildArtifactRef).collect(Collectors.toList())
+                ProcessedTemplate.buildArtifactRefs(action.getInputs())
             );
         }
-        if (!outputs.isEmpty()) {
-            action.put(
+        if (!action.getOutputs().isEmpty()) {
+            data.put(
                 "OutputArtifacts",
-                outputs.stream().distinct().map(CodePipelineUtils::buildArtifactRef).collect(Collectors.toList())
+                ProcessedTemplate.buildArtifactRefs(action.getOutputs())
             );
         }
-        if (runOrder != null) {
-            action.put("RunOrder", runOrder);
+        if (action.getRunOrder() != null) {
+            data.put("RunOrder", action.getRunOrder());
         }
 
-        return action;
+        return data;
     }
 
     /**
@@ -615,6 +569,16 @@ public class ProcessedTemplate implements TemplateDefinition {
                 "true"
             )
         );
+    }
+
+    /**
+     * Converts artifact names into list of artifact reference.
+     *
+     * @param names Artifact names.
+     * @return Artifact references.
+     */
+    private static List<Map<String, String>> buildArtifactRefs(Collection<String> names) {
+        return names.stream().distinct().map(CodePipelineUtils::buildArtifactRef).collect(Collectors.toList());
     }
 
     /**
