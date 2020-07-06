@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"pl.wrzasq.lambda.cform.cognito.domain.data.model","l":"CognitoDomainDataRequest"},{"p":"pl.wrzasq.lambda.cform.cognito.domain.data.service","l":"CognitoDomainHandler"},{"p":"pl.wrzasq.lambda.cform.cognito.domain.data","l":"Handler"}]
