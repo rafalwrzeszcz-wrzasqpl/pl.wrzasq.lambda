@@ -38,6 +38,10 @@ resource.
 
 **CloudFormation** custom resource handler for organization account.
 
+## [Lambda-CForm Cognito domain data](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-cognito-domain-data/)
+
+**Cognito** custom domain data provider as **CloudFormation** custom resource handler.
+
 ## [Lambda-CForm DeviceFarm Project](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-devicefarm-project/)
 
 **CloudFormation** custom resource handler for **DeviceFarm** **Selenium** project.
