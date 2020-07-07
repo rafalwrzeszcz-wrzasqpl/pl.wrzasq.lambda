@@ -37,9 +37,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
                     <usedDependencies>
-                        <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk</usedDependency>
-                        <usedDependency>com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor</usedDependency>
-                        <usedDependency>io.symphonia:lambda-logging</usedDependency>
+                        <usedDependency>pl.wrzasq.parent:parent-lambda</usedDependency>
                     </usedDependencies>
                 </configuration>
             </plugin>
@@ -57,18 +55,6 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
             <version>1.2.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-xray-recorder-sdk-aws-sdk</artifactId>
-            <version>2.5.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-xray-recorder-sdk-aws-sdk-instrumentor</artifactId>
-            <version>2.5.0</version>
         </dependency>
 
         <dependency>
@@ -90,12 +76,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.symphonia</groupId>
-            <artifactId>lambda-logging</artifactId>
-            <version>1.0.3</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.30</version>
@@ -111,6 +91,12 @@
             <groupId>pl.wrzasq.commons</groupId>
             <artifactId>commons-json</artifactId>
             <version>1.1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.wrzasq.parent</groupId>
+            <artifactId>parent-lambda</artifactId>
+            <version>1.1.9</version>
         </dependency>
     </dependencies>
 </project>
