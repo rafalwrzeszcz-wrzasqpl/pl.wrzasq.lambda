@@ -505,6 +505,9 @@ public class ProcessedTemplate implements TemplateDefinition {
         if (!action.getConfiguration().isEmpty()) {
             data.put("Configuration", action.getConfiguration());
         }
+        if (action.getNamespace() != null) {
+            data.put("Namespace", action.getNamespace());
+        }
         if (!action.getInputs().isEmpty()) {
             data.put(
                 "InputArtifacts",

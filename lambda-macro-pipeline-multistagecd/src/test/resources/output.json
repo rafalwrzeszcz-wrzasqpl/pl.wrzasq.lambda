@@ -273,6 +273,7 @@
                                     "TemplatePath": "templates::cloudformation/authorizer.yaml",
                                     "OutputFileName": "out.json"
                                 },
+                                "Namespace": "authorizer",
                                 "InputArtifacts": [
                                     {
                                         "Name": "templates"

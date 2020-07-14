@@ -53,6 +53,12 @@ public class PipelineAction {
     private Map<String, Object> configuration = new HashMap<>();
 
     /**
+     * Variables namespace.
+     */
+    @JsonProperty("Namespace")
+    private String namespace;
+
+    /**
      * Input artifacts IDs.
      */
     @JsonProperty("InputArtifacts")
