@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 WrzasqPl CodePipeline automation macro,pl.wrzasq.lambda.macro.pipeline.multistagecd,Handler,0,14,0,0,0,4,0,2,0,2
 WrzasqPl CodePipeline automation macro,pl.wrzasq.lambda.macro.pipeline.multistagecd.template,CodePipelineUtils,3,58,0,2,1,14,1,4,1,3
-WrzasqPl CodePipeline automation macro,pl.wrzasq.lambda.macro.pipeline.multistagecd.template,ProcessedTemplate,0,829,1,37,0,124,1,51,0,33
+WrzasqPl CodePipeline automation macro,pl.wrzasq.lambda.macro.pipeline.multistagecd.template,ProcessedTemplate,0,838,1,39,0,126,1,52,0,33
 WrzasqPl CodePipeline automation macro,pl.wrzasq.lambda.macro.pipeline.multistagecd.model.codepipeline,ActionTypeId,0,28,0,0,0,8,0,5,0,5
