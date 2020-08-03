@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"pl.wrzasq.lambda.cform.appsync.graphqlapi.data"},{"l":"pl.wrzasq.lambda.cform.appsync.graphqlapi.data.data"},{"l":"pl.wrzasq.lambda.cform.appsync.graphqlapi.data.service"}]

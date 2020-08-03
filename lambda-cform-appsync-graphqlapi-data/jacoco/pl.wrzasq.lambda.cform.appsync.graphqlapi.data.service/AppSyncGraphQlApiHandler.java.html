@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppSyncGraphQlApiHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl CloudFormation AppSync GraphQL API data provider</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.lambda.cform.appsync.graphqlapi.data.service</a> &gt; <span class="el_source">AppSyncGraphQlApiHandler.java</span></div><h1>AppSyncGraphQlApiHandler.java</h1><pre class="source lang-java linenums">/*
+ * This file is part of the pl.wrzasq.lambda.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.lambda.cform.appsync.graphqlapi.data.service;
+
+import com.amazonaws.services.appsync.AWSAppSync;
+import com.amazonaws.services.appsync.model.GetGraphqlApiRequest;
+import pl.wrzasq.commons.aws.cloudformation.CustomResourceResponse;
+import pl.wrzasq.lambda.cform.appsync.graphqlapi.data.data.AppSyncGraphQlApiDataRequest;
+import pl.wrzasq.lambda.cform.appsync.graphqlapi.data.data.AppSyncGraphQlApiDataResponse;
+
+/**
+ * AppSync API implementation.
+ */
+public class AppSyncGraphQlApiHandler {
+    /**
+     * Schema URI prefix.
+     */
+    private static final String APPSYNC_API_URI_PREFIX = &quot;https://&quot;;
+
+    /**
+     * Path URI suffix.
+     */
+    private static final String APPSYNC_API_URI_SUFFIX = &quot;/graphql&quot;;
+
+    /**
+     * AWS AppSync API client.
+     */
+    private AWSAppSync appSync;
+
+    /**
+     * Initializes object with given AppSync client.
+     *
+     * @param appSync AWS AppSync client.
+     */
+<span class="fc" id="L40">    public AppSyncGraphQlApiHandler(AWSAppSync appSync) {</span>
+<span class="fc" id="L41">        this.appSync = appSync;</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Handles domain description.
+     *
+     * @param input Resource creation request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
+     * @return Data about created project.
+     */
+    public CustomResourceResponse&lt;AppSyncGraphQlApiDataResponse&gt; read(
+        AppSyncGraphQlApiDataRequest input,
+        String physicalResourceId
+    ) {
+<span class="fc" id="L55">        var data = this.appSync.getGraphqlApi(</span>
+            new GetGraphqlApiRequest()
+<span class="fc" id="L57">                .withApiId(input.getApiId())</span>
+        )
+<span class="fc" id="L59">            .getGraphqlApi();</span>
+
+<span class="fc" id="L61">        return new CustomResourceResponse&lt;&gt;(</span>
+            new AppSyncGraphQlApiDataResponse(
+<span class="fc" id="L63">                AppSyncGraphQlApiHandler.extractDomainFromUri(data.getUris().get(&quot;GRAPHQL&quot;))</span>
+            ),
+<span class="fc" id="L65">            input.getApiId()</span>
+        );
+    }
+
+    /**
+     * Handles project deletion.
+     *
+     * @param input Resource delete request.
+     * @param physicalResourceId Physical ID of existing resource (if present).
+     * @return Empty response.
+     */
+    public CustomResourceResponse&lt;AppSyncGraphQlApiDataResponse&gt; delete(
+        AppSyncGraphQlApiDataRequest input,
+        String physicalResourceId
+    ) {
+<span class="fc" id="L80">        return new CustomResourceResponse&lt;&gt;(null, physicalResourceId);</span>
+    }
+
+    /**
+     * Extracts domain from API URL.
+     *
+     * @param uri Full API URI.
+     * @return Plain domain name.
+     */
+    private static String extractDomainFromUri(String uri) {
+<span class="fc" id="L90">        return uri.substring(</span>
+<span class="fc" id="L91">            AppSyncGraphQlApiHandler.APPSYNC_API_URI_PREFIX.length(),</span>
+<span class="fc" id="L92">            uri.length() - AppSyncGraphQlApiHandler.APPSYNC_API_URI_SUFFIX.length()</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
