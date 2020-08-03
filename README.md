@@ -38,6 +38,10 @@ resource.
 
 **CloudFormation** custom resource handler for organization account.
 
+## [Lambda-CForm AppSync GraphQL API data](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-appsync-graphqlapi-data/)
+
+**AppSync** GraphQL API data provider as **CloudFormation** custom resource handler.
+
 ## [Lambda-CForm Cognito domain data](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-cognito-domain-data/)
 
 **Cognito** custom domain data provider as **CloudFormation** custom resource handler.

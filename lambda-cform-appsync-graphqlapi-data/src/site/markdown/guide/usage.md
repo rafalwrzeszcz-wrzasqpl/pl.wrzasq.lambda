@@ -7,21 +7,23 @@
 
 # Using in CloudFormation
 
-Since some time **CloudFormation** allows to manage custom domains with
-[`AWS::Cognito::UserPoolDomain`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooldomain.html)
-resource. Unfortunately this resource does not expose generated **CloudFront** distribution which makes management
-of **Route53** record set impossible.
+**AppSync** GraphQL APIs can be managed with **CloudFormation** using
+[`AWS::AppSync::GraphQLApi`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html)
+resource. However, when you try to expose the API through **CloudFront** you will hit the wall - the API resource
+exposes only entire URL (include `https://` scheme and `/graphql` path), while CloudFront expects only domain name.
+Building API domain by hand in CloudFormation with `Fn::Sub` is not possible because it is unique for every API and do
+not utilizes ID.
 
-This custom resource handler exposes properties of custom domain so they can be used within **CloudFormation**.
+This custom resource handler exposes additional properties of GraphQL API so they can be used within **CloudFormation**.
 
 **Note:** This resource handler only exposes information about existing domain name, you need to already have a resource
-created by `AWS::Cognito::UserPoolDomain`.
+created by `AWS::AppSync::GraphQLApi`.
 
 # Required permissions
 
-`lambda-cform-cognito-domain-data` Lambda needs following permissions:
+`lambda-cform-appsync-graphqlapi-data` Lambda needs following permissions:
 
--   `cognito-idp:DescribeUserPoolDomain`.
+-   `appsync:GetGraphqlApi`.
 
 Additionally you may want to add following policies to it's role:
 
@@ -32,22 +34,22 @@ resource handler execution);
 
 # Properties
 
-## `domain` (required) - string
+## `apiId` (required) - string
 
-Target domain name.
+ID of GraphQL API.
 
 # Output values
 
-Deploy handler exposes entire
-[DomainDescriptionType](https://docs.amazonaws.cn/AWSJavaSDK/latest/javadoc/com/amazonaws/services/cognitoidp/model/DomainDescriptionType.html)
-object.
+## `domainName` - string
 
-**Note:** Custom resource physical ID is set as domain name.
+Domain name of public endpoint.
+
+**Note:** Custom resource physical ID is set as API ID.
 
 # Example
 
 ```yaml
-    CognitoDomainProviderRole:
+    AppSyncGraphQlApiProviderRole:
         Type: "AWS::IAM::Role"
         Properties:
             AssumeRolePolicyDocument:
@@ -62,47 +64,36 @@ object.
                 - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
             Policies:
                 -
-                    PolicyName: "AllowReadingCognitoDomains"
+                    PolicyName: "AllowReadingAppSyncApi"
                     PolicyDocument:
                         Version: "2012-10-17"
                         Statement:
                             -
                                 Action:
-                                    - "cognito-idp:DescribeUserPoolDomain"
+                                    - "appsync:GetGraphqlApi"
                                 Effect: "Allow"
                                 Resource:
-                                    - "*"
+                                    - "*" # you can place particular API ARN here
 
-    CognitoDomainProvider:
+    AppSyncGraphQlApiProvider:
         Type: "AWS::Lambda::Function"
         Properties:
             Runtime: "java11"
             Code:
                 # put your source bucket
                 S3Bucket: "your-bucket"
-                S3Key: "lambda-cform-cognito-domain-data-1.0.1-standalone.jar"
-            Handler: "pl.wrzasq.lambda.cform.cognito.domain.data.Handler::handle"
+                S3Key: "lambda-cform-appsync-graphqalapi-data-1.0.1-standalone.jar"
+            Handler: "pl.wrzasq.lambda.cform.appsync.graphqlapi.data.Handler::handle"
             MemorySize: 256
-            Description: "AWS Cognito user pool custom domain data provider."
+            Description: "AWS AppSync API domain data provider."
             Timeout: 300
             TracingConfig:
                 Mode: "Active"
-            Role: !GetAtt "CognitoDomainProviderRole.Arn"
+            Role: !GetAtt "AppSyncGraphQlApiProviderRole.Arn"
 
-    CognitoDomain:
+    AppSyncGraphQlApi:
         Type: "AWS::CloudFormation::CustomResource"
         Properties:
             # reference to deploy function
-            ServiceToken: !GetAtt "CognitoDomainProvider.Arn"
-            domain: "auth.wrzasq.pl"
-
-    Route53Binding:
-        Type: "AWS::Route53::RecordSet"
-        Properties:
-            HostedZoneId: !Ref ""
-            Name: "auth.wrzasq.pl."
-            Type: "A"
-            AliasTarget:
-                HostedZoneId: "Z2FDTNDATAQYW2"
-                DNSName: !GetAtt "CognitoDomain.cloudFrontDistribution"
-```
+            ServiceToken: !GetAtt "AppSyncGraphQlApiProvider.Arn"
+            apiId: !GetAtt "YourApi.ApiId"

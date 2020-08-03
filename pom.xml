@@ -120,6 +120,7 @@
     <!-- components of WrzasqPl-Lambda project -->
     <modules>
         <module>lambda-cform-account</module>
+        <module>lambda-cform-appsync-graphqlapi-data</module>
         <module>lambda-cform-cognito-domain-data</module>
         <module>lambda-cform-devicefarm-project</module>
         <module>lambda-cform-organization</module>
