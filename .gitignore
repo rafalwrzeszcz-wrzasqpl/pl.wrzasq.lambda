@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 - 2019 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
 ##
 
 # Eclipse IDE files
@@ -17,6 +17,5 @@
 # project builds
 /**/target
 
-# Travis CI files
-/.travis/gpg_key
-/.travis/id_rsa
+# GitHub Actions files
+/.github/gpg_key

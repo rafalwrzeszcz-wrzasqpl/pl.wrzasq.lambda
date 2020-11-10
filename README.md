@@ -9,7 +9,7 @@
 
 **WrzasqPl-Lambda** is a set of generic **AWS Lambda**s.
 
-[![Build Status](https://travis-ci.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda.svg)](https://travis-ci.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
+[![Build Status](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/workflows/build/badge.svg)](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/actions)
 [![Coverage Status](https://coveralls.io/repos/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/badge.svg)](https://coveralls.io/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
 
@@ -86,6 +86,7 @@ resource.
 -   [Maven packages](https://search.maven.org/search?q=g:pl.wrzasq.lambda)
 -   [Wrzasq.pl @ GitHub](https://github.com/rafalwrzeszcz-wrzasqpl)
 -   [Wrzasq.pl @ Facebook](https://www.facebook.com/wrzasqpl)
+-   [Wrzasq.pl @ LinkedIn](https://www.linkedin.com/company/wrzasq-pl/)
 -   [Post on Wrzasq.pl](http://wrzasq.pl/blog/deploying-lambda-edge-with-pl-chilldev-lambda.html)
 
 # Authors
