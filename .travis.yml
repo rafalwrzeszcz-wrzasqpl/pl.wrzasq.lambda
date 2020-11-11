@@ -1,0 +1,118 @@
+##
+# This file is part of the pl.wrzasq.lambda.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2018 - 2019 © by Rafal Wrzeszcz - Wrzasq.pl.
+##
+
+#FIXME: https://github.com/travis-ci/travis-ci/issues/753
+
+language: "java"
+
+sudo: false
+
+dist: "trusty"
+
+branches:
+    except:
+        - "/^release-/"
+
+jdk:
+    - "openjdk11"
+    - "oraclejdk11"
+
+env:
+    global:
+        - "AWS_REGION=eu-central-1"
+        -
+            secure: |-
+                c0huPiApQQKQYvL8kZN3GNXh4aLeQjRtvN9hd26qZgl4PkW1jmkHT8/3y0KFdW7nerHzCBoZ9tx5jUwr2xV9eY2uuRpIb+wIe/Z+PvW
+                j6LG/VsnBFBxUPiiQ8PQKP3PGF7ZYvG/i6y9HlVPs2Gx/+7qv37fpzmzCCwZ5c3XRvOR0+VJoFLVDaWLKfOwlBjgZObAoK109ldPl9A
+                WetNBCMOOuGdCPPdPe/v39D/ck9GN4K4xh3oqMAI4Te0Lakla+yEfE+vBqk9sZqnWhSoNPB6Vlw6ijLxaiQkbaxXzDdHsqvZ912JPfD
+                zzmbm8XbX58eb2cdDQQSBtM/FAzj5rjyfzYAY+k1Tccu1Lh+7jnLFa6JPm+LB6f3ycQd40ulKwzyVsK+UYUSilOXVJeyl1r7gvo1aKh
+                Y8JQOZHDYecgmg+pCwPluhzV3FowQjsMCNCAhW/VSib/SDJOu+YJuzg2AVw9b9dq9D+RgKKhE4J48pPvsovP5Atgw2wY5MVNcG3cWj2
+                aZ4cDQr4Vd8+QQSkxwUCBIaYrzl3EbMfKXe/rGwFz/tEgyfObTty1t/1OujNHUjakIoG8DHJpfRxl0qj5qTKtcOEggKu1wlGqCg0cVH
+                XkXlpuho+0EdCh8d+Jp/4+r39ezMhZ4on2tqRSZxwyo7gw+JOhgEdW8ZVyRPyNBTk=
+        -
+            secure: |-
+                Qb1ERqJanzEiNh+Lrr7gIwgnc70ataL6KF380tGxaBYERcud/6bud9MYOHF0gckr6/2TtqiW2j01NbXtcY66uStfGARIkm1yH1XT1mf
+                kxpsbcdoLRpacbOoumYjT3hlZkIzPx4yGJqN8M7+Kvk5aKU44xREKb3ILyC6qWhQyMWKNMIypgcybB9duimi+n7Q/57mGjry7WgdHb1
+                zQw2toToyyECekO0Nh0VIWs06ai2JgRkPY2VRX/lub6Y4+1OiUoQe8b+C17lhvqAWtg+8TyjJ8+N9eMorIaHXnGS2H2EhvQoqZyMLDa
+                BzSV8cuJg6PXTfJObndZ5e6da7o4PTg5nMmxF/seN5FtTiXNUrYnXcWeyhk4KcMuxKVPxhIZwbxR+lHnPCTMC6Rn2IPajqWlGIV/W7n
+                m/ytnIoj55RUwLEgtXYnoW5F4JYgoczZQdLUMu97BYJ/kCVXp3GUGYeHAjamekmGgiYpy1JovSEsoyZsTqv0ifde1BbP4rHDY2rpass
+                zL70vUV62WUVO+IPBtsJvTwJi7f76AMlKk5IFXdkiioYDS4XWG4ofy9LoPQEDbKGJ5UGydZF83dKt+mbDsuTkqirtd8u9eEdKNQxuCY
+                Bis3Ytb2k4oGlSz1yULi5kjnWZ/Hupi4ziyL8EuPBjg3RDt6TmYCn57GmHuSrIBco=
+        -
+            secure: |-
+                IEh8Xt7n0GpFi2GhEbfQVVnJNJrqD5KOct4sdUjBUUA6Syyuz4t0yDf1Y9yZN80PKMweai6/0EmeWPLtd/cJC5Ef9MxAcIriURgBzct
+                PnBzDKGBsgA6FTLO+KDxG7y5OThjsrD1XS0bFu85i3AEwyUKX97z8axY6Vc5a+ROzjm0YbE94fwM6wAWVXmV3Xa3KvbyJL3Y+WVqsn2
+                5qNQBW3VqMGq3HxI1AsYXow8BXVg/m5P+J1PR2kUDQ3F/yGR/Q8drmPhdP6QhCA/fZLDm9XtI0xGen29XGvO30wS2KjsY4SpnaPgXvr
+                /aMvljTGwAuODC4fNNkQBibE3ceaKXWqvQH/rc0KQzgs/6RR/P+krRYPpMzQFF4aN9Jh+S+0CAqSu7n3PSev7hB51oie/47AI0P7K9K
+                C6/hLfm+2GsNtVTpPBtkPaUlhtiict4esVtvKjpFPtK7IFjJQDB0CZk2NZ64uMWw4/JACxX9Qq3JrWMrm1S6QzfYLqV5sQuBcNWYCcI
+                mSifMPYhyr5mqEk8SNVuXg9voZTTvQucIvehlH5BJg65Za6wSIRKgWYJlkiZ0Nq+zWwDfWmALKBzPVt7zMcUCby1s0cxFuYIJf+k31R
+                V2ul5wkLLXfbhLYAfmLd1HPVE488CLVEFM/4WwLswphFnM6HJc4l5T7S5rRDUzoi4=
+        -
+            secure: |-
+                EN27Z5YVBfd+nDkEgT21lIBQDmtcHk/IQxJrp+Wsnq8uj7N/2bZQyh1coDnS5ljljIMR6ukQmi/O7RbnagbmpcN+Ed1kSUy5r2um8n0
+                CLbkNSIvuXZDHKlP9rW7tBt0Bv0rbLZT0BAkSDqUSg+/kDoDjWTEUZ4SEhzXdQYnYNAy4/V9Y9qsfkBMgQtzmd3AG+7W9lPt5DZ2WaJ
+                lKhaEHQWS+F527rutDChA2dQFEr2skE2eN7cBudYjZ4aCTv5I/kjuk5i/WyETg8ecwfSVAhqRVIcx38C1ShvSXIpL2MZdjEks9fj3MY
+                GdE94cdydel+/siO+Hxlv0PNvhRP/uw76woidYNF7mmkzTNIcZ1fvmxesvr8081HjyCczWjk3nLCEts7iLZmBzyIaIe2U0JCWcWuQY/
+                CfV/OUyQ1+G9E3JcCnRQGfowN/9ezNeJpK5YH8AcFREgPSEeZZRjDsDnvkOMQj3TcJc4G6OjSELb9kooM+23TlhNkVKTe1V7nvMns5V
+                xNy00NBWNk7Os/0jWzdf0PacFbEly2Jo/ywmv3o7enOvne3oIF4lngyuP7SwtxAgXVa4PxmVMIH1KPEnGHszyDpZPcZidTolaSYkwbb
+                uwMGleGt8/O+u/g8BNPVQP5LSC/JXt5wNV3+D/BGFXf/JU+69DnAeIUGs6cCT3ins=
+        -
+            secure: |-
+                DGjuSwMU7QsvaZrA91ODC4vjd/0sC8V//Dr7nwFbLB2WjtSzSGUMiE6mSR7wxY1Ur82xPKcDZVxCvec8ZNYfa/6lfvtRz7lflRh0REx
+                x3c5Hit/Xx6fw0w7KcdnCjxt4H3qjDjWTvAPvDbji0t53OTZw2c2rhWi87AhV/QD9p6BZWGoUzWiUc5GUGiqaFtjdEzET5xSEkbsvKl
+                Ay2T7Z9ArqRFGOczoO0v9YJkRRLq1/eTxW1PVSVLcoJJj4t2sVRvs8sS5vMfCQ6Np9qtAoHOTCXqk/Agxublm4yb27L1/O8T+dbWp/1
+                TjdXl2f20GLjbVEULU1MrxyPB07xF7E2kx5dLnHsafQz0dgZJ/cxIO+SDaZY805FjosDwBmN5556zXZc9WJz+Lqf4sfSUxUZ/Ch7JiT
+                11tKJFRsocr1eKRAJAq+uXdzn9XDZ9xuh0JMycydpxgiPX3ZwVUcfhsoeY6sBNvV0BSUOHh+FkCMsBoRfXHOP1iZ4wr6xNP8xizMbli
+                UZzJnxApEZxddkDZ/bQswSPxlxVMmSF+PSakRIjJ2ICVH/2RR0vEumAomEfjFngCVxFJOHDHpBj2MoNWEuwluEz9ZsadISiEjMadl4Q
+                o4EkLogMgX/YF88W9J1aL9WUrjKo8oNV2AMm9hyleo08+Je7hgN0dKDegmzrLWWhQ=
+
+# this is not a boolean, this is a Linux `true` command to simply override this step
+install: "true"
+
+script: "mvn -B -e verify site"
+
+after_script: "mvn -B -e coveralls:report"
+
+before_deploy:
+    - "eval \"$(ssh-agent -s)\""
+    - "git config user.name \"Travis CI\""
+    - "git config user.email \"office@wrzasq.pl\""
+    - "openssl aes-256-cbc -md sha256 -k \"${SECRET}\" -in .travis/gpg_key.enc -out .travis/gpg_key -d"
+    - "openssl aes-256-cbc -md sha256 -k \"${SECRET}\" -in .travis/id_rsa.enc -out .travis/id_rsa -d"
+    # this is needed to avoid duplicated key error as we have two deploys on `master`
+    - "rm -f ~/.gnupg/*.gpg"
+    - "gpg --fast-import .travis/gpg_key"
+    - "chmod 600 .travis/id_rsa"
+    - "ssh-add .travis/id_rsa"
+    - "echo -e \"Host github.com\\n    StrictHostKeyChecking no\\n\" >> ~/.ssh/config"
+    # this actually does the job, but we need it to produce artifacts for "releases" provider
+    # entire "before_deploy" will not be executed if there is no deploy to be processed
+    - "./.travis/release.sh"
+    - "export TRAVIS_TAG=$(git describe --abbrev=0)"
+
+deploy:
+    -
+        provider: "releases"
+        skip_cleanup: true
+        api_key: "${GITHUB_TOKEN}"
+        file_glob: true
+        file: "*/target/*.jar"
+        on:
+            branch: "master"
+            condition: "${TRAVIS_EVENT_TYPE} == push"
+            jdk: "oraclejdk11"
+
+cache:
+    directories:
+        - "${HOME}/.m2/"
+
+before_cache: "rm -rf ${HOME}/.m2/repository/pl/wrzasq/lambda"
+
+notifications:
+    webhooks:
+        urls:
+            - "https://webhooks.gitter.im/e/76216ca12231f783391e"

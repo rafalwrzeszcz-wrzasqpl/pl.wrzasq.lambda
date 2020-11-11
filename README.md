@@ -9,7 +9,7 @@
 
 **WrzasqPl-Lambda** is a set of generic **AWS Lambda**s.
 
-[![Build Status](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/workflows/build/badge.svg)](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/actions)
+[![Build Status](https://travis-ci.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda.svg)](https://travis-ci.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
 [![Coverage Status](https://coveralls.io/repos/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda/badge.svg)](https://coveralls.io/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rafalwrzeszcz-wrzasqpl/pl.wrzasq.lambda)
 
