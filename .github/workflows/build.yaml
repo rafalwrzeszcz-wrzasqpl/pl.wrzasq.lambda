@@ -80,7 +80,7 @@ jobs:
                 run: "git commit -m \"[skip ci] Automated release release.\""
             # perform a release
             -
-                run: "mvn -B -e clean deploy site-deploy -P deploy --settings .github/settings.xml"
+                run: "mvn -B -e clean deploy -P deploy --settings .github/settings.xml"
                 env:
                     GITHUB_ACTOR: "${{ secrets.GITHUB_ACTOR }}"
                     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
