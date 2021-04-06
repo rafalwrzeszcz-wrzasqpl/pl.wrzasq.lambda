@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
 # WrzasqPl-Lambda
@@ -57,14 +57,6 @@ resource.
 ## [Lambda-CForm Organizational Unit](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-organization-unit/)
 
 **CloudFormation** custom resource handler for organizational unit management.
-
-## [Lambda-CForm StackSet](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-stackset/)
-
-**CloudFormation** stack set resource implementation as **CloudFormation** custom resource.
-
-## [Lambda-CForm StackSet Instance](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-stackset-instance/)
-
-**CloudFormation** single stack instance resource implementation as **CloudFormation** custom resource.
 
 ## [Lambda-CForm PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.lambda/lambda-cform-passwordpolicy/)
 

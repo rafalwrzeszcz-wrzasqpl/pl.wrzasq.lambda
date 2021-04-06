@@ -3,7 +3,7 @@
 # This file is part of the pl.wrzasq.lambda.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2018 - 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2018 - 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
@@ -126,8 +126,6 @@
         <module>lambda-cform-organization</module>
         <module>lambda-cform-organization-unit</module>
         <module>lambda-cform-passwordpolicy</module>
-        <module>lambda-cform-stackset</module>
-        <module>lambda-cform-stackset-instance</module>
         <module>lambda-edgedeploy</module>
         <module>lambda-macro-lambda-function</module>
         <module>lambda-macro-pipeline-multistagecd</module>
